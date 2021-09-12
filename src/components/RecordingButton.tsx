@@ -1,4 +1,5 @@
 import { FunctionComponent } from "react";
+import ToggleButton from "react-bootstrap/esm/ToggleButton";
 
 interface IStartButtonProps {
     isRecording: boolean;
@@ -6,10 +7,17 @@ interface IStartButtonProps {
 }
 
 const RecordingButton: FunctionComponent<IStartButtonProps> = (props: IStartButtonProps) => {
+    let message = props.isRecording ? "Stop Recording" : "Start Recording";
+    let btnVariant = props.isRecording ? "warning" : "success";
+    
     return (
-        <button className="base-button submit-button" onClick={props.onClick}>
-            Start
-        </button>
+        <ToggleButton className="btn mb-3" type="checkbox" value="1"
+         variant={btnVariant}
+         checked={props.isRecording} 
+         onClick={props.onClick}
+         >
+            {message}
+        </ToggleButton>
     );
 }
 
