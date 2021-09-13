@@ -1,66 +1,120 @@
-import React, { Component } from 'react';
+import React from 'react';
 import AudioVisualizer from './AudioVizualizer';
 // import AudioVisualiser from './AudioVisualiser';
 
+// https://www.twilio.com/blog/audio-visualisation-web-audio-api--react
 
 interface IAudioManagerProps {
-  audio: MediaStream 
+  audio?: MediaStream | null;
 }
 
 interface IAudioManagerState {
-  audioData: Uint8Array,
+  timeData: Uint8Array,
+  freqData: Float32Array
 }
 
 class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerState>  {
-  analyser?: AnalyserNode;
-  source?: MediaStreamAudioSourceNode;
-  audioBuffer?: Uint8Array;
-  rafId: number = -1;
+  // audio state and analysis
+  audioContext?: AudioContext;
+  analyser?: AnalyserNode | null;
+  source?: MediaStreamAudioSourceNode | null;
+
+  audioActive: boolean = false; // if we're actively processing audio
+  readonly FFT_SIZE = 2048; // num bins in fft -- real + image
+
+  // audio data buffers
+  timeDomainBuffer?: Uint8Array;
+  freqDomainBuffer?: Float32Array;
+
+  // the id for the latest animation frame request
+  framReqID: number = 0;
+
 
   constructor(props: IAudioManagerProps) {
     super(props);
 
+    this.timeDomainBuffer = new Uint8Array(this.FFT_SIZE);
+    this.freqDomainBuffer = new Float32Array(this.FFT_SIZE / 2);
     this.state = {
-      audioData: new Uint8Array(0),
+      timeData: this.timeDomainBuffer,
+      freqData: this.freqDomainBuffer,
     };
 
     this.tick = this.tick.bind(this);
   }
 
-  componentDidMount() {
+  // sets up analysis and source nodes, starts animation frame loop
+  startAudio(): void {
+    if (this.props.audio == null) return;
 
-      const audioContext: AudioContext = new window.AudioContext(); // window.webkitAudioContext ?
-      this.analyser = audioContext.createAnalyser();
-      this.audioBuffer = new Uint8Array(this.analyser.frequencyBinCount);
+    // retain audio context
+    if (this.audioContext == null) {
+      this.audioContext = new window.AudioContext();
+    }
 
-      this.source = audioContext.createMediaStreamSource(this.props.audio);
-      this.source.connect(this.analyser);
+    // set up the analysis node
+    this.analyser = this.audioContext.createAnalyser();
+    this.analyser.fftSize = this.FFT_SIZE;
 
-      this.rafId = requestAnimationFrame(this.tick);
+    // connect the stream to the analysis node
+    this.source = this.audioContext.createMediaStreamSource(this.props.audio);
+    this.source.connect(this.analyser);
 
-      this.setState({
-        audioData: this.audioBuffer!,
-      });
-    
+    this.audioActive = true;
+    this.framReqID = requestAnimationFrame(this.tick); // start animation loop
   }
 
-  tick() {
-    if (this.analyser && this.audioBuffer) {
-      this.analyser.getByteTimeDomainData(this.audioBuffer);
-      this.setState({ audioData: this.audioBuffer });
-      this.rafId = requestAnimationFrame(this.tick);
+
+  stopAudio(): void {
+    // disconnect and delete the audio nodes
+    this.analyser?.disconnect();
+    this.source?.disconnect();
+    this.analyser = null;
+    this.source = null;
+
+    this.audioActive = false;
+    cancelAnimationFrame(this.framReqID); // stop animation loop
+  }
+
+  // monitors for if we should update the state of the audio processing
+  checkStatusUpdates() {
+    if (this.props.audio != null && !this.audioActive) {  // if we didn't have audio but now we do
+      this.startAudio();
+    } else if (this.props.audio == null && this.audioActive) {  // if we had audio but now we dont
+      this.stopAudio();
     }
   }
 
-  componentWillUnmount() {
-    cancelAnimationFrame(this.rafId);
-    this.analyser?.disconnect();
-    this.source?.disconnect();
+  // done each animation tick -- i think before each frame render
+  // TODO: see if you can put the audio data extraction in a timer
+  tick(time: number) {
+    if (this.analyser && this.timeDomainBuffer && this.freqDomainBuffer) {
+
+      // get data 
+      this.analyser.getByteTimeDomainData(this.timeDomainBuffer);
+      this.analyser.getFloatFrequencyData(this.freqDomainBuffer);
+      this.setState({
+        timeData: this.timeDomainBuffer,
+        freqData: this.freqDomainBuffer
+      });
+
+      // updates an onscreen animation and retriggers this function --  oneshot
+      this.framReqID = requestAnimationFrame(this.tick);
+    }
   }
 
   render() {
-    // return <div></div>;
-    return <AudioVisualizer audioData={this.state.audioData} />;
+    this.checkStatusUpdates();
+    return <AudioVisualizer audioData={this.state.timeData} width={300} height={300}/>;
+  }
+
+
+  componentDidMount() {
+    this.checkStatusUpdates();
+  }
+
+  componentWillUnmount() {
+    this.stopAudio();
   }
 }
 

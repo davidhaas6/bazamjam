@@ -1,43 +1,28 @@
+body {
+  background-color: #bdbdbd;
+  /* background-image: url("https://www.transparenttextures.com/patterns/cream-dust.png"); */
+  /* background-image: url("https://www.transparenttextures.com/patterns/blizzard.png"); */
+  /* background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png"); */
+  /* background-image: url("../../public/arches.png"); */
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  /* background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png"); */
+  /* background-image: url("https://www.transparenttextures.com/patterns/black-thread-light.png"); */
+/* This is mostly intended for prototyping; please download the
+ pattern and re-host for production environments. Thank you! */
+  /* min-height: 100vh; */
   display: flex;
-  flex-direction: column;
+  flex-flow: column nowrap;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
 
 .btn-default:focus {
   outline: none;
   box-shadow: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.timeDomGraph {
+  outline: black 3px solid;
 }

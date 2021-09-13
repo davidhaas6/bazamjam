@@ -3,17 +3,17 @@ import './App.css';
 import RecordingButton from './RecordingButton';
 import ToggleButton from 'react-bootstrap/ToggleButton'
 import AudioManager from './AudioManager';
+import { Col, Container, Row } from 'react-bootstrap';
 
 
 type AppState = {
-  audio: MediaStream | null; // like this
+  audio: MediaStream | null;
 };
-
 
 
 class App extends React.Component<{}, AppState> {
   BUFFER_MS: number = 50;
-  // state: AppState =
+
   constructor() {
     super({});
 
@@ -55,10 +55,10 @@ class App extends React.Component<{}, AppState> {
 
     return (
       <div className="App">
-        <div className="controls">
-          {audio != null ? <AudioManager audio={audio}/> : ""}
+        <Container className="controls">
+          <AudioManager audio={audio} />
           <RecordingButton isRecording={this.state.audio !== null} onClick={this.toggleMicrophone} />
-        </div>
+        </Container>
       </div>
     );
   }

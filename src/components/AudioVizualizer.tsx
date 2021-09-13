@@ -2,6 +2,8 @@ import React from 'react';
 
 interface IAudioVisualizerProps {
     audioData: Uint8Array,
+    width: number,
+    height: number
 }
 
 
@@ -42,7 +44,7 @@ class AudioVisualizer extends React.Component<IAudioVisualizerProps> {
   }
 
   render() {
-    return <canvas width="300" height="300" ref={this.canvas} />;
+    return <canvas className="timeDomGraph" width={this.props.width} height={this.props.height} ref={this.canvas} />;
   }
 }
 
