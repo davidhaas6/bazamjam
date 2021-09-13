@@ -1,5 +1,7 @@
 import React from 'react';
-import AudioVisualizer from './AudioVizualizer';
+import { Col, Row } from 'react-bootstrap';
+import FreqVisualizer from './graphs/FreqVisualizer';
+import TimeVisualizer from './graphs/TimeVisualizer';
 // import AudioVisualiser from './AudioVisualiser';
 
 // https://www.twilio.com/blog/audio-visualisation-web-audio-api--react
@@ -105,7 +107,17 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
 
   render() {
     this.checkStatusUpdates();
-    return <AudioVisualizer audioData={this.state.timeData} width={300} height={300}/>;
+    return (
+      <Row>
+        <Col>
+          <TimeVisualizer audioData={this.state.timeData} width={300} height={300} />
+
+        </Col>
+        <Col>
+          <FreqVisualizer freqData={this.state.freqData} width={300} height={300} />
+        </Col>
+      </Row>
+    );
   }
 
 
