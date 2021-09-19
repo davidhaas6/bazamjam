@@ -6,6 +6,8 @@ import TimeVisualizer from './graphs/TimeVisualizer';
 
 // https://www.twilio.com/blog/audio-visualisation-web-audio-api--react
 
+//TODO: should the audio logic be separate from a component?
+
 interface IAudioManagerProps {
   audio?: MediaStream | null;
 }
