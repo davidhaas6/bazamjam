@@ -56,7 +56,7 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
     // retain audio context
     if (this.audioContext == null) {
       this.audioContext = new window.AudioContext(
-        {sampleRate: this.SAMPLE_RATE}
+        { sampleRate: this.SAMPLE_RATE }
       );
     }
 
@@ -129,19 +129,25 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
     );
 
     return (
-      <Row>
-        <Col>
-          <TimeVisualizer audioData={this.state.timeData} width={300} height={300} />
+      <div>
+        <Row>
+          <Col>
+            <TimeVisualizer audioData={this.state.timeData} width={300} height={300} />
+          </Col>
+          <Col>
+            <FreqVisualizer freqData={this.state.freqData} width={300} height={300} />
+          </Col>
+        </Row >
 
-        </Col>
-        <Col>
-          <FreqVisualizer freqData={this.state.freqData} width={300} height={300} />
-        </Col>
+        <Row>
+          <Col>
+          <div>
+            {chordComponent}
+            </div>
+          </Col>
+        </Row>
 
-        <Col>
-        {chordComponent}
-        </Col>
-      </Row >
+      </div>
     );
   }
 

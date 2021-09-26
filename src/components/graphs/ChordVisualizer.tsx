@@ -1,4 +1,6 @@
 import React from "react";
+import { Col, Row } from "react-bootstrap";
+import { Interval, Note, Scale } from "@tonaljs/tonal";
 
 
 interface IChordAnalyzerProps {
@@ -60,13 +62,11 @@ class ChordAnalyzer extends React.Component<IChordAnalyzerProps, IChordAnalyzerS
           maxVals[j] = curVal;
           maxValIdxs[j] = curValIdx;
 
-          console.log("maxVals updated:",maxVals);
           break;
         }
       }
     }
 
-    console.log(maxValIdxs,"\n\n\n\n");
     return [maxVals, maxValIdxs];
   }
 
@@ -85,12 +85,24 @@ class ChordAnalyzer extends React.Component<IChordAnalyzerProps, IChordAnalyzerS
 
 
   render() {
+    let topFreqs = this.getLargestNotes(2).reverse();
+
     return (
       <div>
-        {this.getLargestNotes().map((note) => (
-          <p>{note.toFixed(2)}</p>
-        ))}
-        <p>Bin width: {this.binWidth}</p>
+        <Row>
+          <Col>
+            {
+              topFreqs.map((note) => (
+                <p>{note.toFixed(2)}</p>
+              ))
+            }
+            <p>Bin width: {this.binWidth}</p>
+          </Col>
+          <Col>
+            {topFreqs.map((f) => <p>{Note.fromFreq(f)}</p>)}
+          </Col>
+        </Row>
+
       </div>
     );
   }
