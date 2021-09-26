@@ -51,7 +51,6 @@ class App extends React.Component<{}, AppState> {
 
   render(): ReactElement {
     const audio = this.state.audio;
-    console.log("rendering // is audio null? " + (audio === null));
 
     return (
       <div className="App">

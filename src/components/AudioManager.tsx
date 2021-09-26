@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
+import ChordAnalyzer from './graphs/ChordVisualizer';
 import FreqVisualizer from './graphs/FreqVisualizer';
 import TimeVisualizer from './graphs/TimeVisualizer';
 // import AudioVisualiser from './AudioVisualiser';
@@ -25,6 +26,7 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
 
   audioActive: boolean = false; // if we're actively processing audio
   readonly FFT_SIZE = 2048; // num bins in fft -- real + image
+  readonly SAMPLE_RATE = 16000;
 
   // audio data buffers
   timeDomainBuffer?: Uint8Array;
@@ -53,7 +55,9 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
 
     // retain audio context
     if (this.audioContext == null) {
-      this.audioContext = new window.AudioContext();
+      this.audioContext = new window.AudioContext(
+        {sampleRate: this.SAMPLE_RATE}
+      );
     }
 
     // set up the analysis node
@@ -80,6 +84,7 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
     cancelAnimationFrame(this.framReqID); // stop animation loop
   }
 
+
   // monitors for if we should update the state of the audio processing
   checkStatusUpdates() {
     if (this.props.audio != null && !this.audioActive) {  // if we didn't have audio but now we do
@@ -88,6 +93,10 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
       this.stopAudio();
     }
   }
+
+
+
+
 
   // done each animation tick -- i think before each frame render
   // TODO: see if you can put the audio data extraction in a timer
@@ -107,8 +116,18 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
     }
   }
 
+
   render() {
     this.checkStatusUpdates();
+
+    let chordComponent = this.audioContext == null ? '' : (
+      <ChordAnalyzer
+        freqData={this.state.freqData}
+        fs={this.audioContext?.sampleRate ?? 0}
+        binCount={this.FFT_SIZE / 2}
+        width={300} height={300} />
+    );
+
     return (
       <Row>
         <Col>
@@ -118,7 +137,11 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
         <Col>
           <FreqVisualizer freqData={this.state.freqData} width={300} height={300} />
         </Col>
-      </Row>
+
+        <Col>
+        {chordComponent}
+        </Col>
+      </Row >
     );
   }
 
