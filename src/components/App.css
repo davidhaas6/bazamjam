@@ -1,9 +1,10 @@
 body {
-  background-color: #bdbdbd;
+  background-color: #ffffff;
+  /* background-color: #bdbdbd; */
   /* background-image: url("https://www.transparenttextures.com/patterns/cream-dust.png"); */
   /* background-image: url("https://www.transparenttextures.com/patterns/blizzard.png"); */
   /* background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png"); */
-  /* background-image: url("../../public/arches.png"); */
+  background-image: url("../../public/arches.png");
 }
 
 .App {
@@ -12,15 +13,32 @@ body {
 /* This is mostly intended for prototyping; please download the
  pattern and re-host for production environments. Thank you! */
   /* min-height: 100vh; */
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
+  /* display: flex; */
+  /* flex-flow: column nowrap; */
+  /* align-items: center;
+  margin: auto; */
 }
 
+.topBar {
+  margin-bottom: 4vh;
+}
 
 .btn-default:focus {
   outline: none;
   box-shadow: none;
+}
+
+.controls {
+  justify-items: flex-start;
+  /* align-items: center; */
+  text-align: center;
+}
+
+.recordingButton {
+  /* max-width: 50vh; */
+  width: 30vh;
+  /* min-width: 20vh; */
+  margin: 0vh 0vh 6vh 0vh;
 }
 
 .timeDomGraph {

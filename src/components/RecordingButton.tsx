@@ -11,7 +11,7 @@ const RecordingButton: FunctionComponent<IStartButtonProps> = (props: IStartButt
     let btnVariant = props.isRecording ? "warning" : "success";
     
     return (
-        <ToggleButton className="btn mb-3" type="checkbox" value="1"
+        <ToggleButton className="recordingButton" type="checkbox" value="1"
          variant={btnVariant}
          checked={props.isRecording} 
          onClick={props.onClick}

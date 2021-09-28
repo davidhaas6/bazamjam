@@ -3,7 +3,8 @@ import './App.css';
 import RecordingButton from './RecordingButton';
 import ToggleButton from 'react-bootstrap/ToggleButton'
 import AudioManager from './AudioManager';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Navbar, Row } from 'react-bootstrap';
+import TopBar from './TopBar';
 
 
 type AppState = {
@@ -54,9 +55,15 @@ class App extends React.Component<{}, AppState> {
 
     return (
       <div className="App">
+        <TopBar />
         <Container className="controls">
-          <AudioManager audio={audio} />
-          <RecordingButton isRecording={this.state.audio !== null} onClick={this.toggleMicrophone} />
+          <Row className="justify-content-center">
+            <RecordingButton isRecording={this.state.audio !== null} onClick={this.toggleMicrophone} />
+          </Row>
+
+          <Row>
+            <AudioManager audio={audio} />
+          </Row>
         </Container>
       </div>
     );
