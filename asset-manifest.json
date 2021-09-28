@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/bazamjam/static/css/main.2446e5b5.chunk.css",
+    "main.js": "/bazamjam/static/js/main.d54b41bd.chunk.js",
+    "main.js.map": "/bazamjam/static/js/main.d54b41bd.chunk.js.map",
+    "runtime-main.js": "/bazamjam/static/js/runtime-main.fde490be.js",
+    "runtime-main.js.map": "/bazamjam/static/js/runtime-main.fde490be.js.map",
+    "static/js/2.9458b929.chunk.js": "/bazamjam/static/js/2.9458b929.chunk.js",
+    "static/js/2.9458b929.chunk.js.map": "/bazamjam/static/js/2.9458b929.chunk.js.map",
+    "static/js/3.49bc4f25.chunk.js": "/bazamjam/static/js/3.49bc4f25.chunk.js",
+    "static/js/3.49bc4f25.chunk.js.map": "/bazamjam/static/js/3.49bc4f25.chunk.js.map",
+    "index.html": "/bazamjam/index.html",
+    "static/css/main.2446e5b5.chunk.css.map": "/bazamjam/static/css/main.2446e5b5.chunk.css.map",
+    "static/js/2.9458b929.chunk.js.LICENSE.txt": "/bazamjam/static/js/2.9458b929.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fde490be.js",
+    "static/js/2.9458b929.chunk.js",
+    "static/css/main.2446e5b5.chunk.css",
+    "static/js/main.d54b41bd.chunk.js"
+  ]
+}
