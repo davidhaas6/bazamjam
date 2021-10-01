@@ -4,7 +4,7 @@ body {
   /* background-image: url("https://www.transparenttextures.com/patterns/cream-dust.png"); */
   /* background-image: url("https://www.transparenttextures.com/patterns/blizzard.png"); */
   /* background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png"); */
-  background-image: url("../../public/arches.png");
+  background-image: url("../assets/arches.png");
 }
 
 .App {

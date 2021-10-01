@@ -2,6 +2,25 @@ import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { Interval, Note, Scale } from "@tonaljs/tonal";
 
+// import Essentia from '../../../node_modules/essentia.js/dist/core_api';
+// import EssentiaWASM from '../../../node_modules/essentia.js/dist/core_api';
+
+
+// const essentia = require('essentia.js');  // this works i think -0- but its not typed idk what it is
+
+// import * from EssentiaModule;
+
+// import {EssentiaWASM} from 'essentia-wasm.module.js';
+// Imports Essentia.js core API
+import Essentia from 'essentia.js';
+import EssentiaWASM  from 'essentia.js';
+const essentia = new Essentia(EssentiaWASM);
+
+
+// const essentia = new Essentia(EssentiaWASM)
+// import essentia-wasm-module
+
+
 
 interface IChordAnalyzerProps {
   freqData: Float32Array, // bin magnitudes
