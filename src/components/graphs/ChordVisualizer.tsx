@@ -12,9 +12,9 @@ import { Interval, Note, Scale } from "@tonaljs/tonal";
 
 // import {EssentiaWASM} from 'essentia-wasm.module.js';
 // Imports Essentia.js core API
-import Essentia from 'essentia.js';
-import EssentiaWASM  from 'essentia.js';
-const essentia = new Essentia(EssentiaWASM);
+// import Essentia from 'essentia.js';
+// import EssentiaWASM  from 'essentia.js';
+// const essentia = new Essentia(EssentiaWASM);
 
 
 // const essentia = new Essentia(EssentiaWASM)
