@@ -141,8 +141,8 @@ class AudioManager extends React.Component<IAudioManagerProps, IAudioManagerStat
 
         <Row>
           <Col>
-          <div>
-            {chordComponent}
+            <div>
+              {chordComponent}
             </div>
           </Col>
         </Row>

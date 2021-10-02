@@ -37,11 +37,11 @@ class IFreqVisualizer extends React.Component<IFreqVisualizerProps, IFreqVisuali
     let barHeight;
     let x = 0;
 
-    const minFreq = freqData.reduce((prev,cur) => prev < cur ? prev : cur);
+    const minFreq = freqData.reduce((prev, cur) => prev < cur ? prev : cur);
     const zeroMag = minFreq;
 
     for (const i in freqData) {
-      barHeight = (freqData[i] - minFreq)**1.2;
+      barHeight = (freqData[i] - minFreq) ** 1.2;
 
       canvasCtx.fillStyle = `rgb(${barHeight},50,50,${barHeight})`;
       canvasCtx.fillRect(x, height - barHeight / 2, barWidth, barHeight);
