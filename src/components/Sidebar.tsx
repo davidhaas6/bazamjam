@@ -7,17 +7,14 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import { TiPencil } from 'react-icons/ti';
 import { GiAudioCassette } from 'react-icons/gi';
 import { BiCodeCurly, BiArrowFromRight, BiArrowFromLeft } from 'react-icons/bi';
-import { BsArrowBarLeft, BsArrowBarRight, BsBoxArrowLeft, BsBoxArrowRight } from 'react-icons/bs';
-// import { FaBeer } from 'react-icons/fa';
-// import FaPencil from 'react-icons/lib/fa/pencil'
-
-// import { FaCalendarAlt } from "react-icons/fa";
+import { BsGear } from 'react-icons/bs';
 
 
 const icons = {
   menuClosed: <BiArrowFromLeft />,
   menuOpen: <BiArrowFromRight />,
   library: <GiAudioCassette />,
+  settings: <BsGear />,
   sourceCode: <BiCodeCurly />,
   contact: <TiPencil />,
 };
@@ -55,6 +52,9 @@ const Sidebar: FunctionComponent<ISidebarProps> = (props: ISidebarProps) => {
           <Menu iconShape="round">
             <MenuItem icon={icons.library}>
               <a href="https://omfgdogs.com/">Library</a>
+            </MenuItem>
+            <MenuItem icon={icons.settings}>
+            <a href="https://omfgdogs.com/">Settings</a>
             </MenuItem>
             <MenuItem icon={openCloseIcon} onClick={handleClose}>
               Minimize

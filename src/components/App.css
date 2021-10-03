@@ -73,7 +73,7 @@ body {
 .dashboard {
   width: auto;
   /* display: flex; */
-  background-color: pink;
+  /* background-color: pink; */
   margin: 20px;
   flex: 1;
 }
@@ -98,8 +98,16 @@ body {
   -webkit-box-shadow: 5px 5px 24px 2px rgba(0, 0, 0, 0.42);
   box-shadow: 5px 5px 24px 2px rgba(0, 0, 0, 0.42);
   font-family: Jua;
-  background-color: green;
+  background-color: #fafafa;
 }
+
+.react-grid-item.react-grid-placeholder {
+border-radius: 5px;
+border-width: 10px;
+background: #1d1d1d !important;
+opacity: 0.00 !important;
+}
+
 
 .btn-default:focus {
   outline: none;

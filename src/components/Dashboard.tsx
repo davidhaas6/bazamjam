@@ -7,6 +7,7 @@ import RGL, { WidthProvider, Layout, ReactGridLayoutProps } from 'react-grid-lay
 // import ReactGridLayout from "react-grid-layout";
 import '../assets/grid_styles.css';
 import '../assets/resizable_styles.css';
+import "./App.css"
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -15,9 +16,9 @@ interface IDashboardProps {
 }
 
 const defaultComponents: ReactElement[] = [
-  <div key="a" className="dashboard-component">a</div>,
-  <div key="b" className="dashboard-component">b</div>,
-  <div key="c" className="dashboard-component">c</div>,
+  <div key="a" className="dashboard-component">Mr. Recorder Man</div>,
+  <div key="b" className="dashboard-component">You are playing a  G</div>,
+  <div key="c" className="dashboard-component">Doododooo.. la tee daahh</div>,
 ];
 
 interface IBreakpoints {
@@ -34,9 +35,9 @@ type breakpointKeys = keyof IBreakpoints;
 
 const defaultLayouts: { [key in breakpointKeys]?: Layout[] } = {
   lg: [
-    { i: 'a', x: 0, y: 0, w: 1, h: 1, /*static: true*/ },
+    { i: 'a', x: 0, y: 0, w: 3, h: 1, static: true },
     { i: 'b', x: 1, y: 1, w: 1, h: 1, minW: 1, maxW: 2, minH: 1, maxH: 2  },
-    { i: 'c', x: 4, y: 2, w: 1, h: 1 }
+    { i: 'c', x: 4, y: 2, w: 1, h: 1,  minW: 1, maxW: 2, minH: 1, maxH: 2 }
   ]
 
 };
@@ -45,7 +46,7 @@ const defaultProps: ReactGridLayoutProps = {
   layout: defaultLayouts.lg,
   rowHeight: 200,
   cols: 3,
-  verticalCompact: false,
+  verticalCompact: true,
   isBounded: true,
   onLayoutChange: function () { },
 };
@@ -56,7 +57,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   const [layouts, setLayouts] = useState(defaultLayouts);
 
   props = defaultProps; //todo
-  props.cols
+  // props.cols
 
   // https://github.com/react-grid-layout/react-grid-layout
   return (
