@@ -19,17 +19,6 @@ interface IRecorderProps {
   children?: React.ReactNode[];
 }
 
-// const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({i, children, ...props}, ref) => {
-//   const [isRecording, setIsRecording] = useState(false);
-
-//   let recordingIcon = isRecording ? icons.recordOn : icons.recordOff;
-//   //<div key="c" className="dashboard-component">Doododooo.. la tee daahh</div>,
-//   return (
-//     <div className="recorder" key={key} {...props} ref={ref as React.RefObject<HTMLDivElement>} >
-//       {recordingIcon}
-//     </div>
-//   );
-// });
 
 const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, style = {}, children, ...otherProps }, ref) => {
   const [isRecording, setIsRecording] = useState(false);
@@ -38,6 +27,7 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
   // display properties
   let recordingIcon = isRecording ? icons.recordOn : icons.recordOff;
   let playPauseIcon = isPlaying ? icons.pauseOff : icons.pauseOn;
+  let recordingText = isRecording ? "Recording..." : "  ";
 
   // functions
   let onRecordClick = () => setIsRecording(!isRecording);
@@ -50,7 +40,11 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
       className={className + " recorder"}
       ref={ref as React.RefObject<HTMLDivElement>}
     >
+      <div className="recorder-controls">
       <div onClick={onRecordClick}>{recordingIcon}</div>
+      <p>{recordingText}</p>
+      </div>
+      
       {/* <div onClick={onPlayPauseClick}>{playPauseIcon}</div> */}
       
       {children}

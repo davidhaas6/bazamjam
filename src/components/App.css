@@ -123,3 +123,9 @@ body {
   align-items: center;
   /* width: 400px !important; */
 }
+
+.recorder-controls {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}

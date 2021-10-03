@@ -14,6 +14,14 @@ const dashboardComponents: { [key: string]: IDashboardComponentProps } = {
   recorder: {
     component: <Recorder />,
     layout: { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true }
+  },
+  temp1: {
+    component: <div>hi there fella</div>,
+    layout: { i: '1', x: 0, y: 0, w: 1, h: 1}
+  },
+  temp2: {
+    component: <div >look, im a box!</div>,
+    layout: { i: '2', x: 1, y: 1, w: 1, h: 1}
   }
 }
 
@@ -61,6 +69,8 @@ class App extends React.Component<{}, AppState> {
 
     let components: IDashboardComponentProps[] = [
       dashboardComponents.recorder,
+      dashboardComponents.temp1,
+      dashboardComponents.temp2,
     ];
 
     return (

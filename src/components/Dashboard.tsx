@@ -31,6 +31,7 @@ const defaultProps: ReactGridLayoutProps = {
 };
 
 
+// applys the layouts to the passed in items and creates some grid-items out of them
 function buildComponents(components: ReactElement[], layouts: Layout[]): ReactElement[] {
   return components.map((comp, i) =>
     cloneElement(
