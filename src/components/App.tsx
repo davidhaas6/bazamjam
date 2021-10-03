@@ -5,6 +5,8 @@ import ToggleButton from 'react-bootstrap/ToggleButton'
 import AudioManager from './AudioManager';
 import { Col, Container, Navbar, Row } from 'react-bootstrap';
 import TopBar from './TopBar';
+import Sidebar from './layout/Sidebar';
+import Dashboard from './layout/Dashboard';
 
 
 type AppState = {
@@ -55,7 +57,21 @@ class App extends React.Component<{}, AppState> {
 
     return (
       <div className="App">
-        <TopBar />
+        <Sidebar />
+        {/* <Dashboard /> */}
+        {/* <Container fluid>
+                <Row>
+                    <Col xs={2} id="sidebar-wrapper">      
+                    <Sidebar />
+                    </Col>
+                    <Col  xs={10} id="page-content-wrapper">
+                        
+                    </Col> 
+                </Row>
+
+            </Container> */}
+        {/* <Dashboard/> */}
+        {/* <TopBar />
         <Container className="controls">
           <Row className="justify-content-center">
             <RecordingButton isRecording={this.state.audio !== null} onClick={this.toggleMicrophone} />
@@ -64,7 +80,7 @@ class App extends React.Component<{}, AppState> {
           <Row>
             <AudioManager audio={audio} />
           </Row>
-        </Container>
+        </Container> */}
       </div>
     );
   }

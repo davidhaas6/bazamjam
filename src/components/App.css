@@ -1,11 +1,21 @@
-body {
-  background-color: #ffffff;
-  /* background-color: #bdbdbd; */
-  /* background-image: url("https://www.transparenttextures.com/patterns/cream-dust.png"); */
-  /* background-image: url("https://www.transparenttextures.com/patterns/blizzard.png"); */
-  /* background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png"); */
-  background-image: url("../assets/arches.png");
+
+@font-face {
+  font-family: 'Jua';
+  src: local('MyFont'), url(../assets/fonts/Jua-Regular.ttf) format('truetype');
 }
+
+html, body {
+  background-color: #ffffff;
+  min-height: 100%;
+  /* overflow: auto; */
+}
+
+body{
+  height:100vh;
+}
+
+
+
 
 .App {
   /* background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png"); */
@@ -13,14 +23,64 @@ body {
   /* This is mostly intended for prototyping; please download the
  pattern and re-host for production environments. Thank you! */
   /* min-height: 100vh; */
-  /* display: flex; */
-  /* flex-flow: column nowrap; */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   /* align-items: center;
   margin: auto; */
+  height: 100vh;
+  overflow: auto;
 }
 
-.topBar {
-  margin-bottom: 4vh;
+
+
+/*
+===== Layout ======
+*/
+
+
+
+/*
+ ======== Sidebar ======
+*/
+
+/* https://github.com/azouaoui-med/react-pro-sidebar/issues/10 */
+.pro-sidebar {
+  /* background-color: #fafafa; */
+  font-family: Jua;
+  position: absolute;
+  /* color:#fafafa !importantD; */
+  /* box-shadow: inset -2px 0px 5px 2px #000000; */
+  /* background-color: #fafafa !important; */
+}
+.pro-menu {
+  /* background-color: rgba(0, 9, 9, 0); */
+  /* box-shadow: none !important; */
+  /* box-shadow: inset -2px 0px 5px #000000; */
+}
+.sidebar {
+  /* order: 0; */
+  
+  /* height: 100%; */
+  /* bottom: 0px!important; */
+  /* flex-basis: auto; */
+}
+.header {
+padding: 10px 0;
+}
+.pro-sidebar-header {
+  text-align: center !important;
+  font-size: 30px;
+}
+.pro-sidebar-footer {
+  border-top: 0 !important;
+}
+
+/*
+ ===== Dashboard Components ======
+*/
+.dashboard {
+  /* order:0; */
 }
 
 .btn-default:focus {
