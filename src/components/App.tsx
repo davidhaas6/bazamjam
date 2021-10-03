@@ -1,17 +1,21 @@
 import React, { ReactElement } from 'react';
 import './App.css';
-import RecordingButton from './RecordingButton';
-import ToggleButton from 'react-bootstrap/ToggleButton'
-import AudioManager from './AudioManager';
-import { Col, Container, Navbar, Row } from 'react-bootstrap';
-import TopBar from './TopBar';
 import Sidebar from './Sidebar';
-import Dashboard from './Dashboard';
+import Dashboard, { IDashboardComponentProps } from './Dashboard';
+import Recorder from './dashboard_components/Recorder';
+import { Layout } from 'react-grid-layout';
 
 
 type AppState = {
   audio: MediaStream | null;
 };
+
+const dashboardComponents: { [key: string]: IDashboardComponentProps } = {
+  recorder: {
+    component: <Recorder />,
+    layout: { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true }
+  }
+}
 
 
 class App extends React.Component<{}, AppState> {
@@ -55,20 +59,17 @@ class App extends React.Component<{}, AppState> {
   render(): ReactElement {
     const audio = this.state.audio;
 
+    let components: IDashboardComponentProps[] = [
+      dashboardComponents.recorder,
+    ];
+
     return (
       <div className="App">
         <Sidebar />
-        <Dashboard />
-
-        {/* <Container fluid>
-            <Col id="sidebar-wrapper">
-              <Sidebar />
-            </Col>
-            <Col id="page-content-wrapper">
-              <Dashboard />
-            </Col>
-        </Container> */}
-        {/* <Dashboard/> */}
+        <Dashboard
+          components={components.map((comp) => comp.component)}
+          layouts={components.map((comp) => comp.layout)}
+        />
       </div>
     );
   }

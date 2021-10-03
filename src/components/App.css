@@ -4,7 +4,8 @@
 }
 
 html, body {
-  background-color: #ffffff;
+  /* background-color: #d3d3d3; */
+  background-color: #fafafa;
   min-height: 100%;
   /* overflow: auto; */
 }
@@ -67,7 +68,7 @@ body {
 }
 
 /*
- ===== Dashboard Components ======
+ ===== Dashboard ======
 */
 
 .dashboard {
@@ -84,10 +85,11 @@ body {
 
 .dashboard-component {
   /* flexbox */
-  display: flex;
+  /* display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
+
   /* Sizing */
   width: fit-content;
   min-width: 150;
@@ -102,31 +104,22 @@ body {
 }
 
 .react-grid-item.react-grid-placeholder {
-border-radius: 5px;
-border-width: 10px;
-background: #1d1d1d !important;
-opacity: 0.00 !important;
+  border-radius: 5px;
+  border-width: 10px;
+  background: #1d1d1d !important;
+  opacity: 0.01 !important;
+  height: max-content;
 }
 
 
-.btn-default:focus {
-  outline: none;
-  box-shadow: none;
-}
+/*
+======= Dashboard Components =======
+*/
 
-.controls {
-  justify-items: flex-start;
-  /* align-items: center; */
-  text-align: center;
-}
-
-.recordingButton {
-  /* max-width: 50vh; */
-  width: 30vh;
-  /* min-width: 20vh; */
-  margin: 0vh 0vh 6vh 0vh;
-}
-
-.timeDomGraph {
-  outline: black 3px solid;
+.recorder {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  /* width: 400px !important; */
 }
