@@ -1,6 +1,6 @@
+import { Note } from "@tonaljs/tonal";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { Interval, Note, Scale } from "@tonaljs/tonal";
 
 // import Essentia from '../../../node_modules/essentia.js/dist/core_api';
 // import EssentiaWASM from '../../../node_modules/essentia.js/dist/core_api';

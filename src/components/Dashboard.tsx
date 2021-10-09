@@ -1,13 +1,13 @@
 // holds all the dashboard widgets
 
-import { cloneElement, Component, FunctionComponent, ReactElement, useState } from "react";
-
+import { cloneElement, FunctionComponent, ReactElement } from "react";
 // grid
-import RGL, { WidthProvider, Layout, ReactGridLayoutProps } from 'react-grid-layout';
+import RGL, { Layout, ReactGridLayoutProps, WidthProvider } from 'react-grid-layout';
 // import ReactGridLayout from "react-grid-layout";
 import '../assets/grid_styles.css';
 import '../assets/resizable_styles.css';
-import "./App.css"
+import "./App.css";
+
 const ReactGridLayout = WidthProvider(RGL);
 
 export interface IDashboardComponentProps {

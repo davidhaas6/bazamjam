@@ -1,9 +1,8 @@
 import React, { ReactElement } from 'react';
 import './App.css';
-import Sidebar from './Sidebar';
 import Dashboard, { IDashboardComponentProps } from './Dashboard';
 import Recorder from './dashboard_components/Recorder';
-import { Layout } from 'react-grid-layout';
+import Sidebar from './Sidebar';
 
 
 type AppState = {
