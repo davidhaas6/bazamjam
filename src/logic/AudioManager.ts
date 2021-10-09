@@ -7,9 +7,12 @@ interface INodes {
   [key: string]: AudioNode;
 }
 
+// 
+type nodeKey = keyof INodes;
+
 // A string-indexed list of nodes. Essentially a dict
 interface INodeConnections {
-  [key: keyof INodes]: keyof INodes;
+  [src: nodeKey]: nodeKey;
 }
 
 type clor = number;
@@ -65,10 +68,17 @@ class AudioManager {
     // connect this node to the ones it outputs to
     if (conn?.outputs != null)
       for (let outputKey of conn.outputs)
-        if (outputKey in this._nodes) {
-          let outputNode = this._nodes[outputKey];
-          node.connect(outputNode);
-        }
+        this.connectNodes(key, outputKey);
+  }
+
+  // conencts two audio nodes -- true on success
+  private connectNodes(srcNodeKey: nodeKey, dstNodeKey: nodeKey): boolean {
+    if (srcNodeKey in this._nodes && dstNodeKey in this._nodes) {
+      this._nodes[srcNodeKey].connect(this._nodes[dstNodeKey]);
+      this.nodeConnections[srcNodeKey] = dstNodeKey;
+      return true;
+    }
+    return false;
   }
 
 
