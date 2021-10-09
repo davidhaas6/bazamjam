@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import AudioManager from '../logic/AudioManager';
 import './App.css';
 import Dashboard, { IDashboardComponentProps } from './Dashboard';
 import Recorder from './dashboard_components/Recorder';
@@ -26,45 +27,17 @@ const dashboardComponents: { [key: string]: IDashboardComponentProps } = {
 
 
 class App extends React.Component<{}, AppState> {
-  BUFFER_MS: number = 50;
+  audioManager: AudioManager;
 
   constructor() {
     super({});
 
-    this.state = {
-      audio: null
-    };
-
-    this.toggleMicrophone = this.toggleMicrophone.bind(this);
-  }
-
-
-  async getMicrophone() {
-    const audio = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: false
-    });
-    this.setState({ audio });
-  }
-
-  stopMicrophone() {
-    if (this.state.audio) {
-      this.state.audio.getTracks().forEach(track => track.stop());
-      this.setState({ audio: null });
-    }
-  }
-
-  toggleMicrophone() {
-    if (this.state.audio) {
-      this.stopMicrophone();
-    } else {
-      this.getMicrophone();
-    }
+    this.audioManager = new AudioManager();
+    // TODO: Create hooks for audio manager tasks like mic control, adding nodes
   }
 
 
   render(): ReactElement {
-    const audio = this.state.audio;
 
     let components: IDashboardComponentProps[] = [
       dashboardComponents.recorder,

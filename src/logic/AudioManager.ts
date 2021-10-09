@@ -1,6 +1,4 @@
-interface IAudioManagerProps {
-  audio?: MediaStream | null;
-}
+
 
 // A string-indexed list of nodes. Essentially a dict
 interface INodes {
@@ -35,91 +33,95 @@ class AudioManager {
   readonly FFT_SIZE = 2048; // num bins in fft -- real + image
   readonly SAMPLE_RATE = 16000;
 
+  public get nodes() {
+    return this._nodes;
+  }
 
-  constructor(props: IAudioManagerProps) {
-    this.audioStream = props.audio; // TODO: move audio getting to this class
+
+  constructor() {
+    this._nodes = {};
+    this.nodeConnections = {};
 
     this.audioContext = new window.AudioContext({ sampleRate: this.SAMPLE_RATE });
 
     // BaseAudioContext.onstatechange?
 
-    this._nodes = {};
-    this.nodeConnections = {};
-
     this.addNode(this.createAnalyzerNode(), "analyzer");
-
   }
 
+
+  /*
+  ==== Audio input ===== 
+  */
+
+  async startRecording() {
+    let stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    this.addAudioStream(stream);
+    this.audioActive = true;
+  }
+
+
+  stopRecording(): void {
+    this.audioStream?.getTracks().forEach(track => track.stop());
+    this.audioActive = false;
+  }
+
+  public addAudioStream(stream: MediaStream) {
+    this.audioStream = stream;
+    if ("source" in this._nodes) return;
+
+    // connect the stream to the analysis node
+    let source = this.createSourceNode(this.audioStream);
+    this.addNode(source, "source", { outputs: ["analyzer"] });
+  }
+
+
+  /*
+  ==== Audio graph structure ===== 
+  */
+
   public addNode(node: AudioNode, key: string, conn?: { inputs?: string[], outputs?: string[] }) {
+    if (key in this._nodes) {
+      throw new Error("Key already exists in audio graph");
+    }
     this._nodes[key] = node;
 
-    // TODO: is there some way to modularize this?
-    // also should we throw an error on invalid keys?
-
     // connect the inputs for this node to it
-    if (conn?.inputs != null)
-      for (let inputKey of conn.inputs)
-        if (inputKey in this._nodes) {
-          let inputNode = this._nodes[inputKey];
-          inputNode.connect(node);
-        }
-
+    if (conn?.inputs) {
+      conn.inputs.forEach((inputKey) => this.connectNodes(inputKey, key));
+    }
 
     // connect this node to the ones it outputs to
-    if (conn?.outputs != null)
-      for (let outputKey of conn.outputs)
-        this.connectNodes(key, outputKey);
+    if (conn?.outputs) {
+      conn.outputs.forEach((outputKey) => this.connectNodes(key, outputKey));
+    }
   }
 
   // conencts two audio nodes -- true on success
-  private connectNodes(srcNodeKey: nodeKey, dstNodeKey: nodeKey): boolean {
-    if (srcNodeKey in this._nodes && dstNodeKey in this._nodes) {
-      this._nodes[srcNodeKey].connect(this._nodes[dstNodeKey]);
-      this.nodeConnections[srcNodeKey] = dstNodeKey;
-      return true;
+  private connectNodes(srcNodeKey: nodeKey, dstNodeKey: nodeKey) {
+    if (!(srcNodeKey in this._nodes) && !(dstNodeKey in this._nodes)) {
+      throw new Error("At least one provided key is invalid");
     }
-    return false;
+
+    this._nodes[srcNodeKey].connect(this._nodes[dstNodeKey]);
+    this.nodeConnections[srcNodeKey] = dstNodeKey;
   }
 
 
-  createAnalyzerNode(): AudioNode {
+  /*
+  ==== Base nodes ===== 
+  */
+
+  private createAnalyzerNode(): AudioNode {
     return new AnalyserNode(this.audioContext,
       { fftSize: this.FFT_SIZE }
     );
   }
 
-  createSourceNode(audioStream: MediaStream) {
+  private createSourceNode(audioStream: MediaStream) {
     return new MediaStreamAudioSourceNode(this.audioContext,
       { mediaStream: audioStream }
     );
-  }
-
-  // monitors for if we should update the state of the audio processing
-  checkStatusUpdates() {
-    if (this.audioStream != null && !this.audioActive) {  // if we didn't have audio but now we do
-      this.startAudio();
-    } else if (this.audioStream == null && this.audioActive) {  // if we had audio but now we dont
-      this.stopAudio();
-    }
-  }
-
-  // sets up analysis and source nodes, starts animation frame loop
-  startAudio(): void {
-
-    // connect the stream to the analysis node
-    let source = this.createSourceNode(this.audioStream!);
-    this.addNode(source, "source", { outputs: ["analyzer"] });
-
-    this.audioActive = true;
-  }
-
-
-  stopAudio(): void {
-    this.audioActive = false;
-  }
-
-  public get nodes() {
-    return this._nodes;
   }
 
 }
