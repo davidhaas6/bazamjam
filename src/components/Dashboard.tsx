@@ -11,13 +11,12 @@ import "./App.css";
 const ReactGridLayout = WidthProvider(RGL);
 
 export interface IDashboardComponentProps {
-  component: ReactElement;
+  element: ReactElement;
   layout: Layout;
 }
 
 interface IDashboardProps {
-  components?: ReactElement[];
-  layouts?: Layout[];
+  components: IDashboardComponentProps[];
 }
 
 
@@ -32,39 +31,26 @@ const defaultProps: ReactGridLayoutProps = {
 
 
 // applys the layouts to the passed in items and creates some grid-items out of them
-function buildComponents(components: ReactElement[], layouts: Layout[]): ReactElement[] {
+function buildComponents(components: IDashboardComponentProps[]): ReactElement[] {
   return components.map((comp, i) =>
     cloneElement(
-      comp,
+      comp.element,
       {
         className: "dashboard-component",
-        key: layouts[i].i,
-        "data-grid": layouts[i]
+        key: comp.layout.i,
+        "data-grid": comp.layout
       },
     ));
 }
 
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
-  // initialize the components we'll have on our dashboard
-  // const [components, setComponents] = useState(defaultComponents);
-  // const [layouts, setLayouts] = useState(defaultLayouts);
-
-  let gridProps = defaultProps; //todo
-
-  let elements: ReactElement[] = [];
-  if (props.components && props.layouts) {
-    elements = buildComponents(props.components, props.layouts);
-
-    // console.log("props loaded");
-    // console.log({ elements });
-    console.log({ props, elements });
-  }
+  let builtElements: ReactElement[] = buildComponents(props.components);;
 
   // https://github.com/react-grid-layout/react-grid-layout
   return (
     <div className="dashboard">
-      <ReactGridLayout className="grid" {...gridProps}>
-        {elements}
+      <ReactGridLayout className="grid" {...defaultProps}>
+        {builtElements}
       </ReactGridLayout>
     </div >
   );
