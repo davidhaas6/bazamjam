@@ -2,6 +2,7 @@ import { FunctionComponent, useState, forwardRef } from "react";
 import { Layout } from "react-grid-layout";
 
 import { TiMediaRecord, TiMediaRecordOutline, TiMediaPauseOutline, TiMediaPlayOutline } from "react-icons/ti";
+import { IDashboardComponentProps } from "./DshbComp";
 
 const icons = {
   recordOn: <TiMediaRecord size={100} />,
@@ -11,12 +12,8 @@ const icons = {
 };
 
 
-interface IRecorderProps {
-  className?: string;
-  key?: string;
-  "data-grid"?: Layout;
-  style?: { [x: string]: string };
-  children?: React.ReactNode[];
+interface IRecorderProps extends IDashboardComponentProps {
+
 }
 
 
@@ -41,12 +38,12 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
       ref={ref as React.RefObject<HTMLDivElement>}
     >
       <div className="recorder-controls">
-      <div onClick={onRecordClick}>{recordingIcon}</div>
-      <p>{recordingText}</p>
+        <div onClick={onRecordClick}>{recordingIcon}</div>
+        <p>{recordingText}</p>
       </div>
-      
+
       {/* <div onClick={onPlayPauseClick}>{playPauseIcon}</div> */}
-      
+
       {children}
     </div>
   );

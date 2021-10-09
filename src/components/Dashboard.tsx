@@ -10,13 +10,13 @@ import "./App.css";
 
 const ReactGridLayout = WidthProvider(RGL);
 
-export interface IDashboardComponentProps {
+export interface IDashboardGridComponentProps {
   element: ReactElement;
   layout: Layout;
 }
 
 interface IDashboardProps {
-  components: IDashboardComponentProps[];
+  components: IDashboardGridComponentProps[];
 }
 
 
@@ -31,7 +31,8 @@ const defaultProps: ReactGridLayoutProps = {
 
 
 // applys the layouts to the passed in items and creates some grid-items out of them
-function buildComponents(components: IDashboardComponentProps[]): ReactElement[] {
+function buildComponents(components: IDashboardGridComponentProps[]): ReactElement[] {
+  console.log("Components built");
   return components.map((comp, i) =>
     cloneElement(
       comp.element,

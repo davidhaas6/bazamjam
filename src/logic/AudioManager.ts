@@ -13,8 +13,6 @@ interface INodeConnections {
   [src: nodeKey]: nodeKey;
 }
 
-type clor = number;
-var yummy: clor = 2;
 
 class AudioManager {
   // audio state and analysis
@@ -65,6 +63,7 @@ class AudioManager {
     this.audioStream?.getTracks().forEach(track => track.stop());
     this.audioActive = false;
   }
+  
 
   public addAudioStream(stream: MediaStream) {
     this.audioStream = stream;
