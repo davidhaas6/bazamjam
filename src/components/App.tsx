@@ -10,29 +10,32 @@ type AppState = {
   audio: MediaStream | null;
 };
 
-const dashboardComponents: { [key: string]: IDashboardGridComponentProps } = {
-  recorder: {
-    element: <Recorder />,
-    layout: { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true }
-  },
-  temp1: {
-    element: <div>hi there fella</div>,
-    layout: { i: '1', x: 0, y: 0, w: 1, h: 1 }
-  },
-  temp2: {
-    element: <div >look, im a box!</div>,
-    layout: { i: '2', x: 1, y: 1, w: 1, h: 1 }
-  }
-}
+
 
 
 class App extends React.Component<{}, AppState> {
   audioManager: AudioManager;
 
+  dashboardComponents: { [key: string]: IDashboardGridComponentProps } = {
+    temp1: {
+      element: <div>hi there fella</div>,
+      layout: { i: '1', x: 0, y: 0, w: 1, h: 1 }
+    },
+    temp2: {
+      element: <div >look, im a box!</div>,
+      layout: { i: '2', x: 1, y: 1, w: 1, h: 1 }
+    }
+  }
+
   constructor() {
     super({});
 
     this.audioManager = new AudioManager();
+    
+    this.dashboardComponents["recorder"] =    {
+      element: <Recorder audioManager={this.audioManager}/>,
+      layout: { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true }
+    };
     // TODO: Create hooks for audio manager tasks like mic control, adding nodes
   }
 
@@ -40,9 +43,9 @@ class App extends React.Component<{}, AppState> {
   render(): ReactElement {
 
     let components: IDashboardGridComponentProps[] = [
-      dashboardComponents.recorder,
-      dashboardComponents.temp1,
-      dashboardComponents.temp2,
+      this.dashboardComponents['recorder'],
+      this.dashboardComponents.temp1,
+      this.dashboardComponents.temp2,
     ];
 
     return (

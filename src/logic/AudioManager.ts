@@ -13,6 +13,8 @@ interface INodeConnections {
   [src: nodeKey]: nodeKey;
 }
 
+const emptyBuffer = new Float32Array(0);
+
 
 class AudioManager {
   // audio state and analysis
@@ -22,6 +24,9 @@ class AudioManager {
   nodeConnections: INodeConnections;
 
   analyser?: AnalyserNode | null;
+  _timeBuffer: Float32Array;
+  _freqBuffer: Float32Array;
+
   source?: MediaStreamAudioSourceNode | null;
 
 
@@ -42,9 +47,14 @@ class AudioManager {
 
     this.audioContext = new window.AudioContext({ sampleRate: this.SAMPLE_RATE });
 
-    // BaseAudioContext.onstatechange?
-
+    // Initialize analyzer node
+    this._timeBuffer = new Float32Array(this.FFT_SIZE);
+    this._freqBuffer = new Float32Array(this.FFT_SIZE / 2);
     this.addNode(this.createAnalyzerNode(), "analyzer");
+
+    // Lets them be used in callbacks
+    this.getTimeData.bind(this);
+    this.getFreqData.bind(this);
   }
 
 
@@ -63,7 +73,7 @@ class AudioManager {
     this.audioStream?.getTracks().forEach(track => track.stop());
     this.audioActive = false;
   }
-  
+
 
   public addAudioStream(stream: MediaStream) {
     this.audioStream = stream;
@@ -72,6 +82,27 @@ class AudioManager {
     // connect the stream to the analysis node
     let source = this.createSourceNode(this.audioStream);
     this.addNode(source, "source", { outputs: ["analyzer"] });
+    // source.mediaStream.getTracks()[0].
+  }
+
+  public getTimeData(): Float32Array {
+    let analyzer = this._nodes['analyzer'];
+    if (analyzer instanceof AnalyserNode) {
+      let buf =  new Float32Array(this.FFT_SIZE);
+      analyzer.getFloatTimeDomainData(buf);
+      console.info({ manager: buf[0] });
+      return buf;
+    }
+    return emptyBuffer;
+  }
+
+  public getFreqData(): Float32Array {
+    let analyzer = this._nodes.analyzer;
+    if (analyzer instanceof AnalyserNode) {
+      analyzer.getFloatFrequencyData(this._freqBuffer);
+      return this._freqBuffer;
+    }
+    return emptyBuffer;
   }
 
 
@@ -112,6 +143,7 @@ class AudioManager {
   */
 
   private createAnalyzerNode(): AudioNode {
+
     return new AnalyserNode(this.audioContext,
       { fftSize: this.FFT_SIZE }
     );
