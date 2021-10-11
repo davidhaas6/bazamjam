@@ -1,26 +1,38 @@
-// holds all the dashboard widgets
+import { cloneElement, createElement, FunctionComponent, ReactElement, useEffect, useMemo, useState } from "react";
+import "../assets/App.css";
 
-import { cloneElement, FunctionComponent, ReactElement } from "react";
 // grid
 import RGL, { Layout, ReactGridLayoutProps, WidthProvider } from 'react-grid-layout';
-// import ReactGridLayout from "react-grid-layout";
 import '../assets/grid_styles.css';
 import '../assets/resizable_styles.css';
-import "./App.css";
+import AudioManager from "../logic/AudioManager";
+import SampleComponent from "./dashboard_components/SampleComponent";
+import Recorder, { IRecorderProps } from "./dashboard_components/Recorder";
+
 
 const ReactGridLayout = WidthProvider(RGL);
 
-export interface IDashboardGridComponentProps {
-  element: ReactElement;
+
+/*
+ =========== types
+*/
+
+
+export interface IGridComponent<T> {
+  element: FunctionComponent<T>;
+  props: T;
   layout: Layout;
+  children?: React.ReactNode[];
 }
 
 interface IDashboardProps {
-  components: IDashboardGridComponentProps[];
 }
 
+/*
+ =========== constants
+*/
 
-const defaultProps: ReactGridLayoutProps = {
+const gridProps: ReactGridLayoutProps = {
   // layout: defaultLayouts.lg,
   rowHeight: 200,
   cols: 3,
@@ -29,28 +41,63 @@ const defaultProps: ReactGridLayoutProps = {
   onLayoutChange: function () { },
 };
 
+const defaultDashboardLayout: { [key: string]: IGridComponent<any> } = {
+  temp1: {
+    element: SampleComponent,
+    props: {},
+    layout: { i: '1', x: 0, y: 0, w: 1, h: 1 }
+  },
+  temp2: {
+    element: SampleComponent,
+    props: {},
+    layout: { i: '2', x: 1, y: 1, w: 1, h: 1 }
+  }
+};
+
+
+const recorderLayout = { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true };
+
+
+/*
+ =========== functions
+*/
 
 // applys the layouts to the passed in items and creates some grid-items out of them
-function buildComponents(components: IDashboardGridComponentProps[]): ReactElement[] {
+function buildComponents(components: IGridComponent<any>[]): ReactElement[] {
   console.log("Components built");
-  return components.map((comp, i) =>
-    cloneElement(
-      comp.element,
-      {
-        className: "dashboard-component",
-        key: comp.layout.i,
-        "data-grid": comp.layout
-      },
-    ));
+
+  return components.map((comp: IGridComponent<any>, i) =>
+    createElement(comp.element, {
+      props: comp.props, // passed in props
+
+      // props for grid-itemsa
+      className: "dashboard-component",
+      key: comp.layout.i,
+      "data-grid": comp.layout
+    }, comp.children)
+  );
 }
 
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
-  let builtElements: ReactElement[] = buildComponents(props.components);;
+  const [audioManager, setaudioManager] = useState(new AudioManager());
+  const [dshbLayout, setDshbLayout] = useState([defaultDashboardLayout.temp1,defaultDashboardLayout.temp2]);
+  // execute on first build
+
+
+  // TODO: How often does this get built? is it a side-effect?
+  let builtElements: ReactElement[] = useMemo(() =>
+    buildComponents(dshbLayout)
+    , [dshbLayout]
+  );
+  console.timeLog("dashboard");
 
   // https://github.com/react-grid-layout/react-grid-layout
   return (
     <div className="dashboard">
-      <ReactGridLayout className="grid" {...defaultProps}>
+      <ReactGridLayout className="grid" {...gridProps}>
+        <Recorder className="dashboard-component" audioManager={audioManager}
+          data-grid={recorderLayout} key={recorderLayout.i} />
+
         {builtElements}
       </ReactGridLayout>
     </div >

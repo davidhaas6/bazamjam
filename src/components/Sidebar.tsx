@@ -1,9 +1,7 @@
 import { FunctionComponent, useState } from "react";
 import { ProSidebar, Menu, MenuItem, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
-// import { ProSidebar, SidebarHeader, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
 
 import 'react-pro-sidebar/dist/css/styles.css';
-// import '../App.css'
 import { TiPencil } from 'react-icons/ti';
 import { GiAudioCassette } from 'react-icons/gi';
 import { BiCodeCurly, BiArrowFromRight, BiArrowFromLeft } from 'react-icons/bi';
