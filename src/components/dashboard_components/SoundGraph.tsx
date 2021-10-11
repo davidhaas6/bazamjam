@@ -2,8 +2,7 @@ import { FunctionComponent, useEffect, useRef, useState } from "react";
 
 
 interface ISoundGraphProps {
-  audioCallback: () => Float32Array;
-  updateFreq: number; // Hz to update the sound data at
+  soundData: Float32Array;
 }
 
 
@@ -29,24 +28,23 @@ function draw(context: CanvasRenderingContext2D, audioData: Float32Array) {
 }
 
 const SoundGraph: FunctionComponent<ISoundGraphProps> = (props: ISoundGraphProps) => {
-  const [soundData, setSoundData] = useState(new Float32Array(0));
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  console.group("soundgraph");
 
-  // Start timer on first render
-  useEffect(() => {
-    setInterval(() => setSoundData(props.audioCallback()), 1000 * 1 / props.updateFreq);
-  }, []);
+  //TODO: this isn't getting called...
 
+  let updateKey = props.soundData[0];
   useEffect(() => {
     const canvas = canvasRef.current?.getContext('2d');
     if (canvas != null) {
-      draw(canvas, soundData);
+      draw(canvas, props.soundData);
     }
-    console.debug("dd",soundData);
-  }, [soundData]);
+    console.debug("updated! ",props.soundData);
+  }, [updateKey]);
 
-  console.info({ component: soundData[0] });
+  console.info({ updateKey });
 
+  console.groupEnd();
   return (<div>
     <canvas className="timeDomGraph" ref={canvasRef} width={200} height={200} />;
   </div>);

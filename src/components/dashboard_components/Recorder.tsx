@@ -16,7 +16,7 @@ const icons = {
 
 
 
-interface IRecorderProps extends IDashboardComponentProps {
+export interface IRecorderProps extends IDashboardComponentProps {
   audioManager: AudioManager;
 }
 
@@ -25,7 +25,9 @@ interface IRecorderProps extends IDashboardComponentProps {
 const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, style = {}, children, ...props }, ref) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [soundData, setSoundData] = useState(new Float32Array(0));
 
+  console.log("(global) isRecording: ", isRecording);
 
   // display properties
   let recordingIcon = isRecording ? icons.recordOn : icons.recordOff;
@@ -33,6 +35,10 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
   let recordingText = isRecording ? "Recording..." : "  ";
 
   // functions
+  let onPlayPauseClick = () => setIsPlaying(!isPlaying);
+
+  let recordingStatus = useCallback(() => updateTimeData, []);
+
   let onRecordClick = () => {
     let newRecordingState = !isRecording;
     if (newRecordingState)
@@ -40,12 +46,40 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
     else
       props.audioManager.stopRecording();
     setIsRecording(newRecordingState);
+    console.log(newRecordingState);
   };
-  let onPlayPauseClick = () => setIsPlaying(!isPlaying);
-  let getTimeData = () => props.audioManager.getTimeData();//useCallback(props.audioManager.getTimeData,[],);
+
+  let updateTimeData = useCallback(() => {
+    console.group("timeData");
+    console.log("isRecording: ", isRecording);
+    if (isRecording) {
+      let timeData = props.audioManager.getTimeData();
+
+      console.log(timeData.slice(0, 3));
+      
+      console.log(timeData.length);
+
+      // TODO: isrecording isnt updated -- cant access it
+      setSoundData(timeData);
+
+    }
+    else {
+      console.log("Not recording");
+    }
+    console.groupEnd();
+  }, [isRecording]);
 
   // logic
-  let updateFreq = 1;//props.audioManager.SAMPLE_RATE / props.audioManager.FFT_SIZE;
+  let updatePeriod = 1000;// props.audioManager.FFT_SIZE / props.audioManager.SAMPLE_RATE;
+
+
+  // launch settings
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateTimeData()
+    }, updatePeriod);
+    return () => clearInterval(interval);
+  },[]);
 
 
   return (
@@ -61,7 +95,7 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
       </div>
 
       <div>
-        <SoundGraph audioCallback={getTimeData} updateFreq={updateFreq} />
+        <SoundGraph soundData={soundData} />
       </div>
 
       {/* <div onClick={onPlayPauseClick}>{playPauseIcon}</div> */}

@@ -18,7 +18,7 @@ const emptyBuffer = new Float32Array(0);
 
 class AudioManager {
   // audio state and analysis
-  audioContext: AudioContext;
+  audioContext?: AudioContext;
 
   _nodes: INodes; // essentially a dictionary of nodes
   nodeConnections: INodeConnections;
@@ -45,59 +45,74 @@ class AudioManager {
     this._nodes = {};
     this.nodeConnections = {};
 
-    this.audioContext = new window.AudioContext({ sampleRate: this.SAMPLE_RATE });
-
-    // Initialize analyzer node
     this._timeBuffer = new Float32Array(this.FFT_SIZE);
     this._freqBuffer = new Float32Array(this.FFT_SIZE / 2);
-    this.addNode(this.createAnalyzerNode(), "analyzer");
+  }
+
+  // Initializes the audio context and nodes. Must be called from a user gesture
+  //TODO: How to avoid re-doing this w/ every click?
+  private async initAudio(): Promise<boolean> {
+    // audio context must be created in a user gesture
+    if (this.audioContext == null) {
+      this.audioContext = new window.AudioContext({ sampleRate: this.SAMPLE_RATE });
+    }
+
+    // Initialize analyzer node
+
+    if (this._nodes['analyzer'] == null) {
+      let analyzer = new AnalyserNode(this.audioContext, { fftSize: this.FFT_SIZE });
+      this.addNode(analyzer, "analyzer");
+    }
+
+    if (this.audioStream == null || !this.audioStream?.active) {
+      this.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      this.addSourceNode();
+    } else if (this.audioStream?.getTracks().every((track) => track.enabled == false)) {
+      this.audioStream?.getTracks().forEach(track => track.enabled = true);
+    }
+
+
+    if (this._nodes['source'] == null) {
+      this.addSourceNode();
+    }
 
     // Lets them be used in callbacks
     this.getTimeData.bind(this);
     this.getFreqData.bind(this);
-  }
 
+    return true;
+  }
 
   /*
   ==== Audio input ===== 
   */
 
-  async startRecording() {
-    let stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-    this.addAudioStream(stream);
-    this.audioActive = true;
+  async startRecording(): Promise<boolean> {
+    let bigIfTrue = await this.initAudio();
+    this.audioActive = bigIfTrue;
+    return bigIfTrue;
   }
 
 
   stopRecording(): void {
-    this.audioStream?.getTracks().forEach(track => track.stop());
+    this.audioStream?.getTracks().forEach(track => track.enabled = false);
     this.audioActive = false;
   }
 
 
-  public addAudioStream(stream: MediaStream) {
-    this.audioStream = stream;
-    if ("source" in this._nodes) return;
-
-    // connect the stream to the analysis node
-    let source = this.createSourceNode(this.audioStream);
-    this.addNode(source, "source", { outputs: ["analyzer"] });
-    // source.mediaStream.getTracks()[0].
-  }
-
   public getTimeData(): Float32Array {
     let analyzer = this._nodes['analyzer'];
     if (analyzer instanceof AnalyserNode) {
-      let buf =  new Float32Array(this.FFT_SIZE);
-      analyzer.getFloatTimeDomainData(buf);
-      console.info({ manager: buf[0] });
-      return buf;
+      // TODO: this has weird behavior... doesn't always output right thing
+      analyzer.getFloatTimeDomainData(this._timeBuffer);
+      console.info({ manager: this._timeBuffer[0] });
+      return this._timeBuffer;
     }
     return emptyBuffer;
   }
 
   public getFreqData(): Float32Array {
-    let analyzer = this._nodes.analyzer;
+    let analyzer = this._nodes['analyzer'];
     if (analyzer instanceof AnalyserNode) {
       analyzer.getFloatFrequencyData(this._freqBuffer);
       return this._freqBuffer;
@@ -127,6 +142,10 @@ class AudioManager {
     }
   }
 
+  public nodeExists(key: string) {
+    return key in this._nodes;
+  }
+
   // conencts two audio nodes -- true on success
   private connectNodes(srcNodeKey: nodeKey, dstNodeKey: nodeKey) {
     if (!(srcNodeKey in this._nodes) && !(dstNodeKey in this._nodes)) {
@@ -138,21 +157,11 @@ class AudioManager {
   }
 
 
-  /*
-  ==== Base nodes ===== 
-  */
-
-  private createAnalyzerNode(): AudioNode {
-
-    return new AnalyserNode(this.audioContext,
-      { fftSize: this.FFT_SIZE }
-    );
-  }
-
-  private createSourceNode(audioStream: MediaStream) {
-    return new MediaStreamAudioSourceNode(this.audioContext,
-      { mediaStream: audioStream }
-    );
+  private addSourceNode = () => {
+    if (this.audioContext && this.audioStream) {
+      let source = new MediaStreamAudioSourceNode(this.audioContext, { mediaStream: this.audioStream });
+      this.addNode(source, "source", { outputs: ["analyzer"] });
+    }
   }
 
 }
