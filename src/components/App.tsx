@@ -1,7 +1,7 @@
 import  { FunctionComponent } from 'react';
 import "../assets/App.css";
 
-import Dashboard, { IGridComponent } from './Dashboard';
+import Dashboard from './Dashboard';
 import Sidebar from './Sidebar';
 
 

@@ -1,4 +1,4 @@
-import { cloneElement, createElement, FunctionComponent, ReactElement, useEffect, useMemo, useState } from "react";
+import {  createElement, FunctionComponent, ReactElement, useMemo, useState } from "react";
 import "../assets/App.css";
 
 // grid
@@ -7,7 +7,7 @@ import '../assets/grid_styles.css';
 import '../assets/resizable_styles.css';
 import AudioManager from "../logic/AudioManager";
 import SampleComponent from "./dashboard_components/SampleComponent";
-import Recorder, { IRecorderProps } from "./dashboard_components/Recorder";
+import Recorder from "./dashboard_components/Recorder";
 
 
 const ReactGridLayout = WidthProvider(RGL);

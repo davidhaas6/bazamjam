@@ -1,6 +1,4 @@
-import { time } from "console";
 import { FunctionComponent, useState, forwardRef, useEffect, useCallback } from "react";
-import { Layout } from "react-grid-layout";
 
 import { TiMediaRecord, TiMediaRecordOutline, TiMediaPauseOutline, TiMediaPlayOutline } from "react-icons/ti";
 import AudioManager from "../../logic/AudioManager";
@@ -13,8 +11,6 @@ const icons = {
   pauseOn: <TiMediaPlayOutline size={100} />,
   pauseOff: <TiMediaPauseOutline size={100} />
 };
-
-
 
 
 export interface IRecorderProps extends IDashboardComponentProps {
@@ -34,9 +30,7 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
 
   // functions
   let onPlayPauseClick = () => setIsPlaying(!isPlaying);
-
-  let recordingStatus = useCallback(() => updateTimeData, []);
-
+  
 
   let onRecordClick = () => {
     let newRecordingState = !isRecording;
@@ -55,16 +49,8 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
   const updateTimeData = () => {
     let timeData = props.audioManager.getTimeData();
     setSoundData(new Float32Array(timeData));
-    // console.group("timeData");
-    // console.log("isRecording: ", isRecording);
-    // console.log(timeData.slice(0, 3));
-    // console.log(timeData.length);
-    // console.groupEnd();
-    // console.log(timeData == soundData);
-    // console.log(soundData[0], soundData.length);
   };
-  // console.log("recorder rendered: ", soundData[0], soundData.length);
-  // logic
+
   let updatePeriod =  props.audioManager.FFT_SIZE / props.audioManager.SAMPLE_RATE;
 
 

@@ -5,8 +5,6 @@ interface SampleComponentProps extends IDashboardComponentProps {
   text?: string;
 }
 
-const boxStyle = { textAlign: 'center' };
-
 const SampleComponent: FunctionComponent<SampleComponentProps>
   = forwardRef(({ className, style = {}, children, ...props }, ref) => {
     let { text = "Hi there" } = props;

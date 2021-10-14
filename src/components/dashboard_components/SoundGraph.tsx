@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { FunctionComponent, useLayoutEffect, useRef, useState } from "react";
 
 
 interface ISoundGraphProps {
@@ -11,33 +11,26 @@ interface IDimensions {
   height: number;
 }
 
-const toPower = (db: number) => 10^(db/10);
 
 function draw(context: CanvasRenderingContext2D, audioData: Float32Array,
   width: number, height: number
 ) {
   let x = 0;
+  const noiseFloor = 3;
   const sliceWidth = width / audioData.length;
 
-  context.lineWidth = 2;
-  context.strokeStyle = '#000000';
-  context.clearRect(0, 0, width, height);
   context.strokeStyle = '#ffffff';
-  // context.fillRect(20, 20, width, height);
 
+  // TODO: run a gaussian filter or smtn
+  audioData.forEach((sample, i) => {
+    let sampleHeight = sample * height/2;
+    let y = sampleHeight + height/2;
 
-  // TODO: filter data
-  for (const idx in audioData) {
-    const y = audioData[idx] * height + height/2;
-    // if (idx == "100")
-    //   console.log(idx, y);
     let r = sliceWidth * 5;
-    context.fillRect(x, y, r, r);
-    // context.ellipse(x,y,r,r,0,0,0);
+    context.fillRect(x, y, r, r );
+
     x += sliceWidth;
-  }
-
-
+  });
 }
 
 const SoundGraph: FunctionComponent<ISoundGraphProps> = (props: ISoundGraphProps) => {
@@ -47,6 +40,10 @@ const SoundGraph: FunctionComponent<ISoundGraphProps> = (props: ISoundGraphProps
 
   const [dimensions, setDimensions] = useState<IDimensions>();
 
+
+  //TODO: Dimensions still don't update right when the canvas
+  // is being drawn and the window gets large than smaller
+
   // holds the timer for setTimeout and clearInterval
   let movement_timer: NodeJS.Timer;
 
@@ -55,19 +52,11 @@ const SoundGraph: FunctionComponent<ISoundGraphProps> = (props: ISoundGraphProps
   const RESET_TIMEOUT = 100;
 
   const test_dimensions = () => {
-    // For some reason targetRef.current.getBoundingClientRect was not available
-    // I found this worked for me, but unfortunately I can't find the
-    // documentation to explain this experience
-    // console.log("updating w/h");
-
     if (containerRef.current) {
       setDimensions({
         width: containerRef.current.offsetWidth,
         height: containerRef.current.offsetHeight
       });
-      // console.log(containerRef.current.offsetWidth,
-      //   containerRef.current.offsetHeight);
-
     }
   }
 
@@ -91,13 +80,6 @@ const SoundGraph: FunctionComponent<ISoundGraphProps> = (props: ISoundGraphProps
 
 
 
-  // let width = containerRef?.current?.offsetWidth;
-  // let height = containerRef?.current?.offsetHeight;
-  if (dimensions != null) {
-    // console.log("timegraph rendered", dimensions);
-  }
-
-
   // Redraw canvas on new sound data
   let displayGraph = props.isRecording && dimensions != null;
   useLayoutEffect(() => {
@@ -110,14 +92,8 @@ const SoundGraph: FunctionComponent<ISoundGraphProps> = (props: ISoundGraphProps
         canvasRef.current!.setAttribute("height", height.toString());
         draw(canvas, props.soundData, width, height);
       }
-      // console.log("drew canvase");
-
     }
-    // console.log('w/h: ', {
-    //   width: containerRef.current?.offsetWidth,
-    //   height: containerRef.current?.offsetHeight
-    // })
-  }, [dimensions?.width, dimensions?.height, props.soundData[0]]);
+  }, [dimensions?.width, dimensions?.height, props.soundData[0], displayGraph]);
 
 
 
