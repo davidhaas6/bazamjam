@@ -1,3 +1,4 @@
+import { time } from "console";
 import { FunctionComponent, useState, forwardRef, useEffect, useCallback } from "react";
 import { Layout } from "react-grid-layout";
 
@@ -20,14 +21,11 @@ export interface IRecorderProps extends IDashboardComponentProps {
   audioManager: AudioManager;
 }
 
-
-
 const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, style = {}, children, ...props }, ref) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [soundData, setSoundData] = useState(new Float32Array(0));
-
-  console.log("(global) isRecording: ", isRecording);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 
   // display properties
   let recordingIcon = isRecording ? icons.recordOn : icons.recordOff;
@@ -39,49 +37,51 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
 
   let recordingStatus = useCallback(() => updateTimeData, []);
 
+
   let onRecordClick = () => {
     let newRecordingState = !isRecording;
-    if (newRecordingState)
+    if (newRecordingState) {
       props.audioManager.startRecording();
-    else
-      props.audioManager.stopRecording();
-    setIsRecording(newRecordingState);
-    console.log(newRecordingState);
-  };
-
-  let updateTimeData = useCallback(() => {
-    console.group("timeData");
-    console.log("isRecording: ", isRecording);
-    if (isRecording) {
-      let timeData = props.audioManager.getTimeData();
-
-      console.log(timeData.slice(0, 3));
-      
-      console.log(timeData.length);
-
-      // TODO: isrecording isnt updated -- cant access it
-      setSoundData(timeData);
-
+      console.log("\n\nstarted\n")
     }
     else {
-      console.log("Not recording");
+      props.audioManager.stopRecording();
+      console.log("\n\nstopped\n")
     }
-    console.groupEnd();
+    setIsRecording(newRecordingState);
+  };
+  
+
+  const updateTimeData = () => {
+    let timeData = props.audioManager.getTimeData();
+    setSoundData(new Float32Array(timeData));
+    // console.group("timeData");
+    // console.log("isRecording: ", isRecording);
+    // console.log(timeData.slice(0, 3));
+    // console.log(timeData.length);
+    // console.groupEnd();
+    // console.log(timeData == soundData);
+    // console.log(soundData[0], soundData.length);
+  };
+  // console.log("recorder rendered: ", soundData[0], soundData.length);
+  // logic
+  let updatePeriod =  props.audioManager.FFT_SIZE / props.audioManager.SAMPLE_RATE;
+
+
+  // start timer when record is hit -- stop it once is record is off
+  useEffect(() => {
+    if (isRecording) {
+      const interval = setInterval(updateTimeData, updatePeriod);
+      setIntervalId(interval);
+    }
+    else if (intervalId != null) {
+      clearInterval(intervalId);
+    }
   }, [isRecording]);
 
-  // logic
-  let updatePeriod = 1000;// props.audioManager.FFT_SIZE / props.audioManager.SAMPLE_RATE;
 
 
-  // launch settings
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateTimeData()
-    }, updatePeriod);
-    return () => clearInterval(interval);
-  },[]);
-
-
+// could use key={soundData[0]} and other keys to only rerender sound graph
   return (
     <div
       {...props}
@@ -94,9 +94,7 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
         {/* <p>{recordingText}</p> */}
       </div>
 
-      <div>
-        <SoundGraph soundData={soundData} />
-      </div>
+      <SoundGraph soundData={soundData} isRecording={isRecording}/>
 
       {/* <div onClick={onPlayPauseClick}>{playPauseIcon}</div> */}
 

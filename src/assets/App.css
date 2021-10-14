@@ -122,10 +122,18 @@ body {
   justify-content: flex-start;
   align-items: center;
   /* width: 400px !important; */
+  padding: 20px;
 }
 
 .recorder-controls {
   display: flex;
   flex-direction: column;
   text-align: center;
+  width: 175px;
+}
+
+.timeDomGraph {
+  flex: 1;
+  height: 100%;
+  width: 100%;
 }

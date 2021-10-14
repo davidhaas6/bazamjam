@@ -105,7 +105,6 @@ class AudioManager {
     if (analyzer instanceof AnalyserNode) {
       // TODO: this has weird behavior... doesn't always output right thing
       analyzer.getFloatTimeDomainData(this._timeBuffer);
-      console.info({ manager: this._timeBuffer[0] });
       return this._timeBuffer;
     }
     return emptyBuffer;
