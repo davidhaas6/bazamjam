@@ -1,11 +1,14 @@
 import { FunctionComponent, useState } from "react";
 import { ProSidebar, Menu, MenuItem, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
+import { useAuth0 } from "@auth0/auth0-react";
 
 import 'react-pro-sidebar/dist/css/styles.css';
 import { TiPencil } from 'react-icons/ti';
 import { GiAudioCassette } from 'react-icons/gi';
 import { BiCodeCurly, BiArrowFromRight, BiArrowFromLeft } from 'react-icons/bi';
 import { BsGear } from 'react-icons/bs';
+import { MdAccountCircle, } from 'react-icons/md';
+import { RiDoorClosedLine, RiDoorLockLine, RiDoorOpenLine } from 'react-icons/ri';
 
 
 const icons = {
@@ -15,6 +18,8 @@ const icons = {
   settings: <BsGear />,
   sourceCode: <BiCodeCurly />,
   contact: <TiPencil />,
+  login: <RiDoorClosedLine />,
+  logout: <RiDoorClosedLine />
 };
 
 interface ISidebarProps {
@@ -22,8 +27,8 @@ interface ISidebarProps {
 }
 
 const Sidebar: FunctionComponent<ISidebarProps> = (props: ISidebarProps) => {
-  // if it's mobile, start closed
-  const [isClosed, setIsClosed] = useState(props.isMobile == true);
+  const [isClosed, setIsClosed] = useState(props.isMobile == true);    // if it's mobile, start closed
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
   // display properties
   let title = isClosed ? "BzJ" : "BazamJam";
@@ -32,11 +37,15 @@ const Sidebar: FunctionComponent<ISidebarProps> = (props: ISidebarProps) => {
 
   // functions
   let handleClose = () => setIsClosed(!isClosed);
+  let onLibaryClick = isAuthenticated ? () => { } : loginWithRedirect;
+  let onSettingsClick = isAuthenticated ? () => { } : loginWithRedirect;
+
 
   // logic
   if (props.isMobile && !isClosed) {
     setIsClosed(true);
   }
+
 
   return (
     <div className="sidebar">
@@ -48,11 +57,16 @@ const Sidebar: FunctionComponent<ISidebarProps> = (props: ISidebarProps) => {
 
         <SidebarContent>
           <Menu iconShape="round">
-            <MenuItem icon={icons.library}>
-              <a href="https://omfgdogs.com/">Library</a>
+            {!isAuthenticated &&
+              <MenuItem icon={icons.login} onClick={() => loginWithRedirect()}>
+                Sign in
+              </MenuItem>
+            }
+            <MenuItem icon={icons.library} onClick={() => onLibaryClick()}>
+              {isAuthenticated ? <a href="https://omfgdogs.com/">Library</a> : "Library"}
             </MenuItem>
-            <MenuItem icon={icons.settings}>
-            <a href="https://omfgdogs.com/">Settings</a>
+            <MenuItem icon={icons.settings} onClick={() => onSettingsClick()}>
+            {isAuthenticated ? <a href="https://omfgdogs.com/">Settings</a> : "Settings"}
             </MenuItem>
             <MenuItem icon={openCloseIcon} onClick={handleClose}>
               Minimize
@@ -62,12 +76,18 @@ const Sidebar: FunctionComponent<ISidebarProps> = (props: ISidebarProps) => {
 
         <SidebarFooter>
           <Menu iconShape="round">
+            {isAuthenticated &&
+              <MenuItem icon={icons.logout} onClick={() => logout({ returnTo: window.location.origin })}>
+                Log out
+              </MenuItem>
+            }
             <MenuItem icon={icons.contact}>
               <a href="mailto:davidhaas6@gmail.com">Contact</a>
             </MenuItem>
             <MenuItem icon={icons.sourceCode}>
               <a href="https://github.com/davidhaas6/bazamjam">Source</a>
             </MenuItem>
+
           </Menu>
         </SidebarFooter>
 

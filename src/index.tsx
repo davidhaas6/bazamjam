@@ -3,11 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import { Auth0Provider } from "@auth0/auth0-react";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Auth0Provider
+    domain="dev-9c8pon97.us.auth0.com" // If you are using a custom domain with Auth0, the value of the domain property is 
+                                       //the value of your custom domain instead of the value reflected in the "Settings" tab.
+    clientId="cofJDIegnz1wWXwQiDA2Qda0lCQ4uKDL"
+    redirectUri={window.location.origin}
+  >
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </Auth0Provider>,
   document.getElementById('root')
 );
 

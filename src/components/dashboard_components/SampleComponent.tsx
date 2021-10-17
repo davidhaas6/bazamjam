@@ -13,7 +13,7 @@ const SampleComponent: FunctionComponent<SampleComponentProps>
         style={{ ...style }}
         className={className + " recorder"}
         ref={ref as React.RefObject<HTMLDivElement>}>
-        <div style={{ textAlign: 'center' }}> {text} </div>
+        <div style={{ textAlign: 'center' }}>{text}</div>
       </div>
     );
   });

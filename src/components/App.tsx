@@ -10,8 +10,6 @@ interface IAppProps {
 }
  
 const App: FunctionComponent<IAppProps> = (props: IAppProps) => {
-
-
   return (
     <div className="App">
       <Sidebar />
