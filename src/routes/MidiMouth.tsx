@@ -17,7 +17,7 @@ enum RequestStatus {
 }
 
 const WELCOME_MESSAGE = "Make a song with your voice! Choose a sound clip, song, and go!";
-const API_URL = "http://127.0.0.1:8000/";
+const API_URL = "https://bazamjam.uc.r.appspot.com/";
 
 function downloadSong(song: string) {
     const url = API_URL + "download_song?song_id=" + song;
@@ -26,9 +26,10 @@ function downloadSong(song: string) {
 }
 
 const MidiMouth: FunctionComponent<MidiMouthProps> = () => {
-    const [outputSongId, setOutputSongId] = useState("");
+    const [outputSongUrl, setOutputSongUrl] = useState("");
     const [songCreationStatus, setSongCreationStatus] = useState(RequestStatus.None);
-    let songUrl = API_URL + outputSongId;
+
+    let songUrl = outputSongUrl;
     console.log(ReactPlayer.canPlay(songUrl))
     return (
         <main className="midi-main">
@@ -37,10 +38,9 @@ const MidiMouth: FunctionComponent<MidiMouthProps> = () => {
                 header="Howdy!"
                 message={WELCOME_MESSAGE}
             />
-            <MidiMouthForm apiRoot={API_URL} setOutputSong={setOutputSongId} />
+            <MidiMouthForm apiRoot={API_URL} setOutputSong={setOutputSongUrl} />
             <hr />
-            {outputSongId.length > 0 && (
-
+            {outputSongUrl.length > 0 && (
                 <Card>
                     <Card.Header>
                         <h3>Your song is ready!</h3>
@@ -49,10 +49,8 @@ const MidiMouth: FunctionComponent<MidiMouthProps> = () => {
                         <ReactPlayer url={songUrl} config={{ file: { forceAudio: true } }} controls={true} 
                         height={50} width={300} />
                     </Card.Body>
-
                 </Card>
             )
-
             }
         </main>
     );

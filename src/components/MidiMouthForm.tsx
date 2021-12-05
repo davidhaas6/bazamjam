@@ -1,10 +1,10 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { Accordion, Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
+import { Accordion, Button, Card, Form, FormControl, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import AlertDismissable from "./AlertDismissable";
 
 interface MidiMouthFormProps {
   apiRoot: string;
-  setOutputSong: (outputSongId: string) => void;
+  setOutputSong: (outputSongURL: string) => void;
 }
 
 
@@ -18,6 +18,12 @@ function formatName(name: string, id: string, prefix?: string): string {
   }
   return name;
 }
+
+const renderTooltip = (text: string, options) => (
+  <Tooltip id="button-tooltip" {...options}>
+    Simple tooltip
+  </Tooltip>
+);
 
 const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFormProps) => {
   const [sourceSongs, setSourceSongs] = useState<Object>();
@@ -152,11 +158,14 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
         {errMsg.length > 0 && <AlertDismissable message={errMsg} variant="danger" header="Error" />}
 
         {/* input sound */}
+
         <InputGroup className="mb-3">
           <InputGroup.Text>🎤</InputGroup.Text>
-          <Form.Control type="file" size="lg" accept=".wav"
-            onChange={(e) => setUserSoundFile(e.target.files[0])} />
+
+            <Form.Control type="file" size="lg" accept=".wav"
+              onChange={(e) => setUserSoundFile(e.target.files[0])} />
         </InputGroup>
+
 
         {/* song selection */}
         <InputGroup className="mb-3">
