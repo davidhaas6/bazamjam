@@ -1,6 +1,7 @@
 import { FunctionComponent, useState } from "react";
 import { ProSidebar, Menu, MenuItem, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
 import { useAuth0 } from "@auth0/auth0-react";
+import { Link } from "react-router-dom";
 
 import 'react-pro-sidebar/dist/css/styles.css';
 import { TiPencil } from 'react-icons/ti';
@@ -9,6 +10,7 @@ import { BiCodeCurly, BiArrowFromRight, BiArrowFromLeft } from 'react-icons/bi';
 import { BsGear } from 'react-icons/bs';
 import { MdAccountCircle, } from 'react-icons/md';
 import { RiDoorClosedLine, RiDoorLockLine, RiDoorOpenLine } from 'react-icons/ri';
+import { CgSmileMouthOpen } from 'react-icons/cg';
 
 
 const icons = {
@@ -19,7 +21,8 @@ const icons = {
   sourceCode: <BiCodeCurly />,
   contact: <TiPencil />,
   login: <RiDoorClosedLine />,
-  logout: <RiDoorClosedLine />
+  logout: <RiDoorClosedLine />,
+  midimouth: <CgSmileMouthOpen />,
 };
 
 interface ISidebarProps {
@@ -60,17 +63,24 @@ const Sidebar: FunctionComponent<ISidebarProps> = (props: ISidebarProps) => {
             {!isAuthenticated &&
               <MenuItem icon={icons.login} onClick={() => loginWithRedirect()}>
                 Sign in
-              </MenuItem>
-            }
+              </MenuItem>}
+
+            <MenuItem icon={icons.midimouth}>
+              <Link to="/midi-mouth">MidiMouth</Link>
+            </MenuItem>
+
             <MenuItem icon={icons.library} onClick={() => onLibaryClick()}>
               {isAuthenticated ? <a href="https://omfgdogs.com/">Library</a> : "Library"}
             </MenuItem>
+
             <MenuItem icon={icons.settings} onClick={() => onSettingsClick()}>
-            {isAuthenticated ? <a href="https://omfgdogs.com/">Settings</a> : "Settings"}
+              {isAuthenticated ? <a href="https://omfgdogs.com/">Settings</a> : "Settings"}
             </MenuItem>
+
             <MenuItem icon={openCloseIcon} onClick={handleClose}>
               Minimize
             </MenuItem>
+
           </Menu>
         </SidebarContent>
 

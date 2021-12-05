@@ -18,8 +18,7 @@ body {
   height: 100vh;
   /* ensures app takes up all of screen */
   display: flex;
-  flex-direction: column;
-  flex-flow: nowrap;
+  /* flex-flow: column nowrap; */
   align-items: stretch;
   /* display: grid;
   grid-template-columns: 240px 1fr;
@@ -33,6 +32,17 @@ body {
 /*
 ===== Layout ======
 */
+
+/*
+===== Components ======
+*/
+
+.alert {
+    /* margin: 1rem; */
+    display: inline-block;
+    max-width: 550px;
+    width: 100%;
+}
 
 /*
  ======== Sidebar ======
@@ -136,4 +146,39 @@ body {
   flex: 1;
   height: 100%;
   width: 100%;
+}
+
+
+/*
+ ======== Midi Mouth ======= 
+*/
+
+.midi-main {
+    height: 100vh;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-center;
+    align-items: center;
+    /* width: 400px !important; */
+    padding: 20px;
+}
+.midi-header {
+    margin-bottom: 20px;
+}
+.midi-form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    width: fit-content;
+}
+
+.midi-form-label {
+    font-size: 20px;
+
+    margin-bottom: -5px;
+}
+
+.midi-advanced-options {
+    padding: 20px;
 }

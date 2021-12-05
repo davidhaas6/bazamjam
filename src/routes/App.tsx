@@ -1,9 +1,10 @@
 import  { FunctionComponent } from 'react';
 import "../assets/App.css";
 
-import Dashboard from './Dashboard';
-import Sidebar from './Sidebar';
+import Dashboard from '../components/Dashboard';
+import Sidebar from '../components/Sidebar';
 
+import 'react-bootstrap'
 
 interface IAppProps {
   
