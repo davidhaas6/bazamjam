@@ -21,6 +21,7 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [soundData, setSoundData] = useState(new Float32Array(0));
+  const [recording, setRecording] = useState(new Float32Array(0));
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 
   // display properties
@@ -47,8 +48,13 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
   
 
   const updateTimeData = () => {
-    let timeData = props.audioManager.getTimeData();
-    setSoundData(new Float32Array(timeData));
+    let timeData = new Float32Array(props.audioManager.getTimeData());
+    setSoundData(timeData);
+
+    // let newRecording = new Float32Array(timeData.length + recording.length);
+    // newRecording.set(recording);
+    // newRecording.set(timeData, recording.length);
+    setRecording((prev) => new Float32Array([...Array.from(prev), ...Array.from(timeData)]));
   };
 
   let updatePeriod =  props.audioManager.FFT_SIZE / props.audioManager.SAMPLE_RATE;
@@ -66,6 +72,7 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
   }, [isRecording]);
 
 
+//   console.log(recording.length);
 
 // could use key={soundData[0]} and other keys to only rerender sound graph
   return (

@@ -18,8 +18,7 @@ body {
   height: 100vh;
   /* ensures app takes up all of screen */
   display: flex;
-  flex-direction: column;
-  flex-flow: nowrap;
+  /* flex-flow: column nowrap; */
   align-items: stretch;
   /* display: grid;
   grid-template-columns: 240px 1fr;

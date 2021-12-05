@@ -1,3 +1,4 @@
+import Recorder from "./Recorder";
 
 
 // A string-indexed list of nodes. Essentially a dict
@@ -16,6 +17,8 @@ interface INodeConnections {
 const emptyBuffer = new Float32Array(0);
 
 
+// TODO: Add recording loop in here instead of react components
+
 class AudioManager {
   // audio state and analysis
   audioContext?: AudioContext;
@@ -24,13 +27,13 @@ class AudioManager {
   nodeConnections: INodeConnections;
 
   analyser?: AnalyserNode | null;
+  source?: MediaStreamAudioSourceNode | null;
+  audioStream?: MediaStream | null;
+
   _timeBuffer: Float32Array;
   _freqBuffer: Float32Array;
 
-  source?: MediaStreamAudioSourceNode | null;
-
-
-  audioStream?: MediaStream | null;
+  _recorder: Recorder;
 
   audioActive: boolean = false; // if we're actively processing audio
   readonly FFT_SIZE = 2048; // num bins in fft -- real + image
@@ -47,6 +50,8 @@ class AudioManager {
 
     this._timeBuffer = new Float32Array(this.FFT_SIZE);
     this._freqBuffer = new Float32Array(this.FFT_SIZE / 2);
+
+    this._recorder = new Recorder(this.SAMPLE_RATE);
   }
 
   // Initializes the audio context and nodes. Must be called from a user gesture

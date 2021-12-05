@@ -7,10 +7,13 @@ import { Auth0Provider } from "@auth0/auth0-react";
 
 ReactDOM.render(
   <Auth0Provider
-    domain="dev-9c8pon97.us.auth0.com" // If you are using a custom domain with Auth0, the value of the domain property is 
-                                       //the value of your custom domain instead of the value reflected in the "Settings" tab.
+    // If you are using a custom domain with Auth0, the value of the domain property is 
+    //the value of your custom domain instead of the value reflected in the "Settings" tab.
+    domain="dev-9c8pon97.us.auth0.com" 
     clientId="cofJDIegnz1wWXwQiDA2Qda0lCQ4uKDL"
     redirectUri={window.location.origin}
+    audience="https://YOUR_DOMAIN/api/v2/"
+    scope="read:current_user update:current_user_metadata"
   >
     <React.StrictMode>
       <App />
