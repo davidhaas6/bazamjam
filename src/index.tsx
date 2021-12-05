@@ -25,7 +25,7 @@ ReactDOM.render(
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<App />} />
-                <Route path="midi-mouth" element={<MidiMouth />} />
+                <Route path="/midi-mouth" element={<MidiMouth />} />
             </Routes>
         </BrowserRouter>
 

@@ -153,6 +153,17 @@ body {
  ======== Midi Mouth ======= 
 */
 
+.midi-app {
+    height: 100vh;
+    width: 100%;
+    /* ensures app takes up all of screen */
+    display: flex;
+    flex-flow: row nowrap;
+    /* justify-content: center; */
+    align-items: stretch;
+    
+}
+
 .midi-main {
     height: 100vh;
 
@@ -162,6 +173,7 @@ body {
     align-items: center;
     /* width: 400px !important; */
     padding: 20px;
+    flex: 1; /* fill remaining space */
 }
 .midi-header {
     margin-bottom: 20px;
