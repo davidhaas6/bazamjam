@@ -25,9 +25,11 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
 
   const [songChoice, setSongChoice] = useState<string>();
   const [instrumentChoice, setInstrumentChoice] = useState<string>();
+  const [userSoundFile, setUserSoundFile] = useState()
   const [keyShift, setKeyShift] = useState<number>(0);
   const [allTracksChoice, setAllTracksChoice] = useState<boolean>();
 
+  const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState<string>("");
 
   // let ifSongChosenProps = {'d'}
@@ -49,9 +51,7 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
     instrumentOptions = entries.map(
       ([instrId, instrName]) => <option value={instrId}>{formatName(instrName, instrId, "Instrument")}</option>);
   }
-  // let instrumentOptions = instruments.map(
-  //   (instrument) => <option value={instrument}>instrument</option>
-  // )
+
 
   // Load song options
   useEffect(() => {
@@ -72,9 +72,9 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
   // Load instrument options
   useEffect(() => {
     if (songChoice == null || sourceSongs == null) return;
-
     // reset instrument selection
-    setInstrumentChoice("");
+    setInstrumentChoice(allInstrumentsKey);
+
     // get new instruments
     console.log("Fetching instruments for: " + sourceSongs[songChoice]);
     fetch(props.apiRoot + "get_instruments?song_id=" + songChoice)
@@ -91,17 +91,71 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
       );
   }, [songChoice]);
 
+  // Send song generation request
+  async function sendSongRequest() {
+    var formData = new FormData();
+    formData.append('user_sample', userSoundFile);
+    console.log("formdata: ", Array.from(formData.keys()));
+
+    let params = {
+      "song_id": songChoice,
+      "instrument_num": instrumentChoice,
+      "key_shift": keyShift,
+      "all_tracks": instrumentChoice == allInstrumentsKey,
+    };
+
+
+    let paramString = Object.keys(params).map(key => key + "=" + params[key]).join("&");
+    let queryString = props.apiRoot + "create_song" + "?" + paramString;
+    console.log("fetching: " + queryString);
+    setLoading(true);
+    fetch(queryString, {
+      method: "POST",
+      body: formData,
+      headers: {
+        accept: "application/json",
+        // "Content-Type": "multipart/form-data"
+      },
+    })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          props.setOutputSong(result['song'])
+          setLoading(false);
+        },
+        (error) => {
+          console.log(error);
+          setErrMsg(error.message);
+        }
+      );
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("submitting");
+    if (!userSoundFile) {
+      setErrMsg("Please select a sound file.");
+      console.log("no file selected");
+      return;
+    } else {
+      console.log("file: " + userSoundFile);
+    }
+    sendSongRequest();
+  }
+
   // console.log("all instruments: " + allInstrsSelected)
 
   return (
     <div className="midi-form">
-      <Form>
+      <Form onSubmit={handleSubmit}>
         {errMsg.length > 0 && <AlertDismissable message={errMsg} variant="danger" header="Error" />}
 
         {/* input sound */}
         <InputGroup className="mb-3">
           <InputGroup.Text>🎤</InputGroup.Text>
-          <Form.Control type="file" size="lg" />
+          <Form.Control type="file" size="lg" accept=".wav"
+            onChange={(e) => setUserSoundFile(e.target.files[0])} />
         </InputGroup>
 
         {/* song selection */}
@@ -117,18 +171,19 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
         <InputGroup className="mb-3"  >
           <InputGroup.Text>🎷</InputGroup.Text>
           <Form.Select size="lg"
+            value={instrumentChoice}
             disabled={songChoice == null}
-            onChange={(event) => setInstrumentChoice(event.target.value)}
+            onChange={(event) => setInstrumentChoice(event.target.value)
+            }
           >
             {allowInstruments && (
-              <option selected={allInstrsSelected} value={allInstrumentsKey}>{allInstrumentsTitle}</option>
+              <option value={allInstrumentsKey}>{allInstrumentsTitle}</option>
             )}
             {allowInstruments ?
               instrumentOptions
               : <option>Must select a song</option>}
           </Form.Select>
         </InputGroup>
-
 
         {/* advanced options */}
         <Accordion className="mb-3">
@@ -153,13 +208,13 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
 
         {/* submit button */}
         <div className="mb-3 text-center" >
-          <Button variant="success" size="lg">
-            Create Song 👄
+          <Button variant="success" size="lg" type="submit" disabled={loading}>
+            {loading ? "Processing..." : "Create Song 👄"}
           </Button>
         </div>
 
-      </Form>
-    </div>
+      </Form >
+    </div >
   );
 }
 
