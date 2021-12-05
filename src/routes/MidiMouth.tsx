@@ -7,10 +7,20 @@ interface MidiMouthProps {
 
 }
 
+enum RequestStatus {
+    None,
+    Submitted,
+    Success,
+    Error
+}
+
 const WELCOME_MESSAGE = "Midi Mouth lets you make songs with your voice! Choose a song, a sound clip, and go!";
+const API_URL = "http://127.0.0.1:8000/";
+
 
 const MidiMouth: FunctionComponent<MidiMouthProps> = () => {
     const [outputSongId, setOutputSongId] = useState("");
+    const [songCreationStatus, setSongCreationStatus] = useState(RequestStatus.None);
 
     return (
         <main className="midi-main">
@@ -18,9 +28,10 @@ const MidiMouth: FunctionComponent<MidiMouthProps> = () => {
             <AlertDismissable
                 header="Howdy!"
                 message={WELCOME_MESSAGE}
-                center={false}
             />
-            <MidiMouthForm setOutputSong={setOutputSongId} />
+            <MidiMouthForm apiRoot={API_URL} setOutputSong={setOutputSongId} />
+            <hr />
+            di
         </main>
     );
 }

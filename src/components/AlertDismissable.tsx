@@ -5,20 +5,22 @@ interface IAlertDismissableProps {
     header: string;
     message: string;
     closeMessage?: string;
-    center?: boolean;
+    variant?: "success" | "danger" | "warning" | "info";
 }
 
 const AlertDismissable: FunctionComponent<IAlertDismissableProps> = (props: IAlertDismissableProps) => {
     const [show, setShow] = useState(true);
-
-    let alertStyle = props.center ? {"margin": "auto"} : {};
+    let variant = props.variant || "success";
 
     return (
         <>
-            <Alert show={show} variant="success" className="alert" style={alertStyle} dismissible={true}>
+            <Alert show={show} variant={variant} 
+            onClose={() => setShow(false)} 
+            dismissible={true}
+            >
                 <Alert.Heading>{props.header}</Alert.Heading>
-                    {props.message}
-            </Alert>            
+                {props.message}
+            </Alert>
         </>
     );
 }

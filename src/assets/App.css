@@ -38,9 +38,10 @@ body {
 */
 
 .alert {
-    margin: 1rem;
+    /* margin: 1rem; */
     display: inline-block;
     max-width: 550px;
+    width: 100%;
 }
 
 /*
@@ -153,13 +154,14 @@ body {
 */
 
 .midi-main {
+    height: 100vh;
+
     display: flex;
     flex-flow: column nowrap;
     justify-content: flex-center;
     align-items: center;
     /* width: 400px !important; */
     padding: 20px;
-    height: 100vh;
 }
 .midi-header {
     margin-bottom: 20px;
