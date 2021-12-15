@@ -8,6 +8,8 @@ import '../assets/resizable_styles.css';
 import AudioManager from "../logic/AudioManager";
 import SampleComponent from "./dashboard_components/SampleComponent";
 import Recorder from "./dashboard_components/Recorder";
+import MidiMouth from "../routes/MidiMouth";
+import MidiM from "./dashboard_components/MidiMComp";
 
 
 const ReactGridLayout = WidthProvider(RGL);
@@ -41,19 +43,24 @@ const gridProps: ReactGridLayoutProps = {
   onLayoutChange: function () { },
 };
 
-const defaultDashboardLayout: { [key: string]: IGridComponent<any> } = {
-  temp1: {
-    element: SampleComponent,
-    props: {},
-    layout: { i: '1', x: 0, y: 0, w: 1, h: 1 }
-  },
-  temp2: {
-    element: SampleComponent,
-    props: {},
-    layout: { i: '2', x: 1, y: 1, w: 1, h: 1 }
+const components: { [key: string]: IGridComponent<any> } = {
+//   temp1: {
+//     element: SampleComponent,
+//     props: {},
+//     layout: { i: '1', x: 0, y: 0, w: 1, h: 1 }
+//   },
+//   temp2: {
+//     element: SampleComponent,
+//     props: {},
+//     layout: { i: '2', x: 1, y: 1, w: 1, h: 1 }
+//   },
+  midiMouth: {
+      element: MidiM,
+      props: {},
+      layout: { i: '1', x: 0, y: 0, w: 1, h: 2 }
   }
 };
-
+const defaultLayout = Object.values(components);
 
 const recorderLayout = { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true };
 
@@ -80,7 +87,7 @@ function buildComponents(components: IGridComponent<any>[]): ReactElement[] {
 
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
   const [audioManager, setaudioManager] = useState(new AudioManager());
-  const [dshbLayout, setDshbLayout] = useState([defaultDashboardLayout.temp1,defaultDashboardLayout.temp2]);
+  const [dshbLayout, setDshbLayout] = useState(defaultLayout);
   // execute on first build
 
 

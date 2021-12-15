@@ -14,96 +14,103 @@ import { CgSmileMouthOpen } from 'react-icons/cg';
 
 
 const icons = {
-  menuClosed: <BiArrowFromLeft />,
-  menuOpen: <BiArrowFromRight />,
-  library: <GiAudioCassette />,
-  settings: <BsGear />,
-  sourceCode: <BiCodeCurly />,
-  contact: <TiPencil />,
-  login: <RiDoorClosedLine />,
-  logout: <RiDoorClosedLine />,
-  midimouth: <CgSmileMouthOpen />,
+    menuClosed: <BiArrowFromLeft />,
+    menuOpen: <BiArrowFromRight />,
+    library: <GiAudioCassette />,
+    settings: <BsGear />,
+    sourceCode: <BiCodeCurly />,
+    contact: <TiPencil />,
+    login: <RiDoorClosedLine />,
+    logout: <RiDoorClosedLine />,
+    midimouth: <CgSmileMouthOpen />,
 };
 
 interface ISidebarProps {
-  isMobile?: boolean;
+    isMobile?: boolean;
 }
 
 const Sidebar: FunctionComponent<ISidebarProps> = (props: ISidebarProps) => {
-  const [isClosed, setIsClosed] = useState(props.isMobile == true);    // if it's mobile, start closed
-  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+    const [isClosed, setIsClosed] = useState(props.isMobile == true);    // if it's mobile, start closed
+    const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
-  // display properties
-  let title = isClosed ? "BzJ" : "BazamJam";
-  let width = props.isMobile ? "20px" : "175px";
-  let openCloseIcon = isClosed ? icons.menuClosed : icons.menuOpen;
+    // display properties
+    let title = isClosed ? "BzJ" : "BazamJam";
+    let width = props.isMobile ? "20px" : "175px";
+    let openCloseIcon = isClosed ? icons.menuClosed : icons.menuOpen;
 
-  // functions
-  let handleClose = () => setIsClosed(!isClosed);
-  let onLibaryClick = isAuthenticated ? () => { } : loginWithRedirect;
-  let onSettingsClick = isAuthenticated ? () => { } : loginWithRedirect;
-
-
-  // logic
-  if (props.isMobile && !isClosed) {
-    setIsClosed(true);
-  }
+    // functions
+    let handleClose = () => setIsClosed(!isClosed);
+    let onLibaryClick = isAuthenticated ? () => { } : loginWithRedirect;
+    let onSettingsClick = isAuthenticated ? () => { } : loginWithRedirect;
 
 
-  return (
-    <div className="sidebar">
-      <ProSidebar collapsed={isClosed} width={width}>
+    // logic
+    if (props.isMobile && !isClosed) {
+        setIsClosed(true);
+    }
 
-        <SidebarHeader className="title-header">
-          {title}
-        </SidebarHeader>
 
-        <SidebarContent>
-          <Menu iconShape="round">
-            {!isAuthenticated &&
-              <MenuItem icon={icons.login} onClick={() => loginWithRedirect()}>
-                Sign in
-              </MenuItem>}
+    return (
+        <div className="sidebar">
+            <ProSidebar collapsed={isClosed} width={width}>
 
-            <MenuItem icon={icons.midimouth}>
-              <Link to="/midi-mouth">MidiMouth</Link>
-            </MenuItem>
+                <SidebarHeader className="title-header">
+                    {title}
+                </SidebarHeader>
 
-            <MenuItem icon={icons.library} onClick={() => onLibaryClick()}>
-              {isAuthenticated ? <a href="https://omfgdogs.com/">Library</a> : "Library"}
-            </MenuItem>
+                <SidebarContent>
+                    <Menu iconShape="round">
 
-            <MenuItem icon={icons.settings} onClick={() => onSettingsClick()}>
-              {isAuthenticated ? <a href="https://omfgdogs.com/">Settings</a> : "Settings"}
-            </MenuItem>
 
-            <MenuItem icon={openCloseIcon} onClick={handleClose}>
-              Minimize
-            </MenuItem>
 
-          </Menu>
-        </SidebarContent>
+                        <MenuItem icon={icons.library} onClick={() => onLibaryClick()}>
+                            {isAuthenticated ? <a href="https://omfgdogs.com/">Library</a> : "Library"}
+                        </MenuItem>
 
-        <SidebarFooter>
-          <Menu iconShape="round">
-            {isAuthenticated &&
-              <MenuItem icon={icons.logout} onClick={() => logout({ returnTo: window.location.origin })}>
-                Log out
-              </MenuItem>
-            }
-            <MenuItem icon={icons.contact}>
-              <a href="mailto:davidhaas6@gmail.com">Contact</a>
-            </MenuItem>
-            <MenuItem icon={icons.sourceCode}>
-              <a href="https://github.com/davidhaas6/bazamjam">Source</a>
-            </MenuItem>
 
-          </Menu>
-        </SidebarFooter>
+                        <MenuItem icon={icons.midimouth}>
+                            <Link to="/midi-mouth">MidiMouth</Link>
+                        </MenuItem>
 
-      </ProSidebar>
-    </div>
-  );
+                        {!isAuthenticated &&
+                            <MenuItem icon={icons.login} onClick={() => loginWithRedirect()}>
+                                Sign in
+                            </MenuItem>
+                        }
+
+                        {isAuthenticated &&
+                            <MenuItem icon={icons.settings} onClick={() => onSettingsClick()}>
+                                <a href="https://omfgdogs.com/">Settings</a>
+                            </MenuItem>
+                        }
+
+                        <MenuItem icon={openCloseIcon} onClick={handleClose}>
+                            Minimize
+                        </MenuItem>
+
+                    </Menu>
+                </SidebarContent>
+
+                <SidebarFooter>
+                    <Menu iconShape="round">
+                        {isAuthenticated &&
+                            <MenuItem icon={icons.logout} onClick={() => logout({ returnTo: window.location.origin })}>
+                                Log out
+                            </MenuItem>
+                        }
+                        <MenuItem icon={icons.contact}>
+                            <a href="mailto:davidhaas6@gmail.com">Contact</a>
+                        </MenuItem>
+                        <MenuItem icon={icons.sourceCode}>
+                            <a href="https://github.com/davidhaas6/bazamjam">Source</a>
+                        </MenuItem>
+
+                    </Menu>
+                </SidebarFooter>
+
+            </ProSidebar>
+        </div>
+    );
 }
 
 export default Sidebar;

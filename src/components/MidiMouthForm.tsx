@@ -110,11 +110,10 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
       "all_tracks": instrumentChoice == allInstrumentsKey,
     };
 
-
+    setLoading(true);
     let paramString = Object.keys(params).map(key => key + "=" + params[key]).join("&");
     let queryString = props.apiRoot + "create_song" + "?" + paramString;
     console.log("fetching: " + queryString);
-    setLoading(true);
     fetch(queryString, {
       method: "POST",
       body: formData,
@@ -128,13 +127,12 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
         (result) => {
           console.log(result);
           props.setOutputSong(result['song'])
-          setLoading(false);
         },
         (error) => {
           console.log(error);
           setErrMsg(error.message);
         }
-      );
+      ).then(() => { setLoading(false); });
   }
 
   const handleSubmit = (event) => {
@@ -150,7 +148,6 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
     sendSongRequest();
   }
 
-  // console.log("all instruments: " + allInstrsSelected)
 
   return (
     <div className="midi-form">
@@ -158,12 +155,10 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
         {errMsg.length > 0 && <AlertDismissable message={errMsg} variant="danger" header="Error" />}
 
         {/* input sound */}
-
         <InputGroup className="mb-3">
           <InputGroup.Text>🎤</InputGroup.Text>
-
-            <Form.Control type="file" size="lg" accept=".wav"
-              onChange={(e) => setUserSoundFile(e.target.files[0])} />
+          <Form.Control type="file" size="lg" accept=".wav"
+            onChange={(e) => setUserSoundFile(e.target.files[0])} />
         </InputGroup>
 
 
@@ -218,7 +213,7 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
         {/* submit button */}
         <div className="mb-3 text-center" >
           <Button variant="success" size="lg" type="submit" disabled={loading}>
-            {loading ? "Processing..." : "Create Song 👄"}
+            {loading ? "Processing..." : "Create Song"}
           </Button>
         </div>
 
@@ -226,5 +221,5 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
     </div >
   );
 }
-
+//  👄
 export default MidiMouthForm;
