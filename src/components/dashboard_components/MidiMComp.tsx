@@ -36,6 +36,7 @@ const MidiM: FunctionComponent<IMidiMProps> = forwardRef(({ className, style = {
     console.log(ReactPlayer.canPlay(songUrl))
     
     return (
+        
         <div
             {...props}
             style={{ ...style }}
@@ -43,7 +44,7 @@ const MidiM: FunctionComponent<IMidiMProps> = forwardRef(({ className, style = {
             ref={ref as React.RefObject<HTMLDivElement>}
         >
             <div className="midi-main">
-                <h1 className="midi-header">Midi Mouth 🎶👄🎶</h1>
+                <h1 className="midi-header">Midi Mouth 🎶</h1>
 
                 <MidiMouthForm apiRoot={API_URL} setOutputSong={setOutputSongUrl} />
                 <hr />
@@ -53,6 +54,7 @@ const MidiM: FunctionComponent<IMidiMProps> = forwardRef(({ className, style = {
                             <h3>Your song is ready!</h3>
                         </Card.Header>
                         <Card.Body>
+                            <a href={songUrl}> Direct Link </a>
                             <ReactPlayer url={songUrl} config={{ file: { forceAudio: true } }} controls={true}
                                 height={50} width={300} />
                         </Card.Body>

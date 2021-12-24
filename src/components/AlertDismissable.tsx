@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react";
-import { Alert, Button } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 
 interface IAlertDismissableProps {
     header: string;

@@ -1,9 +1,12 @@
-import { FunctionComponent, useState, forwardRef, useEffect, useCallback } from "react";
+import { FunctionComponent, useState, forwardRef, useEffect, useCallback, useContext } from "react";
 
 import { TiMediaRecord, TiMediaRecordOutline, TiMediaPauseOutline, TiMediaPlayOutline } from "react-icons/ti";
 import AudioManager from "../../logic/AudioManager";
+import FloatArrayContext from "../../logic/FloatArrayContext";
+import SoundContext from "../../logic/SoundContext";
 import { IDashboardComponentProps } from "./DshbComp";
 import SoundGraph from "./SoundGraph";
+
 
 const icons = {
   recordOn: <TiMediaRecord size={100} />,
@@ -15,12 +18,12 @@ const icons = {
 
 export interface IRecorderProps extends IDashboardComponentProps {
   audioManager: AudioManager;
+  updateSoundData: (data: Float32Array) => void;
 }
 
 const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, style = {}, children, ...props }, ref) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [soundData, setSoundData] = useState(new Float32Array(0));
   const [recording, setRecording] = useState(new Float32Array(0));
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 
@@ -31,7 +34,7 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
 
   // functions
   let onPlayPauseClick = () => setIsPlaying(!isPlaying);
-  
+
 
   let onRecordClick = () => {
     let newRecordingState = !isRecording;
@@ -45,19 +48,19 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
     }
     setIsRecording(newRecordingState);
   };
-  
+
 
   const updateTimeData = () => {
     let timeData = new Float32Array(props.audioManager.getTimeData());
-    setSoundData(timeData);
+    props.updateSoundData(timeData);
 
     // let newRecording = new Float32Array(timeData.length + recording.length);
     // newRecording.set(recording);
     // newRecording.set(timeData, recording.length);
-    setRecording((prev) => new Float32Array([...Array.from(prev), ...Array.from(timeData)]));
+    // setRecording((prev) => new Float32Array([...Array.from(prev), ...Array.from(timeData)]));
   };
 
-  let updatePeriod =  props.audioManager.FFT_SIZE / props.audioManager.SAMPLE_RATE;
+  let updatePeriod = props.audioManager.FFT_SIZE / props.audioManager.SAMPLE_RATE;
 
 
   // start timer when record is hit -- stop it once is record is off
@@ -72,9 +75,9 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
   }, [isRecording]);
 
 
-//   console.log(recording.length);
+  //   console.log(recording.length);
 
-// could use key={soundData[0]} and other keys to only rerender sound graph
+  // could use key={soundData[0]} and other keys to only rerender sound graph
   return (
     <div
       {...props}
@@ -87,7 +90,12 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
         {/* <p>{recordingText}</p> */}
       </div>
 
-      <SoundGraph soundData={soundData} isRecording={isRecording}/>
+      <SoundContext.Consumer>
+        {
+          snapshot =>
+            <SoundGraph soundData={snapshot.soundData} isRecording={isRecording} />
+        }
+      </SoundContext.Consumer>
 
       {/* <div onClick={onPlayPauseClick}>{playPauseIcon}</div> */}
 
