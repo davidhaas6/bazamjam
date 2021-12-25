@@ -19,7 +19,7 @@ function formatName(name: string, id: string, prefix?: string): string {
   return name;
 }
 
-const renderTooltip = (text: string, options) => (
+const renderTooltip = (text: string, options: any) => (
   <Tooltip id="button-tooltip" {...options}>
     Simple tooltip
   </Tooltip>
@@ -31,7 +31,7 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
 
   const [songChoice, setSongChoice] = useState<string>();
   const [instrumentChoice, setInstrumentChoice] = useState<string>();
-  const [userSoundFile, setUserSoundFile] = useState()
+  const [userSoundFile, setUserSoundFile] = useState<any>()
   const [keyShift, setKeyShift] = useState<number>(0);
   const [allTracksChoice, setAllTracksChoice] = useState<boolean>();
 
@@ -82,7 +82,7 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
     setInstrumentChoice(allInstrumentsKey);
 
     // get new instruments
-    console.log("Fetching instruments for: " + sourceSongs[songChoice]);
+    // console.log("Fetching instruments for: " + sourceSongs[songChoice]);
     fetch(props.apiRoot + "get_instruments?song_id=" + songChoice)
       .then(res => res.json())
       .then(
@@ -103,15 +103,15 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
     formData.append('user_sample', userSoundFile);
     console.log("formdata: ", Array.from(formData.keys()));
 
-    let params = {
-      "song_id": songChoice,
-      "instrument_num": instrumentChoice,
-      "key_shift": keyShift,
-      "all_tracks": instrumentChoice == allInstrumentsKey,
+    let params:{ [key: string]: string  }= {
+      "song_id": songChoice!,
+      "instrument_num": instrumentChoice!,
+      "key_shift": keyShift.toString(),
+      "all_tracks": String(instrumentChoice == allInstrumentsKey)
     };
 
     setLoading(true);
-    let paramString = Object.keys(params).map(key => key + "=" + params[key]).join("&");
+    let paramString = Object.keys(params).map(key => key + "=" + String(params[key])).join("&");
     let queryString = props.apiRoot + "create_song" + "?" + paramString;
     console.log("fetching: " + queryString);
     fetch(queryString, {
@@ -135,7 +135,7 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
       ).then(() => { setLoading(false); });
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
     console.log("submitting");
     if (!userSoundFile) {
@@ -158,14 +158,14 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
         <InputGroup className="mb-3">
           <InputGroup.Text>🎤</InputGroup.Text>
           <Form.Control type="file" size="lg" accept=".wav"
-            onChange={(e) => setUserSoundFile(e.target.files[0])} />
+            onChange={(e:any) => setUserSoundFile(e.target?.files[0])} />
         </InputGroup>
 
 
         {/* song selection */}
         <InputGroup className="mb-3">
           <InputGroup.Text>🎼</InputGroup.Text>
-          <Form.Select size="lg" onChange={(event) => setSongChoice(event.target.value)}>
+          <Form.Select size="lg" onChange={(event: any) => setSongChoice(event.target.value)}>
             <option disabled={true} selected={!songChoice}>Select a song</option>
             {songOptions}
           </Form.Select>
@@ -177,7 +177,7 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
           <Form.Select size="lg"
             value={instrumentChoice}
             disabled={songChoice == null}
-            onChange={(event) => setInstrumentChoice(event.target.value)
+            onChange={(event: any) => setInstrumentChoice(event.target.value)
             }
           >
             {allowInstruments && (
@@ -196,7 +196,7 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
             <Accordion.Body className="midi-advanced-options">
 
               {/* key shift */}
-              <InputGroup className="mb-3" onChange={(evt) => setKeyShift(evt.target.value)} >
+              <InputGroup className="mb-3" onChange={(evt: any) => setKeyShift(evt.target.value)} >
                 <InputGroup.Text>Note Shift</InputGroup.Text>
                 <Form.Control type="number" placeholder="0" />
               </InputGroup>
