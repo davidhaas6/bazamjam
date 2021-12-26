@@ -38,6 +38,7 @@ class AudioManager {
   audioActive: boolean = false; // if we're actively processing audio
   readonly FFT_SIZE = 2048; // num bins in fft -- real + image
   readonly SAMPLE_RATE = 16000;
+  readonly BUFFER_SIZE = this.FFT_SIZE;
 
   public get nodes() {
     return this._nodes;
@@ -130,7 +131,7 @@ class AudioManager {
   */
 
   public addNode(node: AudioNode, key: string, conn?: { inputs?: string[], outputs?: string[] }) {
-    if (key in this._nodes) {
+    if (this.nodeExists(key)) {
       throw new Error("Key already exists in audio graph");
     }
     this._nodes[key] = node;

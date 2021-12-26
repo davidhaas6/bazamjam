@@ -21,7 +21,7 @@ export interface IRecorderProps extends IDashboardComponentProps {
   updateSoundData: (data: Float32Array) => void;
 }
 
-const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, style = {}, children, ...props }, ref) => {
+const RecorderComponent: FunctionComponent<IRecorderProps> = forwardRef(({ className, style = {}, children, ...props }, ref) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [recording, setRecording] = useState(new Float32Array(0));
@@ -104,4 +104,4 @@ const Recorder: FunctionComponent<IRecorderProps> = forwardRef(({ className, sty
   );
 });
 
-export default Recorder;
+export default RecorderComponent;

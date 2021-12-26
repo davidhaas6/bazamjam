@@ -10,7 +10,6 @@ const SampleComponent: FunctionComponent<SampleComponentProps>
   = forwardRef(({ className, style = {}, children, ...props }, ref) => {
     let { text = "Hi there" } = props;
     // const soundData = useContext(SoundContext).soundData;
-    console.log("refresh");
     return (
       <div {...props}
         style={{ ...style }}

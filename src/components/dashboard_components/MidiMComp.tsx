@@ -1,8 +1,6 @@
 import { forwardRef, FunctionComponent, useState } from "react";
 import { Card } from "react-bootstrap";
 import ReactPlayer from "react-player";
-import MidiMouth from "../../routes/MidiMouth";
-import AlertDismissable from "../AlertDismissable";
 import MidiMouthForm from "../MidiMouthForm";
 import { IDashboardComponentProps } from "./DshbComp";
 
@@ -33,7 +31,6 @@ const MidiM: FunctionComponent<IMidiMProps> = forwardRef(({ className, style = {
     const [songCreationStatus, setSongCreationStatus] = useState(RequestStatus.None);
 
     let songUrl = outputSongUrl;
-    console.log(ReactPlayer.canPlay(songUrl))
     
     return (
         

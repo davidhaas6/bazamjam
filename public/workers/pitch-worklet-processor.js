@@ -1,11 +1,13 @@
 // essentia-worklet-processor.js
+// https://github.com/MTG/essentia.js/tree/dev/examples/rms-rt
+// https://mtg.github.io/essentia.js/docs/api/tutorial-2.%20Real-time%20analysis.html
 import { EssentiaWASM } from "https://cdn.jsdelivr.net/npm/essentia.js@0.1/dist/essentia-wasm.es.js";
 import Essentia from "https://cdn.jsdelivr.net/npm/essentia.js@0.1/dist/essentia.js-core.es.js";
 
 let essentia = new Essentia(EssentiaWASM);
 console.log("essentia loaded");
 
-class EssentiaWorkletProcessor extends AudioWorkletProcessor {
+class PitchWorkletProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
     this.essentia = essentia;
@@ -28,8 +30,12 @@ class EssentiaWorkletProcessor extends AudioWorkletProcessor {
 
     output[0][0] = rmsFrame.rms;
 
+    // TODO: add message port https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletNode/port
+
     return true; // keep the process running
   }
 }
+
 console.log("here");
-registerProcessor('essentia-worklet-processor', EssentiaWorkletProcessor); // must use the same name we gave our processor in `createEssentiaNode`
+
+registerProcessor('pitch-processor', PitchWorkletProcessor); // must use the same name we gave our processor in `createEssentiaNode`

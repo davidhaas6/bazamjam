@@ -7,7 +7,7 @@ import '../assets/grid_styles.css';
 import '../assets/resizable_styles.css';
 import AudioManager from "../logic/AudioManager";
 import SampleComponent from "./dashboard_components/SampleComponent";
-import Recorder from "./dashboard_components/Recorder";
+import RecorderComponent from "./dashboard_components/Recorder";
 import MidiM from "./dashboard_components/MidiMComp";
 import React from "react";
 import AudioSnapshot from "../logic/AudioSnapshot";
@@ -64,16 +64,15 @@ const components: { [key: string]: IGridComponent<any> } = {
     props: {},
     layout: { i: '1', x: 0, y: 0, w: 1, h: 3 }
   },
-  pitch: {
-    element: PitchComponent,
-    props: {},
-    layout: { i: '3', x: 1, y: 2, w: 1, h: 1 }
-  }
+  // pitch: {
+  //   element: PitchComponent,
+  //   props: {},
+  //   layout: { i: '3', x: 1, y: 2, w: 1, h: 1 }
+  // }
 };
 const defaultLayout = Object.values(components);
 
 const recorderLayout = { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true };
-
 // sound
 const emptySnapshot = new AudioSnapshot(new Float32Array(0));
 
@@ -99,7 +98,7 @@ function buildComponents(components: IGridComponent<any>[]): ReactElement[] {
 }
 
 
-
+// TODO: Dashboard rebuilds with each new audio data
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
   const [audioManager, setaudioManager] = useState(new AudioManager());
   let [audioSnapshot, setAudioSnapshot] = useState<AudioSnapshot>(emptySnapshot);
@@ -109,12 +108,11 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
     [audioSnapshot]);
 
   // execute on first build
-  // TODO: How often does this get built? is it a side-effect?
   let builtElements: ReactElement[] = useMemo(() =>
     buildComponents(dshbLayout)
     , [dshbLayout]
   );
-  console.log("dashboard");
+  // console.log("dashboard");
 
   let updateSoundData = (soundData: Float32Array) => {
     // TODO: This re renders the whole dashboard, fix
@@ -130,10 +128,12 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
         <ReactGridLayout className="grid" {...gridProps}>
 
           {/* recorder */}
-          <Recorder className="dashboard-component"
+          <RecorderComponent className="dashboard-component"
             audioManager={audioManager} updateSoundData={updateSoundData}
             data-grid={recorderLayout} key={recorderLayout.i}
           />
+          <PitchComponent className="dashboard-component" audioManager={audioManager} 
+          data-grid={{ i: '3', x: 1, y: 2, w: 1, h: 1 }} key={'3'} />
 
           {builtElements}
 
