@@ -55,7 +55,7 @@ const Sidebar: FunctionComponent<ISidebarProps> = (props: ISidebarProps) => {
             <ProSidebar collapsed={isClosed} width={width}>
 
                 <SidebarHeader className="title-header">
-                    {title}
+                    <div>{title}</div>
                 </SidebarHeader>
 
                 <SidebarContent>
@@ -98,12 +98,16 @@ const Sidebar: FunctionComponent<ISidebarProps> = (props: ISidebarProps) => {
                                 Log out
                             </MenuItem>
                         }
+                        <MenuItem>
+                            Beta v0.1
+                        </MenuItem>
                         <MenuItem icon={icons.contact}>
                             <a href="mailto:davidhaas6@gmail.com">Contact</a>
                         </MenuItem>
                         <MenuItem icon={icons.sourceCode}>
                             <a href="https://github.com/davidhaas6/bazamjam">Source</a>
                         </MenuItem>
+                        
 
                     </Menu>
                 </SidebarFooter>

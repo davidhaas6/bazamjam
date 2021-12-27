@@ -7,6 +7,7 @@ import { roundNum } from "../../logic/util";
 
 interface PitchComponentProps extends IDashboardComponentProps {
   audioManager: AudioManager;
+  audioActive: boolean;
 }
 
 const NODE_NAME = "pitch";
@@ -39,14 +40,16 @@ export async function createEssentiaNode(audioCtx: AudioContext) {
 
 const PitchComponent: FunctionComponent<PitchComponentProps>
   = forwardRef(({ className, style = {}, children, ...props }, ref) => {
-    const [pitch, setPitch] = useState(0);
-    let { audioManager } = props;
+    const [pitch, setPitch] = useState(-1);
+    let { audioManager, audioActive } = props;
+
     // console.log("refresh");
 
     const onWorkletMsg = (e: MessageEvent) => {
       // console.log(Number.parseFloat(e.data));
       try {
         setPitch(Number.parseFloat(e.data));
+        console.log("setting pitch to " + e.data);
       } catch (e) {
         console.log("error in onWorkletMsg:" + e);
       }
@@ -73,16 +76,29 @@ const PitchComponent: FunctionComponent<PitchComponentProps>
 
       console.log("effect called");
       addWorklet();
-    }, [props.audioManager.audioContext]);
+    }, [audioActive]);
 
     return (
       <div {...props}
         style={{ ...style }}
         className={className + " simple-component"}
         ref={ref as React.RefObject<HTMLDivElement>}>
-
+        <h4>Pitch Component</h4>
         <div style={{ textAlign: 'center' }}>
-          {roundNum(pitch, 1)} Hz
+          {audioActive ?
+            (
+              pitch < 0 ?
+              <div> Loading :{'>'} </div>
+              : <div>{roundNum(pitch, 1)} Hz</div>
+            )
+            : (
+              <div>
+              Press Play!
+              {/* {pitch > 0 && <div><br />Last pitch:{roundNum(pitch, 1)} Hz</div>} */}
+                </div>
+            )
+          }
+
         </div>
       </div>
     );

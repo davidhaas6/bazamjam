@@ -130,7 +130,8 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
             audioManager={audioManager} updateSoundData={updateSoundData}
             data-grid={recorderLayout} key={recorderLayout.i}
           />
-          <PitchComponent className="dashboard-component" audioManager={audioManager} 
+          <PitchComponent className="dashboard-component" 
+          audioManager={audioManager} audioActive={audioManager.audioActive}
           data-grid={{ i: '3', x: 1, y: 2, w: 1, h: 1 }} key={'3'} />
 
           {builtElements}
