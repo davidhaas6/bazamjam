@@ -12,7 +12,6 @@ import MidiM from "./dashboard_components/MidiMComp";
 import React from "react";
 import AudioSnapshot from "../logic/AudioSnapshot";
 import SoundContext from "../logic/SoundContext";
-import FloatArrayContext from "../logic/FloatArrayContext";
 import PitchComponent from "./dashboard_components/PitchComponent";
 
 

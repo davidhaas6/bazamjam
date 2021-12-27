@@ -2,7 +2,6 @@ import { FunctionComponent, useState, forwardRef, useEffect, useCallback, useCon
 
 import { TiMediaRecord, TiMediaRecordOutline, TiMediaPauseOutline, TiMediaPlayOutline } from "react-icons/ti";
 import AudioManager from "../../logic/AudioManager";
-import FloatArrayContext from "../../logic/FloatArrayContext";
 import SoundContext from "../../logic/SoundContext";
 import { IDashboardComponentProps } from "./DshbComp";
 import SoundGraph from "./SoundGraph";

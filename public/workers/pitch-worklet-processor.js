@@ -9,13 +9,21 @@ let essentia = new Essentia(EssentiaWASM);
 console.log("essentia loaded");
 
 
+function argMax(array) {
+  return [].map.call(array, (x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
+}
+
 // https://developers.google.com/web/updates/2018/06/audio-worklet-design-pattern#handling_buffer_size_mismatch
 
 const SAMPLES_PER_CALL = 128; // set by Web Audio API
 
 const FFT_SIZE = 2048;
-const BUFFER_SECONDS = 0.4;
-const FRAME_OVERLAP = 0; // percent of overlap between audio frames
+const FRAME_SIZE = 2048;
+const HOP_SIZE = 2048;
+const BUFFER_SECONDS = 0.2;
+const FRAME_OVERLAP = 0.1; // percent of overlap between audio frames
+
+
 
 class PitchWorkletProcessor extends AudioWorkletProcessor {
   constructor() {
@@ -31,6 +39,10 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     // controls how often the calculations are performed
     this._calcInterval = Math.floor(this._bufferSize * (1 - FRAME_OVERLAP) / SAMPLES_PER_CALL);
     this._calcCounter = 0;
+
+    // dsp settings
+    this.minFreq = 40;
+    this.maxFreq = 4000;
   }
 
   //System-invoked process callback function.
@@ -44,9 +56,6 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     if (this.isCalculationCall() && !this._buffer.allZero()) {
       let pitch = this.getFundFreq();
 
-      // console.log(pyin);
-      // console.log(pitch + " Hz");
-      // console.log(pyin);
       this.port.postMessage(pitch);
     }
 
@@ -63,17 +72,34 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
   }
 
   getFundFreq() {
-    let vectorInput = this.essentia.arrayToVector(this._buffer.data);
+    let inputSignal = this.essentia.arrayToVector(this._buffer.data);
+    if (inputSignal.size() != this._bufferSize) {
+      console.log(inputSignal);
+      console.log("vector len: " + inputSignal.length);
+      console.log("buffer data len: " + this._buffer.data.length);
+      return -1;
+    }
 
-    // https://mtg.github.io/essentia.js/docs/api/Essentia.html#PitchYinProbabilistic
-    let yinOutput = this.essentia.PitchYinProbabilistic( 
-      vectorInput, FFT_SIZE, 1024, 0.005, 'negative', false, sampleRate
+    // Get the predominant frequency. All the magic numbers are the default params    
+    const algoOutput = this.essentia.PitchMelodia(
+      inputSignal,  // input                          // signal,
+      10, 3, FRAME_SIZE, false, .8, HOP_SIZE, 1, 40,  // binResolution, filterIterations, frameSize, guessUnvoiced, harmonicWeight, hopSize, magnitudeCompression, magnitudeThreshold,
+      this.maxFreq, 100, this.minFreq, 20, .9, .9,    // maxFrequency, minDuration, minFrequency, numberHarmonics, peakDistributionThreshold, peakFrameThreshold, 
+      27.5625, 55, sampleRate, 100                    //  pitchContinuity, referenceFrequency, sampleRate, timeContinuity
     );
-    // let yinOutput = PitchYinFFT();
-    let pitchArr = this.essentia.vectorToArray(yinOutput.pitch);
-    let pitch = Math.max(...pitchArr);
 
-    return pitch;
+    const pitchFrames = essentia.vectorToArray(algoOutput.pitch);
+    const confidenceFrames = essentia.vectorToArray(algoOutput.pitchConfidence);
+
+    // average frame-wise pitches in pitch before writing to SAB
+    const numVoicedFrames = pitchFrames.filter(p => p > 0).length;
+    // const numFrames = pitchFrames.length;
+    const meanPitch = pitchFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
+    const meanConfidence = confidenceFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
+
+    console.log("pitch: " + meanPitch + " Hz, with conf: " + meanConfidence);
+
+    return meanPitch;
   }
 
   sendEmpty() {
