@@ -1,10 +1,12 @@
 import { forwardRef, FunctionComponent, useContext } from "react";
 import SoundContext from "../../logic/SoundContext";
+import { getRMS, getAmplitude, roundNum } from "../../logic/util";
 import { IDashboardComponentProps } from "./DshbComp";
 
 interface SampleComponentProps extends IDashboardComponentProps {
   text?: string;
 }
+
 
 const SampleComponent: FunctionComponent<SampleComponentProps>
   = forwardRef(({ className, style = {}, children, ...props }, ref) => {
@@ -13,20 +15,26 @@ const SampleComponent: FunctionComponent<SampleComponentProps>
     return (
       <div {...props}
         style={{ ...style }}
-        className={className + " recorder"}
+        className={className + " simple-component"}
         ref={ref as React.RefObject<HTMLDivElement>}>
-        <SoundContext.Consumer>
-          {
-            snapshot =>
-              <div style={{ textAlign: 'center' }}>
-                {snapshot.soundData.length > 0 &&
-                  snapshot.soundData.reduce(
-                    (running, cur) => running + Math.abs(cur)
-                  ) / snapshot.soundData.length}
-              </div>
-          }
-         
-        </SoundContext.Consumer>
+        <div style={{ textAlign: 'center' }}>
+          <SoundContext.Consumer>
+            {
+              snapshot =>
+                snapshot.hasSoundData() ?
+                  <div>
+                    RMS: {roundNum(getRMS(snapshot.soundData), 3)}
+                    <br />
+                    Amplitude: {roundNum(getAmplitude(snapshot.soundData), 3)}
+                  </div>
+                  :
+                  <p>Start Recording!</p>
+
+
+
+            }
+          </SoundContext.Consumer>
+        </div>
 
         {/* <iframe src="https://www.omfgdogs.com/"></iframe> */}
       </div>

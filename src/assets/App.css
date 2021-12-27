@@ -1,32 +1,32 @@
 @font-face {
-  font-family: 'Jua';
-  src: local('MyFont'), url(../assets/fonts/Jua-Regular.ttf) format('truetype');
+    font-family: 'Jua';
+    src: local('MyFont'), url(../assets/fonts/Jua-Regular.ttf) format('truetype');
 }
 
 html, body {
-  /* background-color: #d3d3d3; */
-  background-color: #fafafa;
-  min-height: 100%;
-  /* overflow: auto; */
+    /* background-color: #d3d3d3; */
+    background-color: #fafafa;
+    min-height: 100%;
+    /* overflow: auto; */
 }
 
 body {
-  height: 100vh;
+    height: 100vh;
 }
 
 .App {
-  height: 100vh;
-  /* ensures app takes up all of screen */
-  display: flex;
-  /* flex-flow: column nowrap; */
-  align-items: stretch;
-  /* display: grid;
+    height: 100vh;
+    /* ensures app takes up all of screen */
+    display: flex;
+    /* flex-flow: column nowrap; */
+    align-items: stretch;
+    /* display: grid;
   grid-template-columns: 240px 1fr;
   grid-template-rows: 1fr;
   grid-template-areas:
     "sidenav main";  */
-  /* min-height: 100vh; */
-  /* overflow: auto; */
+    /* min-height: 100vh; */
+    /* overflow: auto; */
 }
 
 /*
@@ -51,30 +51,30 @@ body {
 /* https://github.com/azouaoui-med/react-pro-sidebar/issues/10 */
 
 .pro-sidebar {
-  font-family: Jua;
-  /* position: absolute; */
-  width: auto;
+    font-family: Jua;
+    /* position: absolute; */
+    width: auto;
 }
 
 /* .pro-menu {} */
 
 .sidebar {
-  height: 100vh;
-  grid-area: sidenav;
-  width: fit-content;
+    height: 100vh;
+    grid-area: sidenav;
+    width: fit-content;
 }
 
 .title-header {
-  padding: 10px 0;
+    padding: 10px 0;
 }
 
 .pro-sidebar-header {
-  text-align: center !important;
-  font-size: 30px;
+    text-align: center !important;
+    font-size: 30px;
 }
 
 .pro-sidebar-footer {
-  border-top: 0 !important;
+    border-top: 0 !important;
 }
 
 /*
@@ -82,43 +82,43 @@ body {
 */
 
 .dashboard {
-  width: auto;
-  /* display: flex; */
-  /* background-color: pink; */
-  margin: 20px;
-  flex: 1;
+    width: auto;
+    /* display: flex; */
+    /* background-color: pink; */
+    margin: 20px;
+    flex: 1;
 }
 
 .grid {
-  height: 100%
+    height: 100%
 }
 
 .dashboard-component {
-  /* flexbox */
-  /* display: flex;
+    /* flexbox */
+    /* display: flex;
   flex-flow: row wrap;
   align-items: center;
   justify-content: center; */
 
-  /* Sizing */
-  width: fit-content;
-  min-width: 150;
-  /* Style */
-  border: 5 solid #1d1d1d !important;
-  border-radius: 5px;
-  border-width: 10px;
-  -webkit-box-shadow: 5px 5px 24px 2px rgba(0, 0, 0, 0.42);
-  box-shadow: 5px 5px 24px 2px rgba(0, 0, 0, 0.42);
-  font-family: Jua;
-  background-color: #fafafa;
+    /* Sizing */
+    width: fit-content;
+    min-width: 150;
+    /* Style */
+    border: 5 solid #1d1d1d !important;
+    border-radius: 5px;
+    border-width: 10px;
+    -webkit-box-shadow: 5px 5px 24px 2px rgba(0, 0, 0, 0.42);
+    box-shadow: 5px 5px 24px 2px rgba(0, 0, 0, 0.42);
+    font-family: Jua;
+    background-color: #fafafa;
 }
 
 .react-grid-item.react-grid-placeholder {
-  border-radius: 5px;
-  border-width: 10px;
-  background: #1d1d1d !important;
-  opacity: 0.01 !important;
-  height: max-content;
+    border-radius: 5px;
+    border-width: 10px;
+    background: #1d1d1d !important;
+    opacity: 0.01 !important;
+    height: max-content;
 }
 
 
@@ -127,25 +127,36 @@ body {
 */
 
 .recorder {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-items: center;
-  /* width: 400px !important; */
-  padding: 20px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    /* width: 400px !important; */
+    padding: 20px;
 }
 
 .recorder-controls {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  width: 175px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 175px;
 }
 
 .timeDomGraph {
-  flex: 1;
-  height: 100%;
-  width: 100%;
+    flex: 1;
+    height: 100%;
+    width: 100%;
+}
+
+.simple-component {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+    /* width: 400px !important; */
+    padding: 20px;
 }
 
 
@@ -161,7 +172,7 @@ body {
     flex-flow: row nowrap;
     /* justify-content: center; */
     align-items: stretch;
-    
+
 }
 
 .midi-main {
@@ -173,11 +184,14 @@ body {
     align-items: center;
     /* width: 400px !important; */
     padding: 20px;
-    flex: 1; /* fill remaining space */
+    flex: 1;
+    /* fill remaining space */
 }
+
 .midi-header {
     margin-bottom: 20px;
 }
+
 .midi-form {
     display: flex;
     flex-flow: column nowrap;

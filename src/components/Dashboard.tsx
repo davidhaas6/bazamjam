@@ -74,7 +74,6 @@ const defaultLayout = Object.values(components);
 
 const recorderLayout = { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true };
 // sound
-const emptySnapshot = new AudioSnapshot(new Float32Array(0));
 
 /*
  =========== functions
@@ -101,7 +100,7 @@ function buildComponents(components: IGridComponent<any>[]): ReactElement[] {
 // TODO: Dashboard rebuilds with each new audio data
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
   const [audioManager, setaudioManager] = useState(new AudioManager());
-  let [audioSnapshot, setAudioSnapshot] = useState<AudioSnapshot>(emptySnapshot);
+  let [audioSnapshot, setAudioSnapshot] = useState(new AudioSnapshot());
   const [dshbLayout, setDshbLayout] = useState(defaultLayout);
 
   const snapshot = useMemo(() => audioSnapshot,
@@ -114,7 +113,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   );
   // console.log("dashboard");
 
-  let updateSoundData = (soundData: Float32Array) => {
+  let updateSoundData = (soundData?: Float32Array) => {
     // TODO: This re renders the whole dashboard, fix
     // problem: how to update context consumers without updating state?
     setAudioSnapshot(new AudioSnapshot(soundData));

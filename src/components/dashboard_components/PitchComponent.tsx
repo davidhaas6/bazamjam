@@ -1,7 +1,8 @@
-import { forwardRef, FunctionComponent, useContext, useEffect } from "react";
+import { forwardRef, FunctionComponent, useContext, useEffect, useState } from "react";
 import SoundContext from "../../logic/SoundContext";
 import { IDashboardComponentProps } from "./DshbComp";
 import AudioManager from "../../logic/AudioManager";
+import { roundNum } from "../../logic/util";
 
 
 interface PitchComponentProps extends IDashboardComponentProps {
@@ -24,7 +25,7 @@ export async function createEssentiaNode(audioCtx: AudioContext) {
      - the rms example project has a builder that integrates these things
     */
     // register the audio worker
-    await audioCtx.audioWorklet.addModule(workletProcessorPath, 
+    await audioCtx.audioWorklet.addModule(workletProcessorPath,
       { credentials: 'omit' }
     );
     console.log("await done");
@@ -38,9 +39,20 @@ export async function createEssentiaNode(audioCtx: AudioContext) {
 
 const PitchComponent: FunctionComponent<PitchComponentProps>
   = forwardRef(({ className, style = {}, children, ...props }, ref) => {
+    const [pitch, setPitch] = useState(0);
     let { audioManager } = props;
     // console.log("refresh");
 
+    const onWorkletMsg = (e: MessageEvent) => {
+      // console.log(Number.parseFloat(e.data));
+      try {
+        setPitch(Number.parseFloat(e.data));
+      } catch (e) {
+        console.log("error in onWorkletMsg:" + e);
+      }
+    }
+
+    // TODO: stop processor when not recording -- could just send msg to it
     // attach scriptprocessor node to audio context
     useEffect(() => {
       const addWorklet = async () => {
@@ -48,6 +60,8 @@ const PitchComponent: FunctionComponent<PitchComponentProps>
           if (audioManager.audioContext != null && !audioManager.nodeExists(NODE_NAME)) {
             console.log("creating node");
             const node = await createEssentiaNode(audioManager.audioContext);
+            node.port.onmessage = onWorkletMsg;
+
             console.log("attaching node " + NODE_NAME);
             audioManager.addNode(node, NODE_NAME, { inputs: ["source"] });
             console.log("node attached");
@@ -64,18 +78,12 @@ const PitchComponent: FunctionComponent<PitchComponentProps>
     return (
       <div {...props}
         style={{ ...style }}
-        className={className + " recorder"}
+        className={className + " simple-component"}
         ref={ref as React.RefObject<HTMLDivElement>}>
 
-        <SoundContext.Consumer>
-          {
-            snapshot =>
-              <div style={{ textAlign: 'center' }}>
-
-              </div>
-          }
-        </SoundContext.Consumer>
-
+        <div style={{ textAlign: 'center' }}>
+          {roundNum(pitch, 1)} Hz
+        </div>
       </div>
     );
   });

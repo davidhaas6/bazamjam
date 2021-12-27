@@ -18,7 +18,7 @@ const icons = {
 
 export interface IRecorderProps extends IDashboardComponentProps {
   audioManager: AudioManager;
-  updateSoundData: (data: Float32Array) => void;
+  updateSoundData: (data?: Float32Array) => void;
 }
 
 const RecorderComponent: FunctionComponent<IRecorderProps> = forwardRef(({ className, style = {}, children, ...props }, ref) => {
@@ -35,15 +35,18 @@ const RecorderComponent: FunctionComponent<IRecorderProps> = forwardRef(({ class
   // functions
   let onPlayPauseClick = () => setIsPlaying(!isPlaying);
 
-
+  // recording start/stop callback
   let onRecordClick = () => {
     let newRecordingState = !isRecording;
+    // Recording!
     if (newRecordingState) {
       props.audioManager.startRecording();
       console.log("\n\nstarted\n")
     }
+    // Not recording
     else {
       props.audioManager.stopRecording();
+      props.updateSoundData();
       console.log("\n\nstopped\n")
     }
     setIsRecording(newRecordingState);
@@ -93,6 +96,7 @@ const RecorderComponent: FunctionComponent<IRecorderProps> = forwardRef(({ class
       <SoundContext.Consumer>
         {
           snapshot =>
+          snapshot.hasSoundData() &&
             <SoundGraph soundData={snapshot.soundData} isRecording={isRecording} />
         }
       </SoundContext.Consumer>
