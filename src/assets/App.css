@@ -160,6 +160,17 @@ body {
 }
 
 
+.tuner {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 100%;
+    /* width: 400px !important; */
+    padding: 20px;
+}
+
 /*
  ======== Midi Mouth ======= 
 */

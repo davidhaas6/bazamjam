@@ -55,17 +55,17 @@ const components: { [key: string]: IGridComponent<any> } = {
   //   },
   temp2: {
     element: SampleComponent,
-    props: {}, //TODO: how to pass state?
-    layout: { i: '2', x: 1, y: 1, w: 1, h: 1 }
+    props: {}, 
+    layout: { i: '2', x: 1, y: 2, w: 1, h: 1 }
   },
-  midiMouth: {
-    element: MidiM,
-    props: {},
-    layout: { i: '1', x: 0, y: 0, w: 1, h: 3 }
-  },
+  // midiMouth: {
+  //   element: MidiM,
+  //   props: {},
+  //   layout: { i: '1', x: 0, y: 0, w: 1, h: 3 }
+  // },
   // pitch: {
   //   element: PitchComponent,
-  //   props: {},
+  //   props: {}, //TODO: how to pass state?
   //   layout: { i: '3', x: 1, y: 2, w: 1, h: 1 }
   // }
 };
@@ -132,7 +132,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
           />
           <PitchComponent className="dashboard-component" 
           audioManager={audioManager} audioActive={audioManager.audioActive}
-          data-grid={{ i: '3', x: 1, y: 2, w: 1, h: 1 }} key={'3'} />
+          data-grid={{ i: '3', x: 0, y: 1, w: 1, h: 1 }} key={'3'} />
 
           {builtElements}
 

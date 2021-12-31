@@ -19,9 +19,9 @@ const SAMPLES_PER_CALL = 128; // set by Web Audio API
 
 const FFT_SIZE = 2048;
 const FRAME_SIZE = 2048;
-const HOP_SIZE = 2048;
-const BUFFER_SECONDS = 0.2;
-const FRAME_OVERLAP = 0.1; // percent of overlap between audio frames
+const HOP_SIZE = 1024;
+const BUFFER_SECONDS = 0.2; // length of buffer in seconds
+const FRAME_OVERLAP = 0.3; // percent of overlap between audio frames
 
 
 
@@ -55,8 +55,8 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
 
     if (this.isCalculationCall() && !this._buffer.allZero()) {
       let pitch = this.getFundFreq();
-
       this.port.postMessage(pitch);
+      // console.log("posted pitch: " + pitch);
     }
 
     this._calcCounter++;
@@ -90,14 +90,14 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
 
     const pitchFrames = essentia.vectorToArray(algoOutput.pitch);
     const confidenceFrames = essentia.vectorToArray(algoOutput.pitchConfidence);
-
+    
     // average frame-wise pitches in pitch before writing to SAB
     const numVoicedFrames = pitchFrames.filter(p => p > 0).length;
     // const numFrames = pitchFrames.length;
     const meanPitch = pitchFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
     const meanConfidence = confidenceFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
 
-    console.log("pitch: " + meanPitch + " Hz, with conf: " + meanConfidence);
+    // console.log("pitch: " + meanPitch + " Hz, with conf: " + meanConfidence);
 
     return meanPitch;
   }
