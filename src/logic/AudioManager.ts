@@ -175,7 +175,7 @@ class AudioManager {
   // can attach additional event listeners to the AudioWorkletNode
   public async addWorklet(name: string, js_path: string, onMessage: WorkletCallback) {
     // don't add the same node twice, nor to a null context
-    if (this.audioContext === null || this.nodeExists(name)) {
+    if (!this.audioContext || this.nodeExists(name)) {
       console.log("Can't add worklet - " +
         (this.audioContext ? "Node exists" : "Audio context null")
       );

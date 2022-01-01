@@ -1,48 +1,70 @@
 // a react component representing a tuner
 
+import { Note as NoteType, NoNote } from "@tonaljs/core";
 import { Note, NoteLiteral } from "@tonaljs/tonal";
 import { forwardRef, FunctionComponent, useEffect, useState } from "react";
 
 import AudioManager from "../../../logic/AudioManager";
 import { Float32Buffer } from "../../../logic/Float32Buffer";
-import { roundNum } from "../../../logic/util/Math";
+import { freqToMidi, roundNum } from "../../../logic/util/Math";
 import { WorkletCallback } from "../../../logic/util/Worklet";
 import { IDashboardComponentProps } from "../DshbComp";
+
 
 enum TunerState {
   NOT_STARTED,
   LOADING,
   ACTIVE,
 
-  ACTIVE_ERR,
+  NAN_PITCH,
   OTHER_ERR,
 }
 
-const tunings: NoteLiteral[][] = [
-  ["E2", "A2", "D3", "G3", "B3", "E4"]
-];
+type INote = NoteType | NoNote;
+type Tuning = INote[];
+
+const tuning_options: Tuning[] = filterValidTunings([
+  ["E2", "A2", "D3", "G3", "B3", "E4"],
+  ["E2123", "A2", "Daa3", "Gzyda3", "B94%3", "E4"],
+]);
 
 // how often we look for which note they're trying to tune to
-const target_refresh_interval = 400; 
+const target_refresh_interval = 400;
 const pitch_buffer_len = 10;
 
 // path relative to public directory
 const worklet_processor_path = "workers/pitch-worklet-processor.js";
 // the name for both the worklet and audio node
-const node_name = 'pitch-processor'; 
+const node_name = 'pitch-processor';
 
 
-function getClosestTuningNote(inputFreq: number, tuning: NoteLiteral[]) {
-  let noteDists = tuning.map(t => {
-    let note = Note.get(t);
-    if (note && note.freq) {
-      return Math.abs(note.freq - inputFreq);
+// given the users pitch, find the closest note in the tuning
+function getClosestTuningNote(inputFreq: number, tuning: Tuning): INote {
+  // the distance between the users pitch and the notes in the tuning
+  // currently, it's using semitones via midi numbers
+  let noteDists = tuning.map(note => {
+    if (note.midi != null) {
+      return Math.abs(note.midi - freqToMidi(inputFreq));
     }
     return Number.MAX_SAFE_INTEGER;
   });
 
+  // return the note in the tuning that is closest to the input
   let argmin = noteDists.indexOf(Math.min(...noteDists));
   return Note.get(tuning[argmin]);
+}
+
+function filterValidTunings(tunings: NoteLiteral[][]): Tuning[] {
+  let noteTunings: Tuning[] = [];
+
+  for (let i = 0; i < tunings.length; i++) {
+    let notes = tunings[i].map(Note.get);
+    if (notes.every(note => !note.empty)) {
+      noteTunings.push(notes as Tuning);
+    }
+  }
+
+  return noteTunings;
 }
 
 
@@ -54,15 +76,17 @@ interface ITunerProps extends IDashboardComponentProps {
 const Tuner: FunctionComponent<ITunerProps>
   = forwardRef(({ className, style = {}, children, ...props }, ref) => {
     const [pitch, setPitch] = useState(NaN);
-    const [tuning, setTuning] = useState(tunings[0]);
-    const [targetNote, setTargetNote] = useState(Note.get(tuning[0]));
     const [pitchBuffer, setPitchBuffer] = useState(new Float32Buffer(pitch_buffer_len));
+
+    const [tuning, setTuning] = useState<Tuning>(tuning_options[0]);
+    const [targetNote, setTargetNote] = useState<INote>(tuning[0]);
+
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
     const [holdNote, setHoldNote] = useState(false);
     const [compState, setCompState] = useState(TunerState.NOT_STARTED);
 
     let { audioManager, audioActive } = props;
- 
+
     const onWorkletMsg: WorkletCallback = (e: MessageEvent) => {
       try {
         // set pitch, could be NaN
@@ -89,25 +113,28 @@ const Tuner: FunctionComponent<ITunerProps>
 
 
     let hasPitch = !isNaN(pitch);
+    let roundPitch;
 
-    switch(compState) {
+    switch (compState) {
       case TunerState.NOT_STARTED:
         if (audioActive) {
           setCompState(TunerState.LOADING);
         }
         break;
       case TunerState.LOADING:
-        if(hasPitch) {
+        if (hasPitch) {
           setCompState(TunerState.ACTIVE);
         }
         break;
       case TunerState.ACTIVE:
-        if(isNaN(pitch)) {
-          setCompState(TunerState.ACTIVE_ERR);
+        if (isNaN(pitch)) {
+          setCompState(TunerState.NAN_PITCH);
+        } else {
+          roundPitch = roundNum(pitch, 1);
         }
         break;
-      case TunerState.ACTIVE_ERR:
-        if(!isNaN(pitch)) {
+      case TunerState.NAN_PITCH:
+        if (!isNaN(pitch)) {
           setCompState(TunerState.ACTIVE);
         }
         break;
@@ -117,21 +144,6 @@ const Tuner: FunctionComponent<ITunerProps>
         break;
     }
 
-
-
-    //TODO: refactor into state machine
-    let isLoading = audioActive && pitch < 0;
-    let hasError = audioActive && !hasPitch && !isLoading;
-
-    let roundPitch;
-
-    if (hasPitch) {
-      roundPitch = roundNum(pitch, 1);
-    }
-    if (hasError) {
-      if (!isNaN(pitch))
-        console.log("PitchComp Error // pitch: " + pitch);
-    }
 
     // only set new target notes every so often
     let refreshTarget = () => {
@@ -166,26 +178,29 @@ const Tuner: FunctionComponent<ITunerProps>
         <br />
 
         <div style={{ textAlign: 'center' }}>
-          {targetNote && tuning.map(note => {
-            if (note == targetNote.name) {
-              return <span style={hasPitch ? { color: "red" } : {}}>{note} </span>;
+          {!targetNote.empty && tuning.map(note => {
+            if (note.name == targetNote.name) {
+              return <span style={hasPitch ? { color: "red" } : {}}>{note.name} </span>;
             }
-            return <span>{note} </span>;
+            return <span>{note.name} </span>;
           })}
         </div>
 
         <div style={{ textAlign: 'center' }}>
-          {(audioActive && !isLoading && targetNote) &&
+          {(compState === TunerState.ACTIVE || compState === TunerState.NAN_PITCH) &&
             <div>
               Target: {roundNum(targetNote.freq!, 1)} Hz
               <br />
-              You: {roundPitch} Hz {hasError || isNaN(pitch) && <span style={{ color: "red" }}>!</span>}
+              You: {roundPitch} Hz
+              {compState === TunerState.NAN_PITCH &&
+                <span style={{ color: "red" }}>!</span>
+              }
             </div>
           }
-          {isLoading &&
+          {compState === TunerState.LOADING &&
             <div> Loading :{'>'} </div>
           }
-          {!audioActive &&
+          {compState === TunerState.NOT_STARTED &&
             <div>
               Press Play!
             </div>

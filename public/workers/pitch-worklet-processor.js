@@ -89,13 +89,13 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     );
 
     const pitchFrames = essentia.vectorToArray(algoOutput.pitch);
-    const confidenceFrames = essentia.vectorToArray(algoOutput.pitchConfidence);
+    // const confidenceFrames = essentia.vectorToArray(algoOutput.pitchConfidence);
     
     // average frame-wise pitches in pitch before writing to SAB
     const numVoicedFrames = pitchFrames.filter(p => p > 0).length;
     // const numFrames = pitchFrames.length;
     const meanPitch = pitchFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
-    const meanConfidence = confidenceFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
+    // const meanConfidence = confidenceFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
 
     // console.log("pitch: " + meanPitch + " Hz, with conf: " + meanConfidence);
 
@@ -106,7 +106,5 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     this.port.postMessage("");
   }
 }
-
-console.log("here");
 
 registerProcessor('pitch-processor', PitchWorkletProcessor); // must use the same name we gave our processor in `createEssentiaNode`
