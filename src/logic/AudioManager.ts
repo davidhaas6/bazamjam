@@ -1,4 +1,5 @@
 import Recorder from "./Recorder";
+import { createEssentiaNode, WorkletCallback } from "./util/Worklet";
 
 
 // A string-indexed list of nodes. Essentially a dict
@@ -166,6 +167,29 @@ class AudioManager {
     if (this.audioContext && this.audioStream) {
       let source = new MediaStreamAudioSourceNode(this.audioContext, { mediaStream: this.audioStream });
       this.addNode(source, "source", { outputs: ["analyzer"] });
+    }
+  }
+
+  // Create a worklet node from a AudioWorkletProcessor specified by js_path and connect the 
+  // source node to it so it reads from the microphone.
+  // can attach additional event listeners to the AudioWorkletNode
+  public async addWorklet(name: string, js_path: string, onMessage: WorkletCallback) {
+    // don't add the same node twice, nor to a null context
+    if (this.audioContext === null || this.nodeExists(name)) {
+      console.log("Can't add worklet - " +
+        (this.audioContext ? "Node exists" : "Audio context null")
+      );
+      return;
+    }
+
+    // create the node and add it to the graph
+    try {
+      const node = await createEssentiaNode(this.audioContext!, js_path, name);
+      node.port.onmessage = onMessage;
+
+      this.addNode(node, name, { inputs: ["source"] });
+    } catch (e) {
+      console.log("Error adding worklet node:" + e);
     }
   }
 

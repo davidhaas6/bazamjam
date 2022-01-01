@@ -12,7 +12,7 @@ import MidiM from "./dashboard_components/MidiMComp";
 import React from "react";
 import AudioSnapshot from "../logic/AudioSnapshot";
 import SoundContext from "../logic/SoundContext";
-import PitchComponent from "./dashboard_components/PitchComponent";
+import Tuner from "./dashboard_components/tuner/Tuner";
 
 
 const ReactGridLayout = WidthProvider(RGL);
@@ -130,7 +130,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
             audioManager={audioManager} updateSoundData={updateSoundData}
             data-grid={recorderLayout} key={recorderLayout.i}
           />
-          <PitchComponent className="dashboard-component" 
+          <Tuner className="dashboard-component" 
           audioManager={audioManager} audioActive={audioManager.audioActive}
           data-grid={{ i: '3', x: 0, y: 1, w: 1, h: 1 }} key={'3'} />
 
