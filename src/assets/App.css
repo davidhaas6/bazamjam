@@ -166,9 +166,23 @@ body {
     justify-content: flex-start;
     align-items: center;
 
+    text-align: center;
+
     height: 100%;
     /* width: 400px !important; */
     padding: 20px;
+}
+
+.alert-text {
+    color: red;
+}
+
+.loading-display {
+    text-align: center;
+}
+
+.inactive-display {
+    text-align: center;
 }
 
 /*

@@ -6,13 +6,16 @@ import { forwardRef, FunctionComponent, useEffect, useState } from "react";
 
 import AudioManager from "../../../logic/AudioManager";
 import { Float32Buffer } from "../../../logic/Float32Buffer";
-import { freqToMidi, roundNum } from "../../../logic/util/Math";
+import { freqToMidi } from "../../../logic/util/Math";
 import { WorkletCallback } from "../../../logic/util/Worklet";
+import InactiveDisplay from "../../generic/InactiveDisplay";
+import LoadingDisplay from "../../generic/LoadingDisplay";
 import { IDashboardComponentProps } from "../DshbComp";
+import TunerDisplay from "./TunerDisplay";
 
 
 enum TunerState {
-  NOT_STARTED,
+  INACTIVE,
   LOADING,
   ACTIVE,
 
@@ -20,8 +23,8 @@ enum TunerState {
   OTHER_ERR,
 }
 
-type INote = NoteType | NoNote;
-type Tuning = INote[];
+export type INote = NoteType | NoNote;
+export type Tuning = INote[];
 
 const tuning_options: Tuning[] = filterValidTunings([
   ["E2", "A2", "D3", "G3", "B3", "E4"],
@@ -81,9 +84,8 @@ const Tuner: FunctionComponent<ITunerProps>
     const [tuning, setTuning] = useState<Tuning>(tuning_options[0]);
     const [targetNote, setTargetNote] = useState<INote>(tuning[0]);
 
-    const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
-    const [holdNote, setHoldNote] = useState(false);
-    const [compState, setCompState] = useState(TunerState.NOT_STARTED);
+    const [targetRefreshFlag, setTargetRefreshFlag] = useState(false);
+    const [compState, setCompState] = useState(TunerState.INACTIVE);
 
     let { audioManager, audioActive } = props;
 
@@ -105,35 +107,41 @@ const Tuner: FunctionComponent<ITunerProps>
       }
     }
 
-    // TODO: stop processor when not recording -- could just send msg to it
     // create and attach the essentia node to audio context
     useEffect(() => {
       audioManager.addWorklet(node_name, worklet_processor_path, onWorkletMsg);
-    }, [audioActive]);
+    }, [audioActive, audioManager]);
 
 
+    // FSM for component visual state
     let hasPitch = !isNaN(pitch);
-    let roundPitch;
+    let content = <div>error</div>;
 
     switch (compState) {
-      case TunerState.NOT_STARTED:
+      case TunerState.INACTIVE:
+        content = <InactiveDisplay />;
+
         if (audioActive) {
           setCompState(TunerState.LOADING);
         }
         break;
       case TunerState.LOADING:
+        content = <LoadingDisplay />;
+
         if (hasPitch) {
           setCompState(TunerState.ACTIVE);
         }
         break;
       case TunerState.ACTIVE:
+        content = <TunerDisplay pitch={pitch} targetNote={targetNote} tuning={tuning} />
+
         if (isNaN(pitch)) {
           setCompState(TunerState.NAN_PITCH);
-        } else {
-          roundPitch = roundNum(pitch, 1);
         }
         break;
       case TunerState.NAN_PITCH:
+        content = <TunerDisplay pitch={pitch} targetNote={targetNote} tuning={tuning} />
+
         if (!isNaN(pitch)) {
           setCompState(TunerState.ACTIVE);
         }
@@ -144,69 +152,29 @@ const Tuner: FunctionComponent<ITunerProps>
         break;
     }
 
-
-    // only set new target notes every so often
-    let refreshTarget = () => {
-      setTargetNote(getClosestTuningNote(pitch, tuning));
-      setHoldNote(true);
-    };
-
-    // TODO: runs twice b/c holdNote gets set. find out how to pass an updated pitch to the setInterval
+    // update target note every target_refresh_interval
     useEffect(() => {
-      setHoldNote(false);
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
       if (hasPitch) {
-        const interval = setTimeout(() => refreshTarget(), target_refresh_interval);
-        setIntervalId(interval);
+        const timer = setTimeout(() => {
+          setTargetNote(getClosestTuningNote(pitch, tuning));
+          setTargetRefreshFlag(flag => !flag);
+          console.log("target refreshed");
+        }, target_refresh_interval);
+
+        return () => { clearTimeout(timer) }
       }
-      return () => {
-        if (intervalId) {
-          clearInterval(intervalId);
-        }
-      }
-    }, [holdNote, hasPitch]);
+
+    }, [targetRefreshFlag, hasPitch]);
 
 
     return (
       <div {...props}
         style={{ ...style }}
-        className={className + " tuner"}
+        className={className + " sample-component"}
         ref={ref as React.RefObject<HTMLDivElement>}>
         <h4>Tuner</h4>
         <br />
-
-        <div style={{ textAlign: 'center' }}>
-          {!targetNote.empty && tuning.map(note => {
-            if (note.name == targetNote.name) {
-              return <span style={hasPitch ? { color: "red" } : {}}>{note.name} </span>;
-            }
-            return <span>{note.name} </span>;
-          })}
-        </div>
-
-        <div style={{ textAlign: 'center' }}>
-          {(compState === TunerState.ACTIVE || compState === TunerState.NAN_PITCH) &&
-            <div>
-              Target: {roundNum(targetNote.freq!, 1)} Hz
-              <br />
-              You: {roundPitch} Hz
-              {compState === TunerState.NAN_PITCH &&
-                <span style={{ color: "red" }}>!</span>
-              }
-            </div>
-          }
-          {compState === TunerState.LOADING &&
-            <div> Loading :{'>'} </div>
-          }
-          {compState === TunerState.NOT_STARTED &&
-            <div>
-              Press Play!
-            </div>
-          }
-
-        </div>
+        {content}
       </div>
     );
   });
