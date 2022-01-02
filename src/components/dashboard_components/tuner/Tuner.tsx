@@ -19,7 +19,6 @@ enum TunerState {
   LOADING,
   ACTIVE,
 
-  NAN_PITCH,
   OTHER_ERR,
 }
 
@@ -110,12 +109,11 @@ const Tuner: FunctionComponent<ITunerProps>
     // create and attach the essentia node to audio context
     useEffect(() => {
       audioManager.addWorklet(node_name, worklet_processor_path, onWorkletMsg);
-    }, [audioActive, audioManager]);
+    }, [compState == TunerState.LOADING, audioManager]);
 
 
     // FSM for component visual state
-    let hasPitch = !isNaN(pitch);
-    let content = <div>error</div>;
+    let content: JSX.Element;
 
     switch (compState) {
       case TunerState.INACTIVE:
@@ -128,49 +126,41 @@ const Tuner: FunctionComponent<ITunerProps>
       case TunerState.LOADING:
         content = <LoadingDisplay />;
 
-        if (hasPitch) {
+        if (!isNaN(pitch)) {
           setCompState(TunerState.ACTIVE);
         }
         break;
       case TunerState.ACTIVE:
         content = <TunerDisplay pitch={pitch} targetNote={targetNote} tuning={tuning} />
 
-        if (isNaN(pitch)) {
-          setCompState(TunerState.NAN_PITCH);
-        }
-        break;
-      case TunerState.NAN_PITCH:
-        content = <TunerDisplay pitch={pitch} targetNote={targetNote} tuning={tuning} />
-
-        if (!isNaN(pitch)) {
-          setCompState(TunerState.ACTIVE);
+        if (!audioActive) {
+          setCompState(TunerState.INACTIVE);
         }
         break;
       case TunerState.OTHER_ERR:
-        break;
       default:
+        content = <div>error</div>;
         break;
     }
 
     // update target note every target_refresh_interval
     useEffect(() => {
-      if (hasPitch) {
+      if (!isNaN(pitch)) {
         const timer = setTimeout(() => {
           setTargetNote(getClosestTuningNote(pitch, tuning));
           setTargetRefreshFlag(flag => !flag);
-          console.log("target refreshed");
         }, target_refresh_interval);
 
         return () => { clearTimeout(timer) }
       }
 
-    }, [targetRefreshFlag, hasPitch]);
+    }, [targetRefreshFlag, tuning, isNaN(pitch)]);
 
 
     return (
       <div {...props}
         style={{ ...style }}
-        className={className + " sample-component"}
+        className={className + " simple-component"}
         ref={ref as React.RefObject<HTMLDivElement>}>
         <h4>Tuner</h4>
         <br />

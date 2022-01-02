@@ -23,7 +23,6 @@ const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDispla
             })
         }
         </div>
-
         <div>
             Target: {roundNum(props.targetNote.freq!, 1)} Hz
             <br />
