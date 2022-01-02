@@ -9,18 +9,18 @@ export interface IDashboardComponentProps {
   key?: string;
   "data-grid"?: Layout;
   style?: { [x: string]: string };
-  children?: React.ReactNode[];
+  children?: any;
 };
 
 
 // TODO: Compostable dashboard component wrapper?
-const DashboardComponent: FunctionComponent<IDashboardComponentProps> = forwardRef(({ className, style = {}, children, ...props }, ref) => {
+const DashboardComponent: FunctionComponent<IDashboardComponentProps> = forwardRef(({ className, style = {}, ...props }, ref) => {
   return (
     <div {...props}
       style={{ ...style }}
-      className={className + " recorder"}
+      className={className + " dashboard-component"}
       ref={ref as React.RefObject<HTMLDivElement>}>
-      {children}
+      {props.children}
     </div>
   );
 });

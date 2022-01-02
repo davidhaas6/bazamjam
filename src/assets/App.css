@@ -133,6 +133,7 @@ body {
     align-items: center;
     /* width: 400px !important; */
     padding: 20px;
+    height: 100%;
 }
 
 .recorder-controls {

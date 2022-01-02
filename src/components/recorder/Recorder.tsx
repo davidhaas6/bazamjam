@@ -1,9 +1,8 @@
-import { FunctionComponent, useState, forwardRef, useEffect } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 
 import { TiMediaRecord, TiMediaRecordOutline, TiMediaPauseOutline, TiMediaPlayOutline } from "react-icons/ti";
 import AudioManager from "../../logic/AudioManager";
 import SoundContext from "../../logic/SoundContext";
-import { IDashboardComponentProps } from "../generic/DshbComp";
 import SoundGraph from "./SoundGraph";
 
 
@@ -15,12 +14,12 @@ const icons = {
 };
 
 
-export interface IRecorderProps extends IDashboardComponentProps {
+export interface IRecorderProps {
   audioManager: AudioManager;
   updateSoundData: (data?: Float32Array) => void;
 }
 
-const RecorderComponent: FunctionComponent<IRecorderProps> = forwardRef(({ className, style = {}, children, ...props }, ref) => {
+const RecorderComponent: FunctionComponent<IRecorderProps> = (props: IRecorderProps) => {
   const [isRecording, setIsRecording] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 
@@ -66,12 +65,7 @@ const RecorderComponent: FunctionComponent<IRecorderProps> = forwardRef(({ class
 
   // could use key={soundData[0]} and other keys to only rerender sound graph
   return (
-    <div
-      {...props}
-      style={{ ...style }}
-      className={className + " recorder"}
-      ref={ref as React.RefObject<HTMLDivElement>}
-    >
+    <div className="recorder">
       <div className="recorder-controls">
         <div onClick={onRecordClick}>{recordingIcon}</div>
       </div>
@@ -79,12 +73,12 @@ const RecorderComponent: FunctionComponent<IRecorderProps> = forwardRef(({ class
       <SoundContext.Consumer>
         {
           snapshot =>
-          snapshot.hasSoundData() &&
+            snapshot.hasSoundData() &&
             <SoundGraph soundData={snapshot.soundData} isRecording={isRecording} />
         }
       </SoundContext.Consumer>
     </div>
   );
-});
+}
 
 export default RecorderComponent;

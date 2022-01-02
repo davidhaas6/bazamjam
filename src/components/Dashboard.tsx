@@ -13,6 +13,7 @@ import React from "react";
 import AudioSnapshot from "../logic/AudioSnapshot";
 import SoundContext from "../logic/SoundContext";
 import Tuner from "./tuner/Tuner";
+import DashboardComponent from "./generic/DshbComp";
 
 
 const ReactGridLayout = WidthProvider(RGL);
@@ -126,10 +127,10 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
         <ReactGridLayout className="grid" {...gridProps}>
 
           {/* recorder */}
-          <RecorderComponent className="dashboard-component"
-            audioManager={audioManager} updateSoundData={updateSoundData}
-            data-grid={recorderLayout} key={recorderLayout.i}
-          />
+          <DashboardComponent data-grid={recorderLayout} key={recorderLayout.i}>
+            <RecorderComponent audioManager={audioManager} updateSoundData={updateSoundData}/>
+          </DashboardComponent>
+          
           <Tuner className="dashboard-component" 
           audioManager={audioManager} audioActive={audioManager.audioActive}
           data-grid={{ i: '3', x: 0, y: 1, w: 1, h: 1 }} key={'3'} />
