@@ -75,98 +75,93 @@ interface ITunerProps extends IDashboardComponentProps {
   audioActive: boolean;
 }
 
-const Tuner: FunctionComponent<ITunerProps>
-  = forwardRef(({ className, style = {}, children, ...props }, ref) => {
-    const [pitch, setPitch] = useState(NaN);
-    const [pitchBuffer, setPitchBuffer] = useState(new Float32Buffer(pitch_buffer_len));
+const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
+  const [pitch, setPitch] = useState(NaN);
+  const [pitchBuffer, setPitchBuffer] = useState(new Float32Buffer(pitch_buffer_len));
 
-    const [tuning, setTuning] = useState<Tuning>(tuning_options[0]);
-    const [targetNote, setTargetNote] = useState<INote>(tuning[0]);
+  const [tuning, setTuning] = useState<Tuning>(tuning_options[0]);
+  const [targetNote, setTargetNote] = useState<INote>(tuning[0]);
 
-    const [targetRefreshFlag, setTargetRefreshFlag] = useState(false);
-    const [compState, setCompState] = useState(TunerState.INACTIVE);
+  const [targetRefreshFlag, setTargetRefreshFlag] = useState(false);
+  const [compState, setCompState] = useState(TunerState.INACTIVE);
 
-    let { audioManager, audioActive } = props;
+  let { audioManager, audioActive } = props;
 
-    const onWorkletMsg: WorkletCallback = (e: MessageEvent) => {
-      try {
-        // set pitch, could be NaN
-        let newPitch = Number.parseFloat(e.data);
-        setPitch(newPitch);
+  const onWorkletMsg: WorkletCallback = (e: MessageEvent) => {
+    try {
+      // set pitch, could be NaN
+      let newPitch = Number.parseFloat(e.data);
+      setPitch(newPitch);
 
-        // update pitch buffer
-        if (!isNaN(newPitch)) {
-          setPitchBuffer((pitchBuffer) => {
-            pitchBuffer.append([newPitch]);
-            return pitchBuffer;
-          });
-        }
-      } catch (e) {
-        console.log("error in onWorkletMsg: " + e);
+      // update pitch buffer
+      if (!isNaN(newPitch)) {
+        setPitchBuffer((pitchBuffer) => {
+          pitchBuffer.append([newPitch]);
+          return pitchBuffer;
+        });
       }
+    } catch (e) {
+      console.log("error in onWorkletMsg: " + e);
     }
+  }
 
-    // create and attach the essentia node to audio context
-    useEffect(() => {
-      audioManager.addWorklet(node_name, worklet_processor_path, onWorkletMsg);
-    }, [compState == TunerState.LOADING, audioManager]);
+  // create and attach the essentia node to audio context
+  useEffect(() => {
+    audioManager.addWorklet(node_name, worklet_processor_path, onWorkletMsg);
+  }, [compState == TunerState.LOADING, audioManager]);
 
 
-    // FSM for component visual state
-    let content: JSX.Element;
+  // FSM for component visual state
+  let content: JSX.Element;
+  switch (compState) {
+    case TunerState.INACTIVE:
+      content = <InactiveDisplay />;
 
-    switch (compState) {
-      case TunerState.INACTIVE:
-        content = <InactiveDisplay />;
+      if (audioActive) {
+        setCompState(TunerState.LOADING);
+      }
+      break;
+    case TunerState.LOADING:
+      content = <LoadingDisplay />;
 
-        if (audioActive) {
-          setCompState(TunerState.LOADING);
-        }
-        break;
-      case TunerState.LOADING:
-        content = <LoadingDisplay />;
-
-        if (!isNaN(pitch)) {
-          setCompState(TunerState.ACTIVE);
-        }
-        break;
-      case TunerState.ACTIVE:
-        content = <TunerDisplay pitch={pitch} targetNote={targetNote} tuning={tuning} />
-
-        if (!audioActive) {
-          setCompState(TunerState.INACTIVE);
-        }
-        break;
-      case TunerState.OTHER_ERR:
-      default:
-        content = <div>error</div>;
-        break;
-    }
-
-    // update target note every target_refresh_interval
-    useEffect(() => {
       if (!isNaN(pitch)) {
-        const timer = setTimeout(() => {
-          setTargetNote(getClosestTuningNote(pitch, tuning));
-          setTargetRefreshFlag(flag => !flag);
-        }, target_refresh_interval);
-
-        return () => { clearTimeout(timer) }
+        setCompState(TunerState.ACTIVE);
       }
+      break;
+    case TunerState.ACTIVE:
+      content = <TunerDisplay pitch={pitch} targetNote={targetNote} tuning={tuning} />
 
-    }, [targetRefreshFlag, tuning, isNaN(pitch)]);
+      if (!audioActive) {
+        setCompState(TunerState.INACTIVE);
+      }
+      break;
+    case TunerState.OTHER_ERR:
+    default:
+      content = <div>error</div>;
+      break;
+  }
+
+  // update target note every target_refresh_interval
+  useEffect(() => {
+    if (!isNaN(pitch)) {
+      const timer = setTimeout(() => {
+        setTargetNote(getClosestTuningNote(pitch, tuning));
+        setTargetRefreshFlag(flag => !flag);
+      }, target_refresh_interval);
+
+      return () => { clearTimeout(timer) }
+    }
+
+  }, [targetRefreshFlag, tuning, isNaN(pitch)]);
 
 
-    return (
-      <div {...props}
-        style={{ ...style }}
-        className={className + " simple-component"}
-        ref={ref as React.RefObject<HTMLDivElement>}>
-        <h4>Tuner</h4>
-        <br />
-        {content}
-      </div>
-    );
-  });
+  return (
+    <div>
+      <h4>Tuner</h4>
+      <br />
+      {content}
+    </div>
+  );
+}
 
 export default Tuner;

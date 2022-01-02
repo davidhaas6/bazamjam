@@ -73,6 +73,7 @@ const components: { [key: string]: IGridComponent<any> } = {
 const defaultLayout = Object.values(components);
 
 const recorderLayout = { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true };
+const tunerLayout = { i: 'tuner', x: 0, y: 1, w: 1, h: 1, static: false };
 // sound
 
 /*
@@ -131,9 +132,9 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
             <RecorderComponent audioManager={audioManager} updateSoundData={updateSoundData}/>
           </DashboardComponent>
           
-          <Tuner className="dashboard-component" 
-          audioManager={audioManager} audioActive={audioManager.audioActive}
-          data-grid={{ i: '3', x: 0, y: 1, w: 1, h: 1 }} key={'3'} />
+          <DashboardComponent data-grid={tunerLayout} key={tunerLayout.i} >
+           <Tuner audioManager={audioManager} audioActive={audioManager.audioActive}/>
+          </DashboardComponent>
 
           {builtElements}
 

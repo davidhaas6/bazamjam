@@ -94,15 +94,10 @@ body {
 }
 
 .dashboard-component {
-    /* flexbox */
-    /* display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: center; */
-
     /* Sizing */
     width: fit-content;
     min-width: 150;
+
     /* Style */
     border: 5 solid #1d1d1d !important;
     border-radius: 5px;
@@ -131,7 +126,6 @@ body {
     flex-flow: row nowrap;
     justify-content: flex-start;
     align-items: center;
-    /* width: 400px !important; */
     padding: 20px;
     height: 100%;
 }
