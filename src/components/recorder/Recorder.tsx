@@ -37,7 +37,7 @@ const RecorderComponent: FunctionComponent<IRecorderProps> = (props: IRecorderPr
     // Not recording
     else {
       props.audioManager.stopRecording();
-      props.updateSoundData();
+      props.updateSoundData(undefined);
       console.log("\n\nstopped\n")
     }
     setIsRecording(newRecordingState);

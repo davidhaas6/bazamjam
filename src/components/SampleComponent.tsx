@@ -3,6 +3,7 @@ import { FunctionComponent } from "react";
 import SoundContext from "../logic/SoundContext";
 import { getRMS, getAmplitude, roundNum } from "../logic/util/Math";
 import { IDashboardComponentProps } from "./generic/DshbComp";
+import InactiveDisplay from "./generic/InactiveDisplay";
 
 interface SampleComponentProps extends IDashboardComponentProps {
   text?: string;
@@ -11,6 +12,7 @@ interface SampleComponentProps extends IDashboardComponentProps {
 const SampleComponent: FunctionComponent<SampleComponentProps> = (props: SampleComponentProps) => {
     return (
         <div className="simple-component">
+          <h4>Sound Stats</h4>
           <SoundContext.Consumer>
             {
               snapshot =>
@@ -21,7 +23,8 @@ const SampleComponent: FunctionComponent<SampleComponentProps> = (props: SampleC
                     Amplitude: {roundNum(getAmplitude(snapshot.soundData), 3)}
                   </div>
                   :
-                  <p>Start Recording!</p>
+                  <InactiveDisplay />
+                
             }
           </SoundContext.Consumer>
         </div>

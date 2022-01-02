@@ -4,38 +4,38 @@ import { INote, Tuning } from "./Tuner";
 
 
 interface ITunerDisplayProps {
-    pitch: number;
-    targetNote: INote;
-    tuning: Tuning;
+  pitch: number;
+  targetNote: INote;
+  tuning: Tuning;
 }
 
 const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDisplayProps) => {
 
-    return (
-    <div>
-        <div>
+  return (
+    <>
+      <div>
         {!props.targetNote.empty &&
-            props.tuning.map(note => {
-                let spanClass = "";
-                if (note.name === props.targetNote.name && !isNaN(props.pitch)) {
-                    spanClass += " alert-text"
-                }
-                return <span className={spanClass}>{note.name} </span>;
-            })
-        }
-        </div>
-        <div>
-            Target: {roundNum(props.targetNote.freq!, 1)} Hz
-            <br />
-            You: 
-            {isNaN(props.pitch) ?
-                <span > ~~~</span>
-                :
-                <span> {roundNum(props.pitch, 1)} Hz</span>
+          props.tuning.map(note => {
+            let spanClass = "";
+            if (note.name === props.targetNote.name && !isNaN(props.pitch)) {
+              spanClass += " alert-text"
             }
-        </div>
-
-    </div>);
+            return <span className={spanClass}>{note.name} </span>;
+          })
+        }
+      </div>
+      <div>
+        Target: {roundNum(props.targetNote.freq!, 1)} Hz
+        <br />
+        You:
+        {isNaN(props.pitch) ?
+          <span> ~~~</span>
+          :
+          <span> {roundNum(props.pitch, 1)} Hz</span>
+        }
+      </div>
+    </>
+  );
 }
 
 export default TunerDisplay;
