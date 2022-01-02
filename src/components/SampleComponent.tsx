@@ -1,4 +1,5 @@
-import { forwardRef, FunctionComponent, useContext } from "react";
+import { FunctionComponent } from "react";
+
 import SoundContext from "../logic/SoundContext";
 import { getRMS, getAmplitude, roundNum } from "../logic/util/Math";
 import { IDashboardComponentProps } from "./generic/DshbComp";
@@ -7,17 +8,9 @@ interface SampleComponentProps extends IDashboardComponentProps {
   text?: string;
 }
 
-
-const SampleComponent: FunctionComponent<SampleComponentProps>
-  = forwardRef(({ className, style = {}, children, ...props }, ref) => {
-    let { text = "Hi there" } = props;
-    // const soundData = useContext(SoundContext).soundData;
+const SampleComponent: FunctionComponent<SampleComponentProps> = (props: SampleComponentProps) => {
     return (
-      <div {...props}
-        style={{ ...style }}
-        className={className + " simple-component"}
-        ref={ref as React.RefObject<HTMLDivElement>}>
-        <div style={{ textAlign: 'center' }}>
+        <div className="simple-component">
           <SoundContext.Consumer>
             {
               snapshot =>
@@ -29,16 +22,9 @@ const SampleComponent: FunctionComponent<SampleComponentProps>
                   </div>
                   :
                   <p>Start Recording!</p>
-
-
-
             }
           </SoundContext.Consumer>
         </div>
-
-        {/* <iframe src="https://www.omfgdogs.com/"></iframe> */}
-      </div>
     );
-  });
-
+  }
 export default SampleComponent;

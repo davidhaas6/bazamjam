@@ -16,14 +16,9 @@ import Tuner from "./tuner/Tuner";
 import DashboardComponent from "./generic/DshbComp";
 
 
-const ReactGridLayout = WidthProvider(RGL);
-
-
 /*
  =========== types
 */
-
-
 export interface IGridComponent<T> {
   element: FunctionComponent<T>;
   props: T;
@@ -31,12 +26,11 @@ export interface IGridComponent<T> {
   children?: React.ReactNode[];
 }
 
-interface IDashboardProps {
-}
-
 /*
  =========== constants
 */
+
+const ReactGridLayout = WidthProvider(RGL);
 
 // layout
 const gridProps: ReactGridLayoutProps = {
@@ -48,75 +42,35 @@ const gridProps: ReactGridLayoutProps = {
   onLayoutChange: function () { },
 };
 
-const components: { [key: string]: IGridComponent<any> } = {
-  //   temp1: {
-  //     element: SampleComponent,
-  //     props: {},
-  //     layout: { i: '1', x: 0, y: 0, w: 1, h: 1 }
-  //   },
-  temp2: {
-    element: SampleComponent,
-    props: {}, 
-    layout: { i: '2', x: 1, y: 2, w: 1, h: 1 }
-  },
-  // midiMouth: {
-  //   element: MidiM,
-  //   props: {},
-  //   layout: { i: '1', x: 0, y: 0, w: 1, h: 3 }
-  // },
-  // pitch: {
-  //   element: PitchComponent,
-  //   props: {}, //TODO: how to pass state?
-  //   layout: { i: '3', x: 1, y: 2, w: 1, h: 1 }
-  // }
-};
-const defaultLayout = Object.values(components);
-
 const recorderLayout = { i: 'recorder', x: 0, y: 0, w: 3, h: 1, static: true };
 const tunerLayout = { i: 'tuner', x: 0, y: 1, w: 1, h: 1, static: false };
-// sound
 
-/*
- =========== functions
-*/
-
-// applys the layouts to the passed in items and creates some grid-items out of them
-function buildComponents(components: IGridComponent<any>[]): ReactElement[] {
-  console.log("Components built");
-  console.log("num components: " + components.length);
-
-  return components.map((comp: IGridComponent<any>, i) =>
-    createElement(comp.element, {
-      props: comp.props, // passed in props
-
-      // props for grid-itemsa
-      className: "dashboard-component",
-      key: comp.layout.i,
-      "data-grid": comp.layout
-    }, comp.children)
-  );
-}
+const components: { [key: string]: IGridComponent<any> } = {
+  sample: {
+    element: SampleComponent,
+    props: {}, 
+    layout: { i: 'sample', x: 1, y: 2, w: 1, h: 1 }
+  },
+  midiMouth: {
+    element: MidiM,
+    props: {},
+    layout: { i: '1', x: 0, y: 0, w: 1, h: 3 }
+  },
+};
 
 
-// TODO: Dashboard rebuilds with each new audio data
+interface IDashboardProps {}
+
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
   const [audioManager, setaudioManager] = useState(new AudioManager());
   let [audioSnapshot, setAudioSnapshot] = useState(new AudioSnapshot());
-  const [dshbLayout, setDshbLayout] = useState(defaultLayout);
 
-  const snapshot = useMemo(() => audioSnapshot,
-    [audioSnapshot]);
-
-  // execute on first build
-  let builtElements: ReactElement[] = useMemo(() =>
-    buildComponents(dshbLayout)
-    , [dshbLayout]
-  );
-  // console.log("dashboard");
+  const snapshot = useMemo(() => audioSnapshot,[audioSnapshot]);
 
   let updateSoundData = (soundData?: Float32Array) => {
     // TODO: This re renders the whole dashboard, fix
     // problem: how to update context consumers without updating state?
+
     setAudioSnapshot(new AudioSnapshot(soundData));
   }
 
@@ -127,7 +81,6 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
       <SoundContext.Provider value={snapshot}>
         <ReactGridLayout className="grid" {...gridProps}>
 
-          {/* recorder */}
           <DashboardComponent data-grid={recorderLayout} key={recorderLayout.i}>
             <RecorderComponent audioManager={audioManager} updateSoundData={updateSoundData}/>
           </DashboardComponent>
@@ -136,8 +89,10 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
            <Tuner audioManager={audioManager} audioActive={audioManager.audioActive}/>
           </DashboardComponent>
 
-          {builtElements}
-
+          <DashboardComponent data-grid={components.sample.layout} key={components.sample.layout.i} >
+          <SampleComponent/>
+          </DashboardComponent>
+    
         </ReactGridLayout>
       </SoundContext.Provider>
       {/* </FloatArrayContext.Provider> */}
