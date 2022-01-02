@@ -6,13 +6,13 @@ import RGL, { Layout, ReactGridLayoutProps, WidthProvider } from 'react-grid-lay
 import '../assets/grid_styles.css';
 import '../assets/resizable_styles.css';
 import AudioManager from "../logic/AudioManager";
-import SampleComponent from "./dashboard_components/SampleComponent";
-import RecorderComponent from "./dashboard_components/Recorder";
-import MidiM from "./dashboard_components/MidiMComp";
+import SampleComponent from "./SampleComponent";
+import RecorderComponent from "./recorder/Recorder";
+import MidiM from "./midi-mouth/MidiMComp";
 import React from "react";
 import AudioSnapshot from "../logic/AudioSnapshot";
 import SoundContext from "../logic/SoundContext";
-import Tuner from "./dashboard_components/tuner/Tuner";
+import Tuner from "./tuner/Tuner";
 
 
 const ReactGridLayout = WidthProvider(RGL);

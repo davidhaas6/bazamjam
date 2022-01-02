@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import { roundNum } from "../../../logic/util/Math";
+import { roundNum } from "../../logic/util/Math";
 import { INote, Tuning } from "./Tuner";
 
 

@@ -1,8 +1,8 @@
 import { forwardRef, FunctionComponent, useState } from "react";
 import { Card } from "react-bootstrap";
 import ReactPlayer from "react-player";
-import MidiMouthForm from "../MidiMouthForm";
-import { IDashboardComponentProps } from "./DshbComp";
+import MidiMouthForm from "./MidiMouthForm";
+import { IDashboardComponentProps } from "../generic/DshbComp";
 
 
 

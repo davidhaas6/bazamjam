@@ -1,7 +1,7 @@
 import { forwardRef, FunctionComponent, useContext } from "react";
-import SoundContext from "../../logic/SoundContext";
-import { getRMS, getAmplitude, roundNum } from "../../logic/util/Math";
-import { IDashboardComponentProps } from "./DshbComp";
+import SoundContext from "../logic/SoundContext";
+import { getRMS, getAmplitude, roundNum } from "../logic/util/Math";
+import { IDashboardComponentProps } from "./generic/DshbComp";
 
 interface SampleComponentProps extends IDashboardComponentProps {
   text?: string;

@@ -4,13 +4,13 @@ import { Note as NoteType, NoNote } from "@tonaljs/core";
 import { Note, NoteLiteral } from "@tonaljs/tonal";
 import { forwardRef, FunctionComponent, useEffect, useState } from "react";
 
-import AudioManager from "../../../logic/AudioManager";
-import { Float32Buffer } from "../../../logic/Float32Buffer";
-import { freqToMidi } from "../../../logic/util/Math";
-import { WorkletCallback } from "../../../logic/util/Worklet";
-import InactiveDisplay from "../../generic/InactiveDisplay";
-import LoadingDisplay from "../../generic/LoadingDisplay";
-import { IDashboardComponentProps } from "../DshbComp";
+import AudioManager from "../../logic/AudioManager";
+import { Float32Buffer } from "../../logic/Float32Buffer";
+import { freqToMidi } from "../../logic/util/Math";
+import { WorkletCallback } from "../../logic/util/Worklet";
+import InactiveDisplay from "../generic/InactiveDisplay";
+import LoadingDisplay from "../generic/LoadingDisplay";
+import { IDashboardComponentProps } from "../generic/DshbComp";
 import TunerDisplay from "./TunerDisplay";
 
 

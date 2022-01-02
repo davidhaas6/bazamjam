@@ -2,7 +2,7 @@ import { FunctionComponent, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import ReactPlayer from "react-player";
 import AlertDismissable from "../components/AlertDismissable";
-import MidiMouthForm from "../components/MidiMouthForm";
+import MidiMouthForm from "../components/midi-mouth/MidiMouthForm";
 import Sidebar from "../components/Sidebar";
 
 
