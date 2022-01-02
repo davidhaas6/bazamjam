@@ -17,7 +17,7 @@ function argMax(array) {
 
 const SAMPLES_PER_CALL = 128; // set by Web Audio API
 
-const FFT_SIZE = 2048;
+const MIN_RMS = 0.01;
 const FRAME_SIZE = 2048;
 const HOP_SIZE = 1024;
 const BUFFER_SECONDS = 0.2; // length of buffer in seconds
@@ -56,7 +56,6 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     if (this.isCalculationCall() && !this._buffer.allZero()) {
       let pitch = this.getFundFreq();
       this.port.postMessage(pitch);
-      // console.log("posted pitch: " + pitch);
     }
 
     this._calcCounter++;
@@ -67,17 +66,21 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
   // this frequency is determined by the buffer size and the frame overlap.
   // this function returns true if it is time to calculate
   isCalculationCall() {
-    let isCalcStep = (this._calcCounter % this._calcInterval) == 0;
+    let isCalcStep = (this._calcCounter % this._calcInterval) === 0;
     return this._calcCounter > 0 && isCalcStep;
   }
 
   getFundFreq() {
     let inputSignal = this.essentia.arrayToVector(this._buffer.data);
-    if (inputSignal.size() != this._bufferSize) {
+    if (inputSignal.size() !== this._bufferSize) {
       console.log(inputSignal);
       console.log("vector len: " + inputSignal.length);
       console.log("buffer data len: " + this._buffer.data.length);
-      return -1;
+      return NaN;
+    }
+
+    if(this.essentia.RMS(inputSignal) < MIN_RMS) {
+      return NaN;
     }
 
     // Get the predominant frequency. All the magic numbers are the default params    

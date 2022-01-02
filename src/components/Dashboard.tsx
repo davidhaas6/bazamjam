@@ -29,10 +29,8 @@ export interface IGridComponent<T> {
 /*
  =========== constants
 */
-
 const ReactGridLayout = WidthProvider(RGL);
 
-// layout
 const gridProps: ReactGridLayoutProps = {
   // layout: defaultLayouts.lg,
   rowHeight: 200,
@@ -48,7 +46,7 @@ const tunerLayout = { i: 'tuner', x: 0, y: 1, w: 1, h: 1, static: false };
 const components: { [key: string]: IGridComponent<any> } = {
   sample: {
     element: SampleComponent,
-    props: {}, 
+    props: {},
     layout: { i: 'sample', x: 1, y: 2, w: 1, h: 1 }
   },
   midiMouth: {
@@ -59,13 +57,13 @@ const components: { [key: string]: IGridComponent<any> } = {
 };
 
 
-interface IDashboardProps {}
+interface IDashboardProps { }
 
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
   const [audioManager, setaudioManager] = useState(new AudioManager());
   let [audioSnapshot, setAudioSnapshot] = useState(new AudioSnapshot());
 
-  const snapshot = useMemo(() => audioSnapshot,[audioSnapshot]);
+  const snapshot = useMemo(() => audioSnapshot, [audioSnapshot]);
 
   let updateSoundData = (soundData?: Float32Array) => {
     // TODO: This re renders the whole dashboard, fix
@@ -77,25 +75,23 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   // https://github.com/react-grid-layout/react-grid-layout
   return (
     <div className="dashboard">
-      {/* <FloatArrayContext.Provider value={audioSnapshot.soundData}> */}
       <SoundContext.Provider value={snapshot}>
         <ReactGridLayout className="grid" {...gridProps}>
 
           <DashboardComponent data-grid={recorderLayout} key={recorderLayout.i}>
-            <RecorderComponent audioManager={audioManager} updateSoundData={updateSoundData}/>
+            <RecorderComponent audioManager={audioManager} updateSoundData={updateSoundData} />
           </DashboardComponent>
-          
+
           <DashboardComponent data-grid={tunerLayout} key={tunerLayout.i} >
-           <Tuner audioManager={audioManager} audioActive={audioManager.audioActive}/>
+            <Tuner audioManager={audioManager} audioActive={audioManager.audioActive} />
           </DashboardComponent>
 
           <DashboardComponent data-grid={components.sample.layout} key={components.sample.layout.i} >
-          <SampleComponent/>
+            <SampleComponent />
           </DashboardComponent>
-    
+
         </ReactGridLayout>
       </SoundContext.Provider>
-      {/* </FloatArrayContext.Provider> */}
     </div >
   );
 }

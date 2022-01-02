@@ -11,7 +11,8 @@ interface ITunerDisplayProps {
 
 const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDisplayProps) => {
 
-    return (<div className="tuner">
+    return (
+    <div>
         <div>
         {!props.targetNote.empty &&
             props.tuning.map(note => {
@@ -28,7 +29,7 @@ const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDispla
             <br />
             You: 
             {isNaN(props.pitch) ?
-                <span className="alert-text"> !!!</span>
+                <span > ~~~</span>
                 :
                 <span> {roundNum(props.pitch, 1)} Hz</span>
             }

@@ -167,6 +167,10 @@ body {
     /* width: 400px !important; */
     padding: 20px;
 }
+.tuner-header {
+    /* font-size: 32pt; */
+    padding: 15px;
+}
 
 .alert-text {
     color: red;
