@@ -5,7 +5,7 @@ export interface IDashboardComponentProps {
   className?: string;
   key?: string;
   style?: { [x: string]: string };
-  children?: React.ReactNode[];
+  children?: any;
 };
 
 

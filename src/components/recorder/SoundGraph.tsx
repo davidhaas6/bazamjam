@@ -16,7 +16,6 @@ function draw(context: CanvasRenderingContext2D, audioData: Float32Array,
   width: number, height: number
 ) {
   let x = 0;
-  const noiseFloor = 3;
   const sliceWidth = width / audioData.length;
 
   context.strokeStyle = '#ffffff';
