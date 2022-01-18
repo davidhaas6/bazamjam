@@ -55,21 +55,21 @@ html, body {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
     /* flex- */
 }
 
 .info-section {
     background-color: var(--dark-accent); 
     width: 90%;
-    min-height: 45%;
+    min-height: 50%;
     /* padding: 20px 5px; */
 }
 
 .display-section {
     background-color: var(--light-accent);
     width: 90%;
-    min-height: 20%;
+    min-height: 10%;
 }
 
 .button-section {
@@ -77,7 +77,6 @@ html, body {
     width: 90%;
     min-height: 25%;
     /* margin: 20px 5px 2px 5px; */
-
 }
 
 
@@ -90,6 +89,10 @@ html, body {
  @media only screen and (max-height: 800px) { 
     .box-body {
         height:100vh;
+    }
+    .display-section {
+        max-height: 0%;
+        height: 0%;
     }
 }
 

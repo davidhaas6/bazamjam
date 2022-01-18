@@ -4,12 +4,13 @@
 
 import "../assets/App.css";
 
-import { FunctionComponent, useMemo, useState } from "react";
+import { FunctionComponent, useContext, useMemo, useState } from "react";
 
 import AudioManager from "../logic/AudioManager";
 import AudioSnapshot from "../logic/AudioSnapshot";
 import Tuner from "./tuner/Tuner";
 import RecorderComponent from "./recorder/Recorder";
+import { AudioManagerContext } from "../routes/App";
 
 
 interface IDashboardProps {
@@ -17,22 +18,11 @@ interface IDashboardProps {
 }
 
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
-  const [audioManager, setaudioManager] = useState(new AudioManager());
-  let [audioSnapshot, setAudioSnapshot] = useState(new AudioSnapshot());
-
-  const snapshot = useMemo(() => audioSnapshot, [audioSnapshot]);
-
-  let updateSoundData = (soundData?: Float32Array) => {
-    // TODO: This re renders the whole dashboard, fix
-    // problem: how to update context consumers without updating state?
-
-    setAudioSnapshot(new AudioSnapshot(soundData));
-  }
-
+  const audioManager = useContext(AudioManagerContext);
   // https://github.com/react-grid-layout/react-grid-layout
   return (
     <div className="dashboard">
-      <RecorderComponent audioManager={audioManager} updateSoundData={updateSoundData} />
+      {/* <RecorderComponent audioManager={audioManager} updateSoundData={updateSoundData} /> */}
       <Tuner audioManager={audioManager} audioActive={audioManager.audioActive} />
 
     </div >
