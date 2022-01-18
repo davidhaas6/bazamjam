@@ -14,18 +14,21 @@ html, body {
     height: 100vh;
 }
 
-.App {
-    height: 100vh;
-    display: flex;
-}
 
-/* ===== Layout ======
+
+/* ===== App Layout ======
 
 
 
 */
 
-/* ===== Components ======
+.App {
+    height: 100vh;
+    display: flex;
+}
+
+
+/* ===== App Components ======
 
 
 
@@ -37,14 +40,6 @@ html, body {
     max-width: 550px;
     width: 100%;
 }
-
-/* ===== Dashboard ======
-
-
-
-
-*/
-
 
 
 /* ======= Dashboard Components =======

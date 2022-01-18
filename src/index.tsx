@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './routes/App';
 import reportWebVitals from './reportWebVitals';
 
@@ -10,7 +9,7 @@ import {
     Routes,
     Route
 } from "react-router-dom";
-import MidiMouth from './routes/MidiMouth';
+
 
 ReactDOM.render(
     <Auth0Provider
@@ -25,7 +24,7 @@ ReactDOM.render(
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<App />} />
-                <Route path="/midi-mouth" element={<MidiMouth />} />
+                {/* <Route path="/midi-mouth" element={<MidiMouth />} /> */}
             </Routes>
         </BrowserRouter>
 

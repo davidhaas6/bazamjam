@@ -2,7 +2,6 @@ import  { FunctionComponent } from 'react';
 import "../assets/App.css";
 
 import Dashboard from '../components/Dashboard';
-import Sidebar from '../components/Sidebar';
 
 import 'react-bootstrap'
 
@@ -10,11 +9,10 @@ interface IAppProps {
   
 }
  
-const App: FunctionComponent<IAppProps> = (props: IAppProps) => {
+const App: FunctionComponent<IAppProps> = (_: IAppProps) => {
   return (
     <div className="App">
-      <Sidebar />
-      <Dashboard />
+      {/* <Dashboard /> */}
     </div>
   );
 }
