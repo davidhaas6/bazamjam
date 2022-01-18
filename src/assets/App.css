@@ -1,3 +1,17 @@
+/* styles for the app */
+
+/* 
+  retro colors: https://www.schemecolor.com/retro-vintage.php 
+*/
+
+:root {
+
+    --main-bg-color: #E2D7A7;
+    --primary-color: #A16B56;
+    --light-accent: #E0A370;
+    --dark-accent: #567D89;
+    --highlight-color: #DEC584;
+  }
 
 /* === HTML ===
 
@@ -10,8 +24,8 @@
 }
 
 html, body {
-    background-color: #fafafa;
     height: 100vh;
+    width: 100vw;
 }
 
 
@@ -23,8 +37,60 @@ html, body {
 */
 
 .App {
+    background-color: var(--main-bg-color);
+
     height: 100vh;
     display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-body {
+    background-color: var(--primary-color);
+    height: 90vh;
+    width: 56.28vw;
+    /* max-width: 1000px; */
+
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: space-around;
+    /* flex- */
+}
+
+.info-section {
+    background-color: var(--dark-accent); 
+    width: 90%;
+    min-height: 45%;
+    /* padding: 20px 5px; */
+}
+
+.display-section {
+    background-color: var(--light-accent);
+    width: 90%;
+    min-height: 20%;
+}
+
+.button-section {
+    background-color: var(--highlight-color);
+    width: 90%;
+    min-height: 25%;
+    /* margin: 20px 5px 2px 5px; */
+
+}
+
+
+@media only screen and (max-width: 500px) { 
+    .box-body {
+        min-width: 100vw;
+        /* width:100vw; */
+    }
+}
+ @media only screen and (max-height: 800px) { 
+    .box-body {
+        height:100vh;
+    }
 }
 
 

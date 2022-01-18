@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { Accordion, Button, Card, Form, FormControl, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
-import AlertDismissable from "../AlertDismissable";
+import AlertDismissable from "../generic/AlertDismissable";
 
 interface MidiMouthFormProps {
   apiRoot: string;
