@@ -27,11 +27,11 @@ const RecorderComponent: FunctionComponent<IRecorderProps> = (props: IRecorderPr
   let recordingIcon = isRecording ? icons.recordOn : icons.recordOff;
 
   // recording start/stop callback
-  let onRecordClick = () => {
+  let  onRecordClick = async () => {
     let newRecordingState = !isRecording;
     // Recording!
     if (newRecordingState) {
-      props.audioManager.startRecording();
+      await props.audioManager.startRecording();
       console.log("\n\nstarted\n")
     }
     // Not recording

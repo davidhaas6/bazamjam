@@ -71,17 +71,20 @@ class AudioManager {
       this.addNode(analyzer, "analyzer");
     }
 
-    if (this.audioStream == null || !this.audioStream?.active) {
+    if (this.audioStream == null) {
       this.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-      this.addSourceNode();
-    } else if (this.audioStream?.getTracks().every((track) => track.enabled == false)) {
+    }
+    else if (!this.audioStream?.active) {
+      if (this._nodes['source'] == null) {
+        this.addSourceNode();
+      }
       this.audioStream?.getTracks().forEach(track => track.enabled = true);
     }
-
 
     if (this._nodes['source'] == null) {
       this.addSourceNode();
     }
+
 
     // Lets them be used in callbacks
     this.getTimeData.bind(this);
@@ -95,14 +98,14 @@ class AudioManager {
   */
 
   async startRecording(): Promise<boolean> {
-    let bigIfTrue = await this.initAudio();
-    this.audioActive = bigIfTrue;
-    return bigIfTrue;
+    this.audioActive = await this.initAudio();
+    return this.audioActive;
   }
 
 
   stopRecording(): void {
-    this.audioStream?.getTracks().forEach(track => track.enabled = false);
+    this.audioStream?.getAudioTracks().forEach(element => element.stop());
+    this.audioStream = null;
     this.audioActive = false;
   }
 

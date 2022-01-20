@@ -6,6 +6,7 @@ import Dashboard from '../components/Dashboard';
 import 'react-bootstrap'
 import AudioManager from '../logic/AudioManager';
 import React from 'react';
+import ButtonPanel from '../components/ButtonPanel';
 
 interface IAppProps {
 
@@ -22,13 +23,13 @@ const App: FunctionComponent<IAppProps> = (_: IAppProps) => {
         <div className="box-body">
 
 
-          <div className="info-section">
+          <div className="info-box">
             <Dashboard />
           </div>
 
-          <div className="display-section"></div>
+          <div className="display-box"></div>
 
-          <div className="button-section"></div>
+            <ButtonPanel />
 
         </div>
       </AudioManagerContext.Provider>
