@@ -127,7 +127,7 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
     if (audioActive && !audioManager.nodeExists(node_name)) {
       audioManager.addWorklet(node_name, worklet_processor_path, onWorkletMsg);
     }
-  }, [compState == TunerState.LOADING, audioManager]);
+  }, [compState == TunerState.LOADING]);
 
 
   // FSM for component visual state

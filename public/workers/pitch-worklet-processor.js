@@ -48,12 +48,12 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
   //System-invoked process callback function.
   process(inputs, outputs, parameters) {
     if (inputs.length == 0 || inputs[0][0] == null) {
-      console.log("no input");
+      console.log("no input - length", inputs.length);
       return true;
     }
-    console.log("processing");
+    
     // <inputs> and <outputs> will have as many as were specified in the options passed to the AudioWorkletNode constructor, each subsequently spanning potentially multiple channels
-    let audioInput = inputs[0];
+    let audioInput = inputs[0][0];
 
     this._buffer.append(audioInput[0]);
 
@@ -77,9 +77,6 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
   getFundFreq() {
     let inputSignal = this.essentia.arrayToVector(this._buffer.data);
     if (inputSignal.size() !== this._bufferSize) {
-      console.log(inputSignal);
-      console.log("vector len: " + inputSignal.length);
-      console.log("buffer data len: " + this._buffer.data.length);
       return NaN;
     }
 
@@ -103,7 +100,6 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     // const numFrames = pitchFrames.length;
     const meanPitch = pitchFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
     // const meanConfidence = confidenceFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
-
 
     return meanPitch;
   }

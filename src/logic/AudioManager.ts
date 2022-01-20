@@ -85,8 +85,9 @@ class AudioManager {
       }
       else { // Replace node
         this.replaceNode("source", srcNode);
-        console.log("replaced source -- src outputs: ", this._nodes['source'].numberOfOutputs);
       }
+    } else {
+      this.setTracksEnabled(true);
     }
 
     // Lets them be used in callbacks
@@ -113,16 +114,13 @@ class AudioManager {
 
 
   stopRecording(): void {
-    // this.audioContext?.suspend();
-    // this.audioContext?.suspend();
-    this._nodes['source']?.disconnect();
-    this.audioStream?.getAudioTracks().forEach(element => element.stop());
-    delete this._nodes['source'];
-
-    this.audioStream = null;
     this.audioActive = false;
-
+    this.setTracksEnabled(false);
     this.pubsub.publish('audio-active', this.audioActive);
+  }
+
+  private setTracksEnabled(enabled: boolean) {
+    this.audioStream?.getAudioTracks().forEach(element => element.enabled = enabled);
   }
 
 
@@ -155,8 +153,6 @@ class AudioManager {
       throw new Error("Key already exists in audio graph");
     }
     this._nodes[key] = node;
-
-    //todo: inputs not working?
 
     // connect the inputs for this node to it
     if (conn?.inputs) {
@@ -192,8 +188,7 @@ class AudioManager {
       this.nodeGraph.get(srcNodeKey)?.push(dstNodeKey);
     }
 
-    console.log(`${srcNodeKey} --> ${dstNodeKey}`);
-    console.log(`${srcNodeKey} outputs: ${this._nodes[srcNodeKey].numberOfOutputs}\n`);
+    console.log(`added  ${srcNodeKey} --> ${dstNodeKey}`);
   }
 
   // replaces an audionode in the graph
@@ -207,31 +202,13 @@ class AudioManager {
 
     let inputNodes = this.getInputNodesFor(nodeKey);
     let outputNodes = this.nodeGraph.get(nodeKey);
-    console.log("input nodes for ", nodeKey, ": ", inputNodes);
-    delete this._nodes[nodeKey];
 
+    delete this._nodes[nodeKey];
 
     this.addNode(newNode, nodeKey as string, {
       outputs: outputNodes,
       inputs: inputNodes
     });
-
-    // // reconnect the node to its destinations in the WebAudio graph
-    // this.nodeGraph.get(nodeKey)?.forEach((dstNodeKey) => {
-    //   newNode.connect(this._nodes[dstNodeKey]);
-    //   console.log("reconnected " + nodeKey + " to " + dstNodeKey);
-    // });
-
-
-    // // reconnect the nodes that pointed to this node in the WebAudio graph
-    // // for (let key in this.nodeConnections.keys()) {
-    // //   this.nodeConnections.get(key)?.forEach((dstNodeKey) => {
-    // //     if (dstNodeKey == nodeKey) {
-    // //       this._nodes[key].connect(newNode);
-    // //     }
-    // //   });
-    // // }
-    // this.getInputNodesFor(nodeKey).forEach((srcNodeKey) => { this._nodes[srcNodeKey].connect(newNode) })
 
     this._nodes[nodeKey] = newNode;
   }
@@ -272,7 +249,6 @@ class AudioManager {
       node.port.onmessage = onMessage;
 
       this.addNode(node, name, { inputs: ["source"] });
-      node.connect(new AudioNode());
     } catch (e) {
       // TODO: delete node connections for worker if it exists
       console.log("Error adding worklet node:" + e);
