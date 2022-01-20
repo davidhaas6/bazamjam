@@ -23,7 +23,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   return (
     <div className="dashboard">
       {/* <RecorderComponent audioManager={audioManager} updateSoundData={updateSoundData} /> */}
-      <Tuner audioManager={audioManager} audioActive={audioManager.audioActive} />
+      <Tuner audioManager={audioManager} />
 
     </div >
   );

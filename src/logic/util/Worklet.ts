@@ -7,14 +7,14 @@ export type WorkletCallback = ((this: MessagePort, ev: MessageEvent<any>) => any
 // the function path is relative to the public directory and is 
 // specified in the workletProcessorPath variable
 export async function createEssentiaNode(
-  audioCtx: AudioContext, workletJsPath: string, nodeName: string
+  audioCtx: AudioContext,
+  workletJsPath: string,
+  nodeName: string
 ): Promise<AudioWorkletNode> {
   try {
     // register the audio worker
     console.log("registering worker");
-    await audioCtx.audioWorklet.addModule(workletJsPath,
-      { credentials: 'omit' }
-    );
+    await audioCtx.audioWorklet.addModule(workletJsPath, { credentials: 'omit' });
   } catch (e) {
     console.log("error adding worklet module:" + e);
   }

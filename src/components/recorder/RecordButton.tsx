@@ -18,19 +18,6 @@ const RecordingButton: FunctionComponent<RecordingButtonProps> = () => {
     return new Audio("assets/sound/switch-off-2.wav");
   },[]);
 
-  const onPress = () => {
-    console.log("pressed");
-    setIsRecording(() => !isRecording);
-    let weRecording = !isRecording;
-
-    if (weRecording) {
-      
-    } else {
-     
-    }
-
-  }
-
   useEffect(() => {
     if(isRecording) {
       audioManager.startRecording();
@@ -41,13 +28,13 @@ const RecordingButton: FunctionComponent<RecordingButtonProps> = () => {
     }
   }, [isRecording]);
 
-  
+  useEffect(() => {
+
+  }, [audioManager.audioActive]);
+
   
 
   let buttonClass = "recording-button " + (isRecording ? "rb-pressed" : "");
-  console.log("isRecording", isRecording);
-  console.log("buttonClass", buttonClass);
-  
 
   return (
     <div className="recording-box">

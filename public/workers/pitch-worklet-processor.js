@@ -34,7 +34,7 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     // TODO: make this a time value via the sampling rate
     this._bufferSize = sampleRate * BUFFER_SECONDS;
     this._buffer = new Float32Buffer(this._bufferSize);
-    console.log(this._bufferSize + " Samples per buffer");
+    // console.log(this._bufferSize + " Samples per buffer");
 
     // controls how often the calculations are performed
     this._calcInterval = Math.floor(this._bufferSize * (1 - FRAME_OVERLAP) / SAMPLES_PER_CALL);
@@ -47,7 +47,11 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
 
   //System-invoked process callback function.
   process(inputs, outputs, parameters) {
-
+    if (inputs.length == 0 || inputs[0][0] == null) {
+      console.log("no input");
+      return true;
+    }
+    console.log("processing");
     // <inputs> and <outputs> will have as many as were specified in the options passed to the AudioWorkletNode constructor, each subsequently spanning potentially multiple channels
     let audioInput = inputs[0];
 
@@ -100,7 +104,6 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     const meanPitch = pitchFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
     // const meanConfidence = confidenceFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
 
-    // console.log("pitch: " + meanPitch + " Hz, with conf: " + meanConfidence);
 
     return meanPitch;
   }

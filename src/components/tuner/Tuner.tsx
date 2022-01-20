@@ -1,8 +1,8 @@
-// a react component representing a tuner
+// a react component containing audio logic for a tuner
 
 import { Note as NoteType, NoNote } from "@tonaljs/core";
 import { Note, NoteLiteral } from "@tonaljs/tonal";
-import { forwardRef, FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 
 import AudioManager from "../../logic/AudioManager";
 import { Float32Buffer } from "../../logic/Float32Buffer";
@@ -12,6 +12,7 @@ import InactiveDisplay from "../generic/InactiveDisplay";
 import LoadingDisplay from "../generic/LoadingDisplay";
 import { IDashboardComponentProps } from "../generic/DshbComp";
 import TunerDisplay from "./TunerDisplay";
+import { PubSubContext } from "../../routes/App";
 
 
 enum TunerState {
@@ -72,7 +73,6 @@ function filterValidTunings(tunings: NoteLiteral[][]): Tuning[] {
 
 interface ITunerProps extends IDashboardComponentProps {
   audioManager: AudioManager;
-  audioActive: boolean;
 }
 
 const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
@@ -80,12 +80,27 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
   const [pitchBuffer, setPitchBuffer] = useState(new Float32Buffer(pitch_buffer_len));
 
   const [tuning, setTuning] = useState<Tuning>(tuning_options[0]);
+  const [audioActive, setAudioActive] = useState(false);
   const [targetNote, setTargetNote] = useState<INote>(tuning[0]);
 
   const [targetRefreshFlag, setTargetRefreshFlag] = useState(false);
   const [compState, setCompState] = useState(TunerState.INACTIVE);
 
-  let { audioManager, audioActive } = props;
+  let { audioManager } = props;
+
+  let pubSub = useContext(PubSubContext);
+
+  useEffect(() => {
+    pubSub.subscribe("audio-active", (active: boolean) => {
+      setAudioActive(active);
+      console.log("audio active: " + active);
+
+      // if (audioManager.nodeExists("source"))
+      //   console.log("src outputs: ", audioManager._nodes['source'].numberOfOutputs);
+      // console.log("src connections: ", audioManager.nodeGraph?.get('source'));
+    }
+    );
+  }, []);
 
   const onWorkletMsg: WorkletCallback = (e: MessageEvent) => {
     try {
@@ -105,9 +120,13 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
     }
   }
 
+
+
   // create and attach the essentia node to audio context
   useEffect(() => {
-    audioManager.addWorklet(node_name, worklet_processor_path, onWorkletMsg);
+    if (audioActive && !audioManager.nodeExists(node_name)) {
+      audioManager.addWorklet(node_name, worklet_processor_path, onWorkletMsg);
+    }
   }, [compState == TunerState.LOADING, audioManager]);
 
 
@@ -126,6 +145,9 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
 
       if (!isNaN(pitch)) {
         setCompState(TunerState.ACTIVE);
+      }
+      if (!audioActive) {
+        setCompState(TunerState.INACTIVE);
       }
       break;
     case TunerState.ACTIVE:
@@ -155,6 +177,7 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
   }, [targetRefreshFlag, tuning, isNaN(pitch)]);
 
 
+  // rendur tuner and children
   return (
     <div className="tuner">
       <h4 className="">Tuner</h4>
