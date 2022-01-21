@@ -1,5 +1,4 @@
 import PubSub from "./PubSub";
-import Recorder from "./Recorder";
 import { createEssentiaNode, WorkletCallback } from "./util/Worklet";
 
 
@@ -28,17 +27,15 @@ class AudioManager {
   _nodes: INodes; // essentially a dictionary of nodes
   nodeGraph: Map<NodeKey, NodeKey[]>;
 
-  analyser?: AnalyserNode | null;
   audioStream?: MediaStream | null;
 
   _timeBuffer: Float32Array;
   _freqBuffer: Float32Array;
 
-  _recorder: Recorder;
-
   pubsub: PubSub;
 
   audioActive: boolean = false; // if we're actively processing audio
+
   readonly FFT_SIZE = 2048; // num bins in fft -- real + image
   readonly SAMPLE_RATE = 44100;
   readonly BUFFER_SIZE = this.FFT_SIZE;
@@ -54,8 +51,6 @@ class AudioManager {
 
     this._timeBuffer = new Float32Array(this.FFT_SIZE);
     this._freqBuffer = new Float32Array(this.FFT_SIZE / 2);
-
-    this._recorder = new Recorder(this.SAMPLE_RATE);
 
     this.pubsub = pubsub;
   }

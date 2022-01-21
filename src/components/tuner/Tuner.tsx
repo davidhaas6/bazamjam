@@ -10,9 +10,8 @@ import { freqToMidi } from "../../logic/util/Math";
 import { WorkletCallback } from "../../logic/util/Worklet";
 import InactiveDisplay from "../generic/InactiveDisplay";
 import LoadingDisplay from "../generic/LoadingDisplay";
-import { IDashboardComponentProps } from "../generic/DshbComp";
 import TunerDisplay from "./TunerDisplay";
-import { PubSubContext } from "../../routes/App";
+import { AudioManagerContext, PubSubContext } from "../../routes/App";
 
 
 enum TunerState {
@@ -71,11 +70,14 @@ function filterValidTunings(tunings: NoteLiteral[][]): Tuning[] {
 }
 
 
-interface ITunerProps extends IDashboardComponentProps {
-  audioManager: AudioManager;
+interface ITunerProps {
 }
 
 const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
+  let pubSub = useContext(PubSubContext);
+  const audioManager = useContext(AudioManagerContext);
+
+  // state
   const [pitch, setPitch] = useState(NaN);
   const [pitchBuffer, setPitchBuffer] = useState(new Float32Buffer(pitch_buffer_len));
 
@@ -86,9 +88,6 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
   const [targetRefreshFlag, setTargetRefreshFlag] = useState(false);
   const [compState, setCompState] = useState(TunerState.INACTIVE);
 
-  let { audioManager } = props;
-
-  let pubSub = useContext(PubSubContext);
 
   useEffect(() => {
     pubSub.subscribe("audio-active", (active: boolean) => setAudioActive(active));

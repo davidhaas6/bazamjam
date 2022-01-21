@@ -1,7 +1,6 @@
-import { FunctionComponent, useContext, useMemo, useState } from "react";
+import { FunctionComponent, useContext, useMemo } from "react";
 import { AudioManagerContext } from "../../routes/App";
 import ControlButton from "./ControlButton";
-import RecordingButton from "./RecordButton";
 
 import { TiMediaStopOutline, TiNotesOutline } from "react-icons/ti";
 import { RiCloseLine } from "react-icons/ri";
@@ -19,7 +18,7 @@ interface ButtonPanelProps {
 const ButtonPanel: FunctionComponent<ButtonPanelProps> = (props: ButtonPanelProps) => {
   const audioManager = useContext(AudioManagerContext);
 
-  let iconSize = 24;
+  let iconSize = 40;
   const icons = useMemo(() => {
     return {
       play: <BsFillPlayFill className="cb-icon" size={iconSize + 2} />,
@@ -27,8 +26,8 @@ const ButtonPanel: FunctionComponent<ButtonPanelProps> = (props: ButtonPanelProp
       settings: <BsGearFill className="cb-icon" size={iconSize - 2} />,
       close: <RiCloseLine className="cb-icon" size={iconSize + 2} />,
       widgets: <BsFillGridFill className="cb-icon" size={iconSize - 2} />,
-      recorderPressed: <TiMediaStopOutline size={iconSize * 2} />,
-      recorderUnpressed: <TiNotesOutline size={iconSize * 2} />
+      recorderPressed: <TiMediaStopOutline size={50} />,
+      recorderUnpressed: <TiNotesOutline size={50} />
     }
   }, [iconSize]);
 
