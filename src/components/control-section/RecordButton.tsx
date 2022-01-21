@@ -12,11 +12,11 @@ const RecordingButton: FunctionComponent<RecordingButtonProps> = () => {
 
   const snd_on = useMemo(() => {
     return new Audio("assets/sound/switch-on-2.wav");
-  },[]);
+  }, []);
 
   const snd_off = useMemo(() => {
     return new Audio("assets/sound/switch-off-2.wav");
-  },[]);
+  }, []);
 
   useEffect(() => {
     if(isRecording) {

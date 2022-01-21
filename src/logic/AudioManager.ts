@@ -66,9 +66,8 @@ class AudioManager {
     // audio context must be created in a user gesture
     if (this.audioContext == null) {
       this.audioContext = new window.AudioContext({ sampleRate: this.SAMPLE_RATE });
-    } else if (this.audioContext.state == 'suspended') {
-      // this.audioContext.resume();
     }
+
     // Initialize analyzer node
     if (!this.nodeExists('analyzer')) {
       let analyzer = new AnalyserNode(this.audioContext, { fftSize: this.FFT_SIZE });
@@ -94,10 +93,6 @@ class AudioManager {
     this.getTimeData.bind(this);
     this.getFreqData.bind(this);
 
-
-
-
-
     return true;
   }
 
@@ -111,7 +106,6 @@ class AudioManager {
 
     return this.audioActive;
   }
-
 
   stopRecording(): void {
     this.audioActive = false;

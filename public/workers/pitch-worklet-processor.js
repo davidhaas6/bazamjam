@@ -55,7 +55,7 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     // <inputs> and <outputs> will have as many as were specified in the options passed to the AudioWorkletNode constructor, each subsequently spanning potentially multiple channels
     let audioInput = inputs[0][0];
 
-    this._buffer.append(audioInput[0]);
+    this._buffer.append(audioInput);
 
     if (this.isCalculationCall() && !this._buffer.allZero()) {
       let pitch = this.getFundFreq();

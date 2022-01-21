@@ -91,15 +91,7 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
   let pubSub = useContext(PubSubContext);
 
   useEffect(() => {
-    pubSub.subscribe("audio-active", (active: boolean) => {
-      setAudioActive(active);
-      console.log("audio active: " + active);
-
-      // if (audioManager.nodeExists("source"))
-      //   console.log("src outputs: ", audioManager._nodes['source'].numberOfOutputs);
-      // console.log("src connections: ", audioManager.nodeGraph?.get('source'));
-    }
-    );
+    pubSub.subscribe("audio-active", (active: boolean) => setAudioActive(active));
   }, []);
 
   const onWorkletMsg: WorkletCallback = (e: MessageEvent) => {
