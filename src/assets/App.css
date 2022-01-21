@@ -62,18 +62,15 @@ html, body {
     height: 100%;
     width: 100%;
 
-    /* min-height: 50vw; */
     max-height: 1400px;
     max-width: 800px;
     min-width: 350px;
     min-height: 650px;
 
-
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     justify-content: space-evenly;
-    /* flex- */
 
     border-radius: 20px;
     box-shadow: 0 0 32px rgba(0, 0, 0, .25);
@@ -86,7 +83,6 @@ html, body {
     width: 90%;
     min-height: 50%;
     border-radius: 5%;
-    /* padding: 20px 5px; */
 
     box-shadow: inset 0 0 32px rgba(0, 0, 0, .10);
 }
@@ -107,28 +103,17 @@ html, body {
     min-height: 20%;
     height: 20%;
 
-    /* width: 100%; */
-    /* height: 100%; */
-
-
-
     display: flex;
     flex-flow: row nowrap;
-
-
-
 }
 
 .control-button-box {
-    /* background-color: var(--light-accent); */
     width: 90%;
     height: 100%;
 
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-
-    
 }
 
 .settings-box {
@@ -145,25 +130,17 @@ html, body {
     padding: 10%;
 }
 
-@media only screen and (max-height: 1000px) {
+/* @media only screen and (max-height: 1000px) {
     .box-body {
-        /* min-width: 100vw; */
-        /* width:100vw; */
-        /* width: 90vh; */
-        /* max-width: 1200px; */
+    
     }
 }
 
 @media only screen and (max-width: 500px) {
     .box-body {
-        /* min-width: 100vw; */
-        /* width:100vw; */
-        /* width: 90vh;
-        max-width: 1200px; */
-        /* width:100vh; */
-        /* min-width: 200px; */
+
     }
-}
+} */
 
 
 @media only screen and (max-height: 500px) {
@@ -223,12 +200,8 @@ html, body {
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
-    /* text-align: center; */
 
     background-color: var(--light-accent);
-
-    /* border-right: 2vw solid var(--primary-color); */
-    /* margin: -5px, 0px; */
 
     box-shadow: inset 0 0 8px rgba(0, 0, 0, .20);
 
@@ -259,10 +232,6 @@ html, body {
 
 .recording-button span {
     color:black;
-    /* position: relative;
-    color: white;
-    font-weight: 600;
-    font-size: 1rem; */
     text-align: center;
 }
 
@@ -281,16 +250,13 @@ html, body {
     min-width: 45px;
     height: 100%;
     border: none;
-    /* margin: 0px 30px; */
-    /* margin-bottom: 16px; */
 
     background: var(--cb-top);
+
     box-shadow: inset 2px 0 0 rgba(0, 0, 0, .75), /* border */
         inset 8px -8px 16px var(--cb-pressed-top), /* inner shadow */
-         0px 8px 2px rgba(0, 0, 0, .25); /* top outer shadow */
-        ;
-    /* text-shadow: 0 3px 1px rgba(122, 17, 8, .8); */
-
+         0px 4px 2px rgba(0, 0, 0, .25) /* top outer shadow */
+    ;
 
     transition: .02s all ease-in;
     outline: none;
@@ -305,13 +271,11 @@ html, body {
 .cb-pressed {
     padding-top: 3px;
     transform: translateY(4px);
-    /* height: 95%; */
     background: var(--cb-pressed-top);
-    box-shadow: inset 8px -8px 16px rgba(0, 0, 0, .10),
+    box-shadow: inset 8px -8px 16px rgba(0, 0, 0, .20),
         inset -4px 4px 0px var(--cb-pressed-side),
         inset 4px -4px 0 var(--cb-pressed-side),
-        0 -8px 2px rgba(0, 0, 0, .25);
-    /* 0 8px 6px rgba(0, 0, 0, .45); */
+        0 -4px 2px rgba(0, 0, 0, .25);
 }
 
 .cb-icon {
@@ -324,8 +288,6 @@ html, body {
 
 
 */
-
-
 
 .timeDomGraph {
     flex: 1;
@@ -360,13 +322,6 @@ html, body {
 .tuner-header {
     padding: 15px;
 }
-
-
-/* settings
-
-
-*/
-
 
 
 /* ======== Midi Mouth ======= 

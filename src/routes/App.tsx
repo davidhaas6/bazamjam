@@ -32,50 +32,35 @@ interface IAppProps {
 
 
 const App: FunctionComponent<IAppProps> = (_: IAppProps) => {
-  const [pubSub, setPubSub] = useState<PubSub>(new PubSub());
-  const [audioManager, setaudioManager] = useState(new AudioManager(pubSub));
+  const pubSub = useMemo(() => new PubSub(), []);
+  const audioManager = useMemo(() => new AudioManager(pubSub), []);
+
   const [curPanel, setCurPanel] = useState("dashboard");
 
-
-
-  let infoContent;
-  if (curPanel == "dashboard") {
-    infoContent = <Dashboard />
-  } else if (curPanel == "widgets") {
-    infoContent = <Widgets />;
-  } else if (curPanel == "settings") {
-    infoContent = <Settings />;
-  }
-  else {
-    infoContent = <ErrorDisplay />;
-  }
   console.log("panel: " + curPanel);
 
-
-
-
   return (
-    <div className="App">
-      <PubSubContext.Provider value={pubSub}>
-        <AudioManagerContext.Provider value={audioManager}>
+    <PubSubContext.Provider value={pubSub}>
+      <AudioManagerContext.Provider value={audioManager}>
+        <div className="App">
+
           <div className="box-body">
-
-
             <div className="info-box">
-              <Dashboard className={curPanel != "dashboard" ? "hidden" : ""} />
               {curPanel == "widgets" ? <Widgets /> : null}
               {curPanel == "settings" ? <Settings /> : null}
+              <Dashboard className={curPanel != "dashboard" ? "hidden" : ""} /> {/* only hide the dashboard so it doesn't dismount */}
+            </div>
+
+            <div className="display-box">
 
             </div>
 
-            <div className="display-box"></div>
-
             <ButtonPanel curPanel={curPanel} setPanel={(newPanel) => setCurPanel(newPanel)} />
-
           </div>
-        </AudioManagerContext.Provider>
-      </PubSubContext.Provider >
-    </div>
+
+        </div>
+      </AudioManagerContext.Provider>
+    </PubSubContext.Provider >
   );
 }
 
