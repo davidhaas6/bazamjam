@@ -16,6 +16,11 @@
     --rb-side: #831c21;
     --rb-pressed-top: #e90510;
     --rb-pressed-side: #af040c;
+
+    --cb-top: #E2D7A7;
+    --cb-side: #85752c;
+    --cb-pressed-top: #e8e0ba;
+    --cb-pressed-side: rgba(0, 0, 0, .85);
 }
 
 /* === HTML ===
@@ -29,7 +34,7 @@
 }
 
 html, body {
-    height: 100vh;
+    height: 100%;
     width: 100vw;
 }
 
@@ -53,32 +58,51 @@ html, body {
 
 .box-body {
     background-color: var(--primary-color);
-    height: 90vh;
-    width: 56.28vw;
-    /* max-width: 1000px; */
+
+    height: 100%;
+    width: 100%;
+
+    /* min-height: 50vw; */
+    max-height: 1400px;
+    max-width: 800px;
+    min-width: 350px;
+    min-height: 650px;
+
 
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     justify-content: space-evenly;
     /* flex- */
+
+    border-radius: 20px;
+    box-shadow: 0 0 32px rgba(0, 0, 0, .25);
+
+    margin: 5vh 56vw;
 }
 
 .info-box {
     background-color: var(--dark-accent);
     width: 90%;
     min-height: 50%;
+    border-radius: 5%;
     /* padding: 20px 5px; */
+
+    box-shadow: inset 0 0 32px rgba(0, 0, 0, .10);
 }
 
 .display-box {
     background-color: var(--light-accent);
     width: 90%;
     min-height: 10%;
+
+    border-radius: 10px;
+
+    box-shadow: inset 0 0 16px rgba(0, 0, 0, .10);
 }
 
 .button-box {
-    background-color: var(--highlight);
+    background-color: var(--primary-color);
     width: 90%;
     min-height: 20%;
     height: 20%;
@@ -86,27 +110,63 @@ html, body {
     /* width: 100%; */
     /* height: 100%; */
 
+
+
     display: flex;
     flex-flow: row nowrap;
-    /* margin: 20px 5px 2px 5px; */
+
+
+
 }
 
 .control-button-box {
-    background-color: var(--light-accent);
+    /* background-color: var(--light-accent); */
     width: 90%;
-    min-height: 10%;
-    /* margin: 20px 5px 2px 5px; */
+    height: 100%;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+
+    padding: 0px 0px;
 }
 
+.settings-box {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 10%;
+}
 
-@media only screen and (max-width: 500px) {
+.widget-box {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 10%;
+}
+
+@media only screen and (max-height: 1000px) {
     .box-body {
-        min-width: 100vw;
+        /* min-width: 100vw; */
         /* width:100vw; */
+        /* width: 90vh; */
+        /* max-width: 1200px; */
     }
 }
 
-@media only screen and (max-height: 800px) {
+@media only screen and (max-width: 500px) {
+    .box-body {
+        /* min-width: 100vw; */
+        /* width:100vw; */
+        /* width: 90vh;
+        max-width: 1200px; */
+        /* width:100vh; */
+        /* min-width: 200px; */
+    }
+}
+
+
+@media only screen and (max-height: 500px) {
     .box-body {
         height: 100vh;
     }
@@ -118,7 +178,7 @@ html, body {
 }
 
 
-/* ===== App Components ======
+/* ===== General Components ======
 
 
 
@@ -143,15 +203,10 @@ html, body {
 }
 
 
-
-
-/* ======= Dashboard Components =======
-
+/* ===== App Components ======
 
 
 */
-
-
 .recording-box {
     width: 20vw;
     height: 100%;
@@ -166,8 +221,10 @@ html, body {
 
     border-right: 2vw solid var(--primary-color);
     margin: -5px, 0px;
-}
 
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, .20);
+
+}
 
 .recording-button {
     border-radius: 50%;
@@ -178,7 +235,7 @@ html, body {
 
     background: var(--rb-top);
     text-shadow: 0 3px 1px rgba(122, 17, 8, .8);
-    box-shadow: 0 16px 0 var(--rb-side), 
+    box-shadow: 0 16px 0 var(--rb-side),
         0 15px 20px rgba(0, 0, 0, .35);
 
 
@@ -186,8 +243,9 @@ html, body {
     outline: none;
 
     cursor: pointer;
-    
+
     -webkit-user-select: none;
+    user-select: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -209,6 +267,52 @@ html, body {
 }
 
 
+.control-button {
+    width: 100%;
+    max-width: 150px;
+    min-width: 45px;
+    height: 100%;
+    border: none;
+    /* margin: 0px 30px; */
+    /* margin-bottom: 16px; */
+
+    background: var(--cb-top);
+    box-shadow: inset 2px 0 0 rgba(0, 0, 0, .75),
+        inset 8px -8px 16px var(--cb-pressed-top);
+    /* text-shadow: 0 3px 1px rgba(122, 17, 8, .8); */
+
+
+    transition: .08s all ease-in;
+    outline: none;
+
+    cursor: pointer;
+
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.cb-pressed {
+    padding-top: 3px;
+    /* transform: translateY(-4px); */
+    /* height: 95%; */
+    background: var(--cb-pressed-top);
+    box-shadow: inset 8px -8px 16px rgba(0, 0, 0, .10),
+        inset -4px 4px 0px var(--cb-pressed-side),
+        inset 4px -4px 0 var(--cb-pressed-side);
+    /* 0 8px 6px rgba(0, 0, 0, .45); */
+}
+
+.cb-icon {
+    /* width:100px; */
+}
+
+
+/* ======= Dashboard Components =======
+
+
+
+*/
 
 
 
@@ -245,6 +349,13 @@ html, body {
 .tuner-header {
     padding: 15px;
 }
+
+
+/* settings
+
+
+*/
+
 
 
 /* ======== Midi Mouth ======= 
