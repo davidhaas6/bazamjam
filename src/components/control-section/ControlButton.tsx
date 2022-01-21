@@ -5,8 +5,14 @@ import { useDidMount } from "../../logic/hooks";
 interface ControlButtonProps {
   pressedChild?: ReactChild;
   notPressedChild?: ReactChild;
+
+  baseStyles?: string;
+  pressedStyles?: string;
+
   onPress?: () => void;
-  onRelease?: () => void;
+  onRelease?: () => void; 
+
+  releaseCondition?: boolean; // release button when this is true
 }
 
 const ControlButton: FunctionComponent<ControlButtonProps> = (props: ControlButtonProps) => {
@@ -31,7 +37,16 @@ const ControlButton: FunctionComponent<ControlButtonProps> = (props: ControlButt
     }
   }, [isPressed]);
 
-  let buttonClass = "control-button " + (isPressed ? "cb-pressed" : "");
+  useEffect(() => {
+    if(props.releaseCondition) {
+      setIsPressed(false);
+    }
+  }, [props.releaseCondition]);
+
+
+  // add css classes based on button state
+  let buttonClass = props.baseStyles ?? "control-button";
+  buttonClass += " " + (isPressed ? (props.pressedStyles ?? "cb-pressed") : "");
 
   return (
     <button className={buttonClass} onClick={() => {

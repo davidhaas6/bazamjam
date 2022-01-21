@@ -7,7 +7,7 @@ interface WidgetsProps {
 const Widgets: FunctionComponent<WidgetsProps> = () => {
   return (
     <div className="widget-box">
-
+      Widgets
     </div>
   );
 }

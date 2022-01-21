@@ -12,7 +12,7 @@ interface ITunerDisplayProps {
 const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDisplayProps) => {
 
   return (
-    <>
+    <div>
       <div>
         {!props.targetNote.empty &&
           props.tuning.map(note => {
@@ -20,7 +20,7 @@ const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDispla
             if (note.name === props.targetNote.name && !isNaN(props.pitch)) {
               spanClass += " alert-text"
             }
-            return <span className={spanClass}>{note.name} </span>;
+            return <span className={spanClass} key={note.name}>{note.name} </span>;
           })
         }
       </div>
@@ -34,7 +34,7 @@ const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDispla
           <span> {roundNum(props.pitch, 1)} Hz</span>
         }
       </div>
-    </>
+    </div>
   );
 }
 

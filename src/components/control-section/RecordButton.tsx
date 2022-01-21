@@ -2,47 +2,34 @@
 
 import { FunctionComponent, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AudioManagerContext } from "../../routes/App";
+import ControlButton from "./ControlButton";
+
+import { TiMediaStopOutline, TiTimes, TiNotesOutline } from "react-icons/ti";
+
+const iconSize = 64;
+const PressedIcon = <TiMediaStopOutline size={iconSize} />
+const UnPressedIcon = <TiNotesOutline size={iconSize} />
 
 interface RecordingButtonProps {
+  onPress?: () => void;
 }
 
-const RecordingButton: FunctionComponent<RecordingButtonProps> = () => {
-  const [isRecording, setIsRecording] = useState(false);
+const RecordingButton: FunctionComponent<RecordingButtonProps> = (props: RecordingButtonProps) => {
   const audioManager = useContext(AudioManagerContext);
-
-  const snd_on = useMemo(() => {
-    return new Audio("assets/sound/switch-on-2.wav");
-  }, []);
-
-  const snd_off = useMemo(() => {
-    return new Audio("assets/sound/switch-off-2.wav");
-  }, []);
-
-  useEffect(() => {
-    if(isRecording) {
-      audioManager.startRecording();
-      snd_on.play();
-    } else {
-      audioManager.stopRecording();
-      snd_off.play();
-    }
-  }, [isRecording]);
-
-  useEffect(() => {
-
-  }, [audioManager.audioActive]);
-
-  
-
-  let buttonClass = "recording-button " + (isRecording ? "rb-pressed" : "");
 
   return (
     <div className="recording-box">
-      <button onClick={() => setIsRecording(() => !isRecording)} className={buttonClass}>
-        <span>
-          {isRecording ? "Stop" : "Record"}
-        </span>
-      </button>
+      <ControlButton
+        onPress={() => {
+          audioManager.startRecording();
+          if (props.onPress) props.onPress();
+        }}
+        onRelease={() => audioManager.stopRecording()}
+        baseStyles="recording-button"
+        pressedStyles="rb-pressed"
+        pressedChild={PressedIcon}
+        notPressedChild={UnPressedIcon}
+      />
     </div>
   );
 }

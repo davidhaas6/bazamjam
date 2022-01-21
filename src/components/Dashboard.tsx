@@ -14,14 +14,14 @@ import { AudioManagerContext } from "../routes/App";
 
 
 interface IDashboardProps {
-
+  className?: string;
 }
 
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
   const audioManager = useContext(AudioManagerContext);
   // https://github.com/react-grid-layout/react-grid-layout
   return (
-    <div className="dashboard">
+    <div className={"dashboard " + props.className ?? ""}>
       {/* <RecorderComponent audioManager={audioManager} updateSoundData={updateSoundData} /> */}
       <Tuner audioManager={audioManager} />
 

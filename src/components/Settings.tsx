@@ -7,7 +7,7 @@ interface SettingsProps {
 const Settings: FunctionComponent<SettingsProps> = () => {
   return ( 
     <div className="settings-box" >
-      Settings
+      Settings!!
     </div>
    );
 }
