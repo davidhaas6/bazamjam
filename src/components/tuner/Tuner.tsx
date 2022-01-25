@@ -171,7 +171,7 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
   // rendur tuner and children
   return (
     <div className="tuner">
-      <h4 className="">Tuner</h4>
+      <div className="dash-header tuner-header">Tuner</div>
       {content}
     </div>
   );

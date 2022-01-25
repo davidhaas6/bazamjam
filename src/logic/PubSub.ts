@@ -9,6 +9,7 @@ class PubSub {
         }
 
         this.subscribers[event].push(callback);
+        this.publish('subscriber-added', [event, callback]);
     }
 
     public publish(event: string, ...args: any[]) {

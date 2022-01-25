@@ -8,6 +8,7 @@
 
     --main-bg-color: #E2D7A7;
     --primary-color: #A16B56;
+    --primary-dark: #6f4a3b;
     --light-accent: #E0A370;
     --dark-accent: #567D89;
     --highlight: #DEC584;
@@ -21,6 +22,7 @@
     --cb-side: #85752c;
     --cb-pressed-top: #e8e0ba;
     --cb-pressed-side: rgba(0, 0, 0, .85);
+
 }
 
 /* === HTML ===
@@ -62,7 +64,7 @@ html, body {
     height: 100%;
     width: 100%;
 
-    max-height: 1400px;
+    max-height: 1300px;
     max-width: 800px;
     min-width: 350px;
     min-height: 650px;
@@ -73,7 +75,9 @@ html, body {
     justify-content: space-evenly;
 
     border-radius: 20px;
-    box-shadow: 0 0 32px rgba(0, 0, 0, .25);
+    box-shadow: 20px 20px 0px var(--primary-dark),
+        20px 20px 64px rgba(0, 0, 0, .30);
+
 
     margin: 5vh 56vw;
 }
@@ -84,7 +88,9 @@ html, body {
     min-height: 50%;
     border-radius: 5%;
 
-    box-shadow: inset 0 0 32px rgba(0, 0, 0, .10);
+    box-shadow: inset 0 0 32px rgba(0, 0, 0, .15),
+        inset 8px 8px 0px var(--primary-dark);
+    padding: 20px 10px 10px 20px;
 }
 
 .display-box {
@@ -94,14 +100,19 @@ html, body {
 
     border-radius: 10px;
 
-    box-shadow: inset 0 0 16px rgba(0, 0, 0, .10);
+    box-shadow: inset 0 0 16px rgba(0, 0, 0, .10),
+        inset 8px 8px 0px var(--primary-dark);
 }
 
 .button-box {
     background-color: var(--primary-color);
     width: 90%;
-    min-height: 20%;
+    /* height: 20%; */
+    max-height: 400px;
+
     height: 20%;
+
+
 
     display: flex;
     flex-flow: row nowrap;
@@ -179,9 +190,8 @@ html, body {
     text-align: center;
 }
 
-.hidden 
-{ 
-    display:none; 
+.hidden {
+    display: none;
 }
 
 
@@ -203,20 +213,22 @@ html, body {
 
     background-color: var(--light-accent);
 
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, .20);
+    box-shadow: inset 0 0 16px rgba(0, 0, 0, .10),
+        inset 8px 8px 0px var(--primary-dark);
 
 }
 
 .recording-button {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    /* border-radius: 50%; */
+    width: 120px;
+    height: 120px;
     border: none;
     margin-bottom: 16px;
 
     background: var(--rb-top);
     text-shadow: 0 3px 1px rgba(122, 17, 8, .8);
-    box-shadow: 0 16px 0 var(--rb-side),
+    box-shadow: 0px 16px 0px var(--rb-side),
+
         0 15px 20px rgba(0, 0, 0, .35);
 
 
@@ -231,7 +243,7 @@ html, body {
 }
 
 .recording-button span {
-    color:black;
+    color: black;
     text-align: center;
 }
 
@@ -243,7 +255,6 @@ html, body {
         0 8px 6px rgba(0, 0, 0, .45);
 }
 
-
 .control-button {
     width: 100%;
     max-width: 150px;
@@ -253,9 +264,12 @@ html, body {
 
     background: var(--cb-top);
 
-    box-shadow: inset 2px 0 0 rgba(0, 0, 0, .75), /* border */
-        inset 8px -8px 16px var(--cb-pressed-top), /* inner shadow */
-         0px 4px 2px rgba(0, 0, 0, .25) /* top outer shadow */
+    box-shadow: inset 2px 0 0 rgba(0, 0, 0, .75),
+        /* border */
+        inset 8px -8px 16px var(--cb-pressed-top),
+        /* inner shadow */
+        0px 4px 2px rgba(0, 0, 0, .25)
+        /* top outer shadow */
     ;
 
     transition: .02s all ease-in;
@@ -307,6 +321,10 @@ html, body {
     padding: 20px;
 }
 
+.dash-header {
+    /* padding: 12px; */
+}
+
 .tuner {
     display: flex;
     flex-flow: column nowrap;
@@ -316,11 +334,38 @@ html, body {
     text-align: center;
 
     height: 100%;
-    padding: 20px;
+    width: 100%;
+    /* padding: 20px; */
+    color: var(--cb-top);
 }
 
 .tuner-header {
-    padding: 15px;
+    /* padding: 0px 0px 15px 0px; */
+    font-size: calc(42px + 1vmin);
+}
+
+.tuner-notes {
+    font-size: 32px;
+    padding: 20px;
+}
+
+.tuner-you {
+
+}
+
+.tuner-target {
+    color: var(--light-accent);
+    font-weight: 500;
+    /* padding: 0 1px; */
+}
+
+.tuner-bar {
+    min-height: 120px;
+    width: 12px;
+    border-radius: 6px;
+    background-color: var(--cb-top);
+    /* transition-duration: 1; */
+    transform-origin: bottom;
 }
 
 

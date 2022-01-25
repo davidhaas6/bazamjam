@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import { roundNum } from "../../logic/util/Math";
+import { freqToMidi, linearMap, roundNum } from "../../logic/util/Math";
 import { INote, Tuning } from "./Tuner";
 
 
@@ -9,16 +9,28 @@ interface ITunerDisplayProps {
   tuning: Tuning;
 }
 
-const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDisplayProps) => {
+function getPitchAngle(pitch: number, target: INote) {
+  if (target.midi == null) return 0;
+  const max = 90;
+  const min = -90;
 
+  let diff = freqToMidi(pitch) - target.midi;
+  let deg = linearMap(diff,-12,12,min,max);
+  return deg;
+}
+
+const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDisplayProps) => {
+  const {pitch, targetNote, tuning} = props;
+  
+  let rotation = targetNote && getPitchAngle(pitch, targetNote);
   return (
     <div>
-      <div>
+      <div className="tuner-notes">
         {!props.targetNote.empty &&
           props.tuning.map(note => {
             let spanClass = "";
             if (note.name === props.targetNote.name && !isNaN(props.pitch)) {
-              spanClass += " alert-text"
+              spanClass += " tuner-target"
             }
             return <span className={spanClass} key={note.name}>{note.name} </span>;
           })
@@ -34,6 +46,7 @@ const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDispla
           <span> {roundNum(props.pitch, 1)} Hz</span>
         }
       </div>
+      <div className="tuner-bar" style={{transform: `rotate(${rotation}deg)`}}/>
     </div>
   );
 }

@@ -21,3 +21,10 @@ var L440 = Math.log(440);
 export function freqToMidi(freq: number): number {
   return (12 * (Math.log(freq) - L440)) / L2 + 69;
 };
+
+// https://www.arduino.cc/reference/en/language/functions/math/map/
+export function linearMap(
+  x: number, in_min: number, in_max: number, out_min: number, out_max: number
+) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}

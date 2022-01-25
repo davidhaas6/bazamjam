@@ -1,6 +1,5 @@
 // essentia-worklet-processor.js
-// https://github.com/MTG/essentia.js/tree/dev/examples/rms-rt
-// https://mtg.github.io/essentia.js/docs/api/tutorial-2.%20Real-time%20analysis.html
+
 import { EssentiaWASM } from "https://cdn.jsdelivr.net/npm/essentia.js@0.1.3/dist/essentia-wasm.es.js";
 import Essentia from "https://cdn.jsdelivr.net/npm/essentia.js@0.1.3/dist/essentia.js-core.es.js";
 
