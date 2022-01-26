@@ -46,7 +46,7 @@ const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDispla
           <span> {roundNum(props.pitch, 1)} Hz</span>
         }
       </div>
-      <div className="tuner-bar" style={{transform: `rotate(${rotation}deg)`}}/>
+      {/* <div className="tuner-bar" style={{transform: `rotate(${rotation}deg)`}}/> */}
     </div>
   );
 }

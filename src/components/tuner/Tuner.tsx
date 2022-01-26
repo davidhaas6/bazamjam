@@ -14,6 +14,22 @@ import TunerDisplay from "./TunerDisplay";
 import { AudioManagerContext, PubSubContext } from "../../routes/App";
 
 
+interface ITonalData {
+  chords_changes_rate: any,
+  chords_histogram: any,
+  chords_key: any,
+  chords_number_rate: any,
+  chords_progression: any,
+  chords_scale: any,
+  chords_strength: any,
+  hpcp: any,
+  hpcp_highres: any,
+  key_key: any,
+  key_scale: any,
+  key_strength: any
+}
+
+
 enum TunerState {
   INACTIVE,
   LOADING,
@@ -79,7 +95,7 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
 
   // state
   const [pitch, setPitch] = useState(NaN);
-  const [pitchBuffer, setPitchBuffer] = useState(new Float32Buffer(pitch_buffer_len));
+  const [features, setFeatures] = useState<ITonalData>();
 
   const [tuning, setTuning] = useState<Tuning>(tuning_options[0]);
   const [audioActive, setAudioActive] = useState(false);
@@ -95,17 +111,14 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
 
   const onWorkletMsg: WorkletCallback = (e: MessageEvent) => {
     try {
-      // set pitch, could be NaN
-      let newPitch = Number.parseFloat(e.data);
-      setPitch(newPitch);
+      pubSub.publish('tuner-message', e);
+      setFeatures(() => e.data as ITonalData);
+      if (e.data.chords_progression)
+        console.log(e.data.chords_progression);
 
-      // update pitch buffer
-      if (!isNaN(newPitch)) {
-        setPitchBuffer((pitchBuffer) => {
-          pitchBuffer.append([newPitch]);
-          return pitchBuffer;
-        });
-      }
+      // set pitch, could be NaN
+      // let newPitch = Number.parseFloat(e.data);
+      // setPitch(newPitch);
     } catch (e) {
       console.log("error in onWorkletMsg: " + e);
     }
@@ -129,12 +142,14 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
 
       if (audioActive) {
         setCompState(TunerState.LOADING);
+        console.log("setting state to loading");
+
       }
       break;
     case TunerState.LOADING:
       content = <LoadingDisplay />;
 
-      if (!isNaN(pitch)) {
+      if (features != null) {
         setCompState(TunerState.ACTIVE);
       }
       if (!audioActive) {
@@ -142,7 +157,22 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
       }
       break;
     case TunerState.ACTIVE:
-      content = <TunerDisplay pitch={pitch} targetNote={targetNote} tuning={tuning} />
+      content = <div />;
+      if (features != null) {
+        
+        content = <div style={{
+          textAlign: "left", inlineSize: "80%", overflowWrap: "anywhere"
+          
+          // display: "flex", flexFlow: "column warp", alignItems: "start"
+          }}>
+          {Object.entries(features).map((entry) => <tr>{entry[0] + ": " + entry[1]}</tr>)}
+          Key Key: {features.key_key}
+          <br/>
+          Chord Key: {features.chords_key}
+        </div>;
+      }
+      // content = <TunerDisplay pitch={pitch} targetNote={targetNote} tuning={tuning} />;
+
 
       if (!audioActive) {
         setCompState(TunerState.INACTIVE);

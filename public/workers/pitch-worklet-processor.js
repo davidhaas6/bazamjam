@@ -22,7 +22,7 @@ const HOP_SIZE = 1024;
 const BUFFER_SECONDS = 0.2; // length of buffer in seconds
 const FRAME_OVERLAP = 0.3; // percent of overlap between audio frames
 
-
+// IDEA: what if we just had this class, and it could process different things depending on its message inputs
 
 class PitchWorkletProcessor extends AudioWorkletProcessor {
   constructor() {
@@ -42,6 +42,8 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     // dsp settings
     this.minFreq = 40;
     this.maxFreq = 4000;
+
+    this.tuningFreq = 440;
   }
 
   //System-invoked process callback function.
@@ -57,8 +59,9 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     this._buffer.append(audioInput);
 
     if (this.isCalculationCall() && !this._buffer.allZero()) {
-      let pitch = this.getFundFreq();
-      this.port.postMessage(pitch);
+      // let pitch = this.getFundFreq();
+      
+      this.port.postMessage(this.getChord());
     }
 
     this._calcCounter++;
@@ -73,15 +76,38 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     return this._calcCounter > 0 && isCalcStep;
   }
 
-  getFundFreq() {
+  getChord() {
     let inputSignal = this.essentia.arrayToVector(this._buffer.data);
-    if (inputSignal.size() !== this._bufferSize) {
+    if (inputSignal.size() !== this._bufferSize || this.essentia.RMS(inputSignal) < MIN_RMS) {
       return NaN;
     }
 
-    if(this.essentia.RMS(inputSignal) < MIN_RMS) {
+    // https://essentia.upf.edu/reference/std_TonalExtractor.html
+    let toneInfo = this.essentia.TonalExtractor(inputSignal);
+
+    for(let feature in toneInfo) {
+      if(toneInfo[feature].size) {
+        toneInfo[feature] = this.essentia.vectorToArray(toneInfo[feature]);
+        console.log("converted: " + feature);
+      }
+    }
+    return toneInfo;
+
+    // https://mtg.github.io/essentia.js/docs/api/Essentia.html#TonalExtractor
+    // https://github.com/MTG/essentia.js/blob/master/examples/demos/hpcp-chroma-rt/index.html
+    
+    // this.essentia(HPCP)
+    // https://mtg.github.io/essentia.js/docs/api/Essentia.html#HPCP
+    // https://mtg.github.io/essentia.js/docs/api/Essentia.html#ChordsDetection
+    
+  }
+
+  getFundFreq() {
+    let inputSignal = this.essentia.arrayToVector(this._buffer.data);
+    if (inputSignal.size() !== this._bufferSize || this.essentia.RMS(inputSignal) < MIN_RMS) {
       return NaN;
     }
+    
 
     // Get the predominant frequency. All the magic numbers are the default params    
     const algoOutput = this.essentia.PitchMelodia(
@@ -91,7 +117,7 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
       27.5625, 55, sampleRate, 100                    //  pitchContinuity, referenceFrequency, sampleRate, timeContinuity
     );
 
-    const pitchFrames = essentia.vectorToArray(algoOutput.pitch);
+    const pitchFrames = this.essentia.vectorToArray(algoOutput.pitch);
     // const confidenceFrames = essentia.vectorToArray(algoOutput.pitchConfidence);
     
     // average frame-wise pitches in pitch before writing to SAB
