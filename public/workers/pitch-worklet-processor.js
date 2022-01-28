@@ -17,10 +17,10 @@ function argMax(array) {
 const SAMPLES_PER_CALL = 128; // set by Web Audio API
 
 const MIN_RMS = 0.01;
-const FRAME_SIZE = 2048;
-const HOP_SIZE = 1024;
-const BUFFER_SECONDS = 0.2; // length of buffer in seconds
-const FRAME_OVERLAP = 0.3; // percent of overlap between audio frames
+const FRAME_SIZE = 4096 * 2;
+const HOP_SIZE = FRAME_SIZE/2;
+const BUFFER_SECONDS = .5; // length of buffer in seconds
+const FRAME_OVERLAP = 0; // percent of overlap between audio frames
 
 // IDEA: what if we just had this class, and it could process different things depending on its message inputs
 
@@ -31,7 +31,7 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     console.log('Backend - essentia:' + this.essentia.version + '- http://essentia.upf.edu');
 
     // TODO: make this a time value via the sampling rate
-    this._bufferSize = sampleRate * BUFFER_SECONDS;
+    this._bufferSize = Math.max(sampleRate * BUFFER_SECONDS, FRAME_SIZE);
     this._buffer = new Float32Buffer(this._bufferSize);
     // console.log(this._bufferSize + " Samples per buffer");
 
@@ -78,17 +78,28 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
 
   getChord() {
     let inputSignal = this.essentia.arrayToVector(this._buffer.data);
-    if (inputSignal.size() !== this._bufferSize || this.essentia.RMS(inputSignal) < MIN_RMS) {
+    const inputRMS = this.essentia.RMS(inputSignal).rms;
+    console.log("RMS: ", inputRMS);
+
+    if (inputSignal.size() !== this._bufferSize || inputRMS < MIN_RMS) {
+      console.log("rms too low");
       return NaN;
     }
 
     // https://essentia.upf.edu/reference/std_TonalExtractor.html
-    let toneInfo = this.essentia.TonalExtractor(inputSignal);
+    let toneInfo = this.essentia.TonalExtractor(inputSignal, FRAME_SIZE, HOP_SIZE,440);
 
     for(let feature in toneInfo) {
       if(toneInfo[feature].size) {
+        
         toneInfo[feature] = this.essentia.vectorToArray(toneInfo[feature]);
-        console.log("converted: " + feature);
+        if(toneInfo[feature][0].size)
+        {
+          for(let i in toneInfo[feature]) {
+            toneInfo[feature][i] = this.essentia.vectorToArray(toneInfo[feature][i]);
+          }
+        }
+        // console.log("converted: " + feature);
       }
     }
     return toneInfo;
