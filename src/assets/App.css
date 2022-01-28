@@ -65,9 +65,9 @@ html, body {
     width: 100%;
 
     max-height: 1300px;
-    max-width: 800px;
+    max-width: 600px;
     min-width: 350px;
-    min-height: 650px;
+    min-height: 500px;
 
     display: flex;
     flex-flow: column nowrap;
@@ -77,7 +77,6 @@ html, body {
     border-radius: 20px;
     box-shadow: 20px 20px 0px var(--primary-dark),
         20px 20px 64px rgba(0, 0, 0, .30);
-
 
     margin: 5vh 56vw;
 }
@@ -113,8 +112,6 @@ html, body {
     max-height: 400px;
 
     height: 20%;
-
-
 
     display: flex;
     flex-flow: row nowrap;
@@ -230,9 +227,7 @@ html, body {
     background: var(--rb-top);
     text-shadow: 0 3px 1px rgba(122, 17, 8, .8);
     box-shadow: 0px 16px 0px var(--rb-side),
-
         0 15px 20px rgba(0, 0, 0, .35);
-
 
     transition: .08s all ease-in;
     outline: none;

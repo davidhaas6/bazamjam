@@ -44,8 +44,8 @@ const ButtonPanel: FunctionComponent<ButtonPanelProps> = (props: ButtonPanelProp
             props.setPanel("dashboard")
           }}
           onRelease={() => audioManager.stopRecording()}
-          baseStyles="recording-button"
-          pressedStyles="rb-pressed"
+          // baseStyles="recording-button"
+          // pressedStyles="rb-pressed"
           pressedChild={icons.recorderPressed}
           notPressedChild={icons.recorderUnpressed}
           releaseCondition={props.curPanel != "dashboard"}
