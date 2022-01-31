@@ -36,7 +36,7 @@ class AudioManager {
 
   audioActive: boolean = false; // if we're actively processing audio
 
-  readonly FFT_SIZE = 2048; // num bins in fft -- real + image
+  readonly FFT_SIZE = 8192; // num bins in fft -- real + image
   readonly SAMPLE_RATE = 44100;
   readonly BUFFER_SIZE = this.FFT_SIZE;
 
@@ -114,8 +114,8 @@ class AudioManager {
 
 
   public getTimeData(): Float32Array {
-    let analyzer = this._nodes['analyzer'];
-    if (analyzer instanceof AnalyserNode) {
+    let analyzer = this._nodes['analyzer'] as AnalyserNode;
+    if (analyzer) {
       // TODO: this has weird behavior... doesn't always output right thing
       analyzer.getFloatTimeDomainData(this._timeBuffer);
       return this._timeBuffer;
@@ -202,7 +202,7 @@ class AudioManager {
     this._nodes[nodeKey] = newNode;
   }
 
- 
+
   // finds the nodes nodeKey is a destination to
   private getInputNodesFor(nodeKey: NodeKey): NodeKey[] {
     let srcNodes: NodeKey[] = [];
