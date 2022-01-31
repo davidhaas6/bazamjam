@@ -48,7 +48,7 @@ const ButtonPanel: FunctionComponent<ButtonPanelProps> = (props: ButtonPanelProp
         // pressedStyles="rb-pressed"
         pressedChild={icons.recorderPressed}
         notPressedChild={icons.recorderUnpressed}
-        releaseCondition={props.curPanel != "dashboard"}
+        releaseCondition={props.curPanel !== "dashboard"}
       />
 
 
@@ -59,7 +59,7 @@ const ButtonPanel: FunctionComponent<ButtonPanelProps> = (props: ButtonPanelProp
         pressedChild={icons.close}
         onPress={() => { props.setPanel("widgets") }}
         onRelease={() => { props.setPanel("dashboard") }}
-        releaseCondition={props.curPanel != "widgets"}
+        releaseCondition={props.curPanel !== "widgets"}
       />
 
       {/* settings button */}
@@ -68,7 +68,7 @@ const ButtonPanel: FunctionComponent<ButtonPanelProps> = (props: ButtonPanelProp
         pressedChild={icons.close}
         onPress={() => { props.setPanel("settings") }}
         onRelease={() => { props.setPanel("dashboard") }}
-        releaseCondition={props.curPanel != "settings"}
+        releaseCondition={props.curPanel !== "settings"}
       />
 
       {/* play button */}

@@ -22,14 +22,15 @@ function getPitchAngle(pitch: number, target: INote) {
 const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDisplayProps) => {
   const {pitch, targetNote, tuning} = props;
   
-  let rotation = targetNote && getPitchAngle(pitch, targetNote);
+  // let rotation = targetNote && getPitchAngle(pitch, targetNote);
+
   return (
     <div>
       <div className="tuner-notes">
-        {!props.targetNote.empty &&
-          props.tuning.map(note => {
+        {!targetNote.empty &&
+          tuning.map(note => {
             let spanClass = "";
-            if (note.name === props.targetNote.name && !isNaN(props.pitch)) {
+            if (note.name === targetNote.name && !isNaN(pitch)) {
               spanClass += " tuner-target"
             }
             return <span className={spanClass} key={note.name}>{note.name} </span>;
@@ -37,13 +38,13 @@ const TunerDisplay: FunctionComponent<ITunerDisplayProps> = (props: ITunerDispla
         }
       </div>
       <div>
-        Target: {roundNum(props.targetNote.freq!, 1)} Hz
+        Target: {roundNum(targetNote.freq!, 1)} Hz
         <br />
         You:
-        {isNaN(props.pitch) ?
+        {isNaN(pitch) ?
           <span> ~~~</span>
           :
-          <span> {roundNum(props.pitch, 1)} Hz</span>
+          <span> {roundNum(pitch, 1)} Hz</span>
         }
       </div>
       {/* <div className="tuner-bar" style={{transform: `rotate(${rotation}deg)`}}/> */}

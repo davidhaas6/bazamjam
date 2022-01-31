@@ -207,7 +207,7 @@ class AudioManager {
   private getInputNodesFor(nodeKey: NodeKey): NodeKey[] {
     let srcNodes: NodeKey[] = [];
     this.nodeGraph.forEach((value, key) => {
-      let validNodes = value.filter((dstNodeKey) => dstNodeKey == nodeKey) as NodeKey[];
+      let validNodes = value.filter((dstNodeKey) => dstNodeKey === nodeKey) as NodeKey[];
       if (validNodes !== null)
         srcNodes.push(...validNodes);
     });

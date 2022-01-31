@@ -1,5 +1,4 @@
 import { FunctionComponent, ReactChild, useEffect, useMemo, useState } from "react";
-import { Button } from "react-bootstrap";
 import { useDidMount } from "../../logic/hooks";
 
 interface ControlButtonProps {
@@ -10,7 +9,7 @@ interface ControlButtonProps {
   pressedStyles?: string;
 
   onPress?: () => void;
-  onRelease?: () => void; 
+  onRelease?: () => void;
 
   releaseCondition?: boolean; // release button when this is true
 }
@@ -35,10 +34,10 @@ const ControlButton: FunctionComponent<ControlButtonProps> = (props: ControlButt
         snd_off.play();
       }
     }
-  }, [isPressed]);
+  }, [isPressed, snd_on, snd_off]);
 
   useEffect(() => {
-    if(props.releaseCondition) {
+    if (props.releaseCondition) {
       setIsPressed(false);
     }
   }, [props.releaseCondition]);

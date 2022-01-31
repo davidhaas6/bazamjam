@@ -1,18 +1,16 @@
 // a react component containing audio logic for a tuner
 
-import { Note as NoteType, NoNote } from "@tonaljs/core";
+import { NoNote, Note as NoteType } from "@tonaljs/core";
 import { Note, NoteLiteral } from "@tonaljs/tonal";
 import { FunctionComponent, useContext, useEffect, useState } from "react";
-
-import AudioManager from "../../logic/AudioManager";
-import { Float32Buffer } from "../../logic/Float32Buffer";
 import { freqToMidi } from "../../logic/util/Math";
 import { WorkletCallback } from "../../logic/util/Worklet";
+import { AudioManagerContext, PubSubContext } from "../../routes/App";
 import InactiveDisplay from "../generic/InactiveDisplay";
 import LoadingDisplay from "../generic/LoadingDisplay";
-import TunerDisplay from "./TunerDisplay";
-import { AudioManagerContext, PubSubContext } from "../../routes/App";
 import TonalDisplay from "./TonalDisplay";
+import TunerDisplay from "./TunerDisplay";
+
 
 
 export interface ITonalData {
@@ -132,7 +130,7 @@ const Tuner: FunctionComponent<ITunerProps> = (props: ITunerProps) => {
     if (audioActive && !audioManager.nodeExists(node_name)) {
       audioManager.addWorklet(node_name, worklet_processor_path, onWorkletMsg);
     }
-  }, [compState == TunerState.LOADING]);
+  }, [compState === TunerState.LOADING, audioActive, audioManager, onWorkletMsg]);
 
 
   // FSM for component visual state

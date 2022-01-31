@@ -42,7 +42,6 @@ const MidiMouthForm: FunctionComponent<MidiMouthFormProps> = (props: MidiMouthFo
   let allInstrumentsTitle = "All Instruments";
   let allInstrumentsKey = "-1"
   let allowInstruments: boolean = songChoice != null && instruments != null;
-  let allInstrsSelected = instrumentChoice == "";
 
   let songOptions, instrumentOptions;
 

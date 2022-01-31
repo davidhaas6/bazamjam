@@ -8,6 +8,14 @@ export function useDidMount() {
   return didMount;
 }
 
+export function useFreqLog(id: string) {
+  useEffect(() => {
+    console.time(id);
+  }, [id]);
+  console.timeLog(id);
+}
+
+
 
 // partially from here: https://medium.com/@pdx.lucasm/canvas-with-react-js-32e133c05258
 export interface DrawProps {
@@ -29,7 +37,7 @@ export function useCanvas(draw: DrawFunc, props?: DrawProps, maxRate?: number): 
     let frameId: number;
     let lastFrameTime: DOMHighResTimeStamp;
     let startTime: DOMHighResTimeStamp;
-    
+
     // render() is the animation loop
     const render = (curTime: DOMHighResTimeStamp) => {
       if (ctx) {
@@ -46,7 +54,7 @@ export function useCanvas(draw: DrawFunc, props?: DrawProps, maxRate?: number): 
         draw(ctx, props);
 
         lastFrameTime = curTime;
-        frameId = window.requestAnimationFrame(render); // default rate limits 
+        frameId = window.requestAnimationFrame(render); // usually already rate limits to screen refresh rate
       }
 
     };
