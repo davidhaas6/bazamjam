@@ -43,23 +43,23 @@ const App: FunctionComponent<IAppProps> = (_: IAppProps) => {
   return (
     <PubSubContext.Provider value={pubSub}>
       <AudioManagerContext.Provider value={audioManager}>
-        <div className="App">
 
+        <div className="App">
           <div className="box-body">
-            <div className="info-box">
+            <div className="layout-section info-box">
               {curPanel == "widgets" ? <Widgets /> : null}
               {curPanel == "settings" ? <Settings /> : null}
               <Dashboard className={curPanel != "dashboard" ? "hidden" : ""} /> {/* only hide the dashboard so it doesn't dismount */}
             </div>
 
-            <div className="display-box">
+            <div className="layout-section display-box">
               <Visuals />
             </div>
 
             <ButtonPanel curPanel={curPanel} setPanel={(newPanel) => setCurPanel(newPanel)} />
           </div>
-
         </div>
+
       </AudioManagerContext.Provider>
     </PubSubContext.Provider >
   );

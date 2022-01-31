@@ -59,31 +59,37 @@ html, body {
 }
 
 .box-body {
-    background-color: var(--primary-color);
-
-    height: 100%;
-    width: 100%;
-
-    max-height: 1300px;
-    max-width: 600px;
-    min-width: 350px;
+    /* shape */
     min-height: 500px;
+    height: 100%;
+    max-height: 1000px;
+    
+    min-width: 350px;
+    width: 100%;
+    max-width: 600px;
 
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    justify-content: space-evenly;
+    margin: 5vh 56vw;
+    padding: 40px;
 
+    /* color */
+    background-color: var(--primary-color);
     border-radius: 20px;
     box-shadow: 20px 20px 0px var(--primary-dark),
         20px 20px 64px rgba(0, 0, 0, .30);
+    /* contents */
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
 
-    margin: 5vh 56vw;
+.layout-section {
+    width: 100%;
+    background-color: var(--primary-color);
 }
 
 .info-box {
     background-color: var(--dark-accent);
-    width: 90%;
     min-height: 50%;
     border-radius: 5%;
 
@@ -95,11 +101,10 @@ html, body {
 }
 
 .display-box {
-    background-color: var(--primary-color);
-    width: 90%;
-    min-height: 10%;
-
+    min-height: 22%;
+    max-height: 30%;
     border-radius: 10px;
+    margin: 20px 0;
 
     box-shadow: inset 0 0 64px rgba(0, 0, 0, .3),
         inset 8px 8px 0px var(--primary-dark);
@@ -107,18 +112,16 @@ html, body {
 
 .button-box {
     background-color: var(--primary-color);
-    width: 90%;
-    /* height: 20%; */
-    max-height: 400px;
-
     height: 20%;
+    max-height: 190px;
 
     display: flex;
     flex-flow: row nowrap;
+    justify-content: center;
 }
 
 .control-button-box {
-    width: 90%;
+    width: 100%;
     height: 100%;
 
     display: flex;
@@ -140,22 +143,24 @@ html, body {
     padding: 10%;
 }
 
-/* @media only screen and (max-height: 1000px) {
+
+@media only screen and (max-width: 600px) {
     .box-body {
-    
+        width: 100vw;
+
+        padding-left: 7vw;
+        padding-right: 7vw;
+
     }
 }
-
-@media only screen and (max-width: 500px) {
-    .box-body {
-
-    }
-} */
 
 
 @media only screen and (max-height: 500px) {
     .box-body {
         height: 100vh;
+        /* 
+        padding-bottom: 7vh;
+        padding-top: 7vw; */
     }
 
     .display-section {
@@ -346,9 +351,7 @@ html, body {
     padding: 20px;
 }
 
-.tuner-you {
-
-}
+.tuner-you {}
 
 .tuner-target {
     color: var(--light-accent);
@@ -366,7 +369,7 @@ html, body {
 }
 
 .tonal-display {
-    text-align: start; 
+    text-align: start;
     overflow-wrap: anywhere;
 }
 

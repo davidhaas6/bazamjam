@@ -35,50 +35,48 @@ const ButtonPanel: FunctionComponent<ButtonPanelProps> = (props: ButtonPanelProp
 
 
   return (
-    <div className="button-box">
+    <div className="layout-section button-box">
+
       {/* recording button */}
-      <div className="recording-box">
-        <ControlButton
-          onPress={() => {
-            audioManager.startRecording();
-            props.setPanel("dashboard")
-          }}
-          onRelease={() => audioManager.stopRecording()}
-          // baseStyles="recording-button"
-          // pressedStyles="rb-pressed"
-          pressedChild={icons.recorderPressed}
-          notPressedChild={icons.recorderUnpressed}
-          releaseCondition={props.curPanel != "dashboard"}
-        />
-      </div>
+      <ControlButton
+        onPress={() => {
+          audioManager.startRecording();
+          props.setPanel("dashboard")
+        }}
+        onRelease={() => audioManager.stopRecording()}
+        // baseStyles="recording-button"
+        // pressedStyles="rb-pressed"
+        pressedChild={icons.recorderPressed}
+        notPressedChild={icons.recorderUnpressed}
+        releaseCondition={props.curPanel != "dashboard"}
+      />
 
-      {/* other buttons */}
-      <div className="control-button-box">
 
-        {/* widget button */}
-        <ControlButton
-          notPressedChild={icons.widgets}
-          pressedChild={icons.close}
-          onPress={() => { props.setPanel("widgets") }}
-          onRelease={() => { props.setPanel("dashboard") }}
-          releaseCondition={props.curPanel != "widgets"}
-        />
 
-        {/* settings button */}
-        <ControlButton
-          notPressedChild={icons.settings}
-          pressedChild={icons.close}
-          onPress={() => { props.setPanel("settings") }}
-          onRelease={() => { props.setPanel("dashboard") }}
-          releaseCondition={props.curPanel != "settings"}
-        />
+      {/* widget button */}
+      <ControlButton
+        notPressedChild={icons.widgets}
+        pressedChild={icons.close}
+        onPress={() => { props.setPanel("widgets") }}
+        onRelease={() => { props.setPanel("dashboard") }}
+        releaseCondition={props.curPanel != "widgets"}
+      />
 
-        {/* play button */}
-        <ControlButton
-          notPressedChild={icons.play}
-          pressedChild={icons.pause}
-        />
-      </div>
+      {/* settings button */}
+      <ControlButton
+        notPressedChild={icons.settings}
+        pressedChild={icons.close}
+        onPress={() => { props.setPanel("settings") }}
+        onRelease={() => { props.setPanel("dashboard") }}
+        releaseCondition={props.curPanel != "settings"}
+      />
+
+      {/* play button */}
+      <ControlButton
+        notPressedChild={icons.play}
+        pressedChild={icons.pause}
+      />
+
     </div>
   );
 }
