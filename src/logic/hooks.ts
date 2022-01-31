@@ -17,31 +17,45 @@ export type DrawFunc = (ctx: CanvasRenderingContext2D, drawProps?: DrawProps) =>
 
 
 // Effect that returns a canvas ref animated by draw(), with optional rate limiting 
+// specify maxRate in hz
 export function useCanvas(draw: DrawFunc, props?: DrawProps, maxRate?: number): RefObject<HTMLCanvasElement> {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const SEC_TO_NANO = 1000000000;
   // TODO: add rate limiting
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    let frameCount = 0;
-    let frameId: number;
+    const ctx = canvasRef.current?.getContext('2d');
 
-    // render() is the animation loop   --TODO: add rate limiting
-    const render = () => {
+    let frameId: number;
+    let lastFrameTime: DOMHighResTimeStamp;
+    let startTime: DOMHighResTimeStamp;
+    
+    // render() is the animation loop
+    const render = (curTime: DOMHighResTimeStamp) => {
       if (ctx) {
-        frameCount += 1;
+        if (startTime == null) {
+          startTime = curTime;
+        }
+
+        // rate limit if specififed
+        if (maxRate && lastFrameTime) {
+          const periodNano = 1 / maxRate * SEC_TO_NANO;
+          if ((curTime - lastFrameTime) < periodNano) return;
+        }
+
         draw(ctx, props);
-        frameId = window.requestAnimationFrame(render);
+
+        lastFrameTime = curTime;
+        frameId = window.requestAnimationFrame(render); // default rate limits 
       }
 
     };
-    render();
+    window.requestAnimationFrame(render);
 
     return () => {
       window.cancelAnimationFrame(frameId);
     };
-  }, [draw]);
+  }, [draw, props, maxRate]);
 
   return canvasRef;
 }
