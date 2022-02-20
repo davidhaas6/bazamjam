@@ -83,10 +83,9 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
       }
       break;
     case DashState.ACTIVE:
-      content = <div />;
-      if (features) {
+      
         content = <TonalDisplay data={features} />;
-      }
+      
 
       if (!audioActive) {
         setDashState(DashState.INACTIVE);
@@ -102,7 +101,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   return (
     <div className={"dashboard " + props.className ?? ""}>
       <div className="tuner">
-        <div className="dash-header tuner-header">Header</div>
+        <div className="dash-header tuner-header">BazamJam</div>
         {content}
       </div>
     </div >

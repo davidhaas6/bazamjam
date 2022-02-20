@@ -380,8 +380,12 @@ html, body {
 }
 
 .tonal-display {
-    text-align: start;
+    text-align: center;
     overflow-wrap: anywhere;
+}
+
+.current-chord {
+    font-size: 36px;
 }
 
 /* ======== Midi Mouth ======= 

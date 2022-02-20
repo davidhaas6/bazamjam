@@ -1,7 +1,7 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 
 interface TonalDisplayProps {
-  data: ITonalData;
+  data?: ITonalData;
 }
 
 export interface ITonalData {
@@ -21,12 +21,26 @@ export interface ITonalData {
 
 const TonalDisplay: FunctionComponent<TonalDisplayProps> = (props: TonalDisplayProps) => {
   const { data } = props;
+  const [chord, setChord] = useState();
+
+  const has_chord = data?.chords_key != null;
+
+  useEffect(() => {
+    if (has_chord)
+      setChord(() => data.chords_key);
+  }, [data?.chords_key])
+
+  const headerText = (has_chord ? "Current" : "Past") + " Chord:"; 
+
 
   return (
     <div className="tonal-display" >
-      <ul>
+      {/* <ul>
         {Object.entries(data).map((entry) => <li>{entry[0] + ": " + entry[1]}</li>)}
-      </ul>
+      </ul> */}
+      <br/>
+      {headerText}
+      <div className="current-chord">{chord}</div>
     </div>
   );
 }

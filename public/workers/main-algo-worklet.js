@@ -71,6 +71,7 @@ class AlgoWorkletProcessor extends AudioWorkletProcessor {
     if (this.isCalculationCall() && !this._buffer.allZero()) {
       // let data = this.getFundFreq();
       let data = this.getAlgorithmData(this._algo);
+      console.log(data);
       this.port.postMessage(data);
     }
 
@@ -97,7 +98,7 @@ class AlgoWorkletProcessor extends AudioWorkletProcessor {
       return NaN;
     }
 
-    if (algo == 'tonal-info') {
+    if (algo == 'tonal') {
       return this.getTonalInfo(inputSignal);
     } else if (algo == 'chord') {
       return this.getChord(inputSignal)
@@ -109,7 +110,6 @@ class AlgoWorkletProcessor extends AudioWorkletProcessor {
   getTonalInfo(signal) {
     // https://essentia.upf.edu/reference/std_TonalExtractor.html
     let toneInfo = this.essentia.TonalExtractor(signal, FRAME_SIZE, HOP_SIZE, 440);
-
     // convert essentia vectors to arrays  TODO: make into own function
     for (let feature in toneInfo) {
       if (toneInfo[feature].size) { // if array
