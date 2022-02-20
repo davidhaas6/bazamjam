@@ -1,6 +1,5 @@
 // essentia-worklet-processor.js
-// https://github.com/MTG/essentia.js/tree/dev/examples/rms-rt
-// https://mtg.github.io/essentia.js/docs/api/tutorial-2.%20Real-time%20analysis.html
+
 import { EssentiaWASM } from "https://cdn.jsdelivr.net/npm/essentia.js@0.1.3/dist/essentia-wasm.es.js";
 import Essentia from "https://cdn.jsdelivr.net/npm/essentia.js@0.1.3/dist/essentia.js-core.es.js";
 
@@ -18,12 +17,12 @@ function argMax(array) {
 const SAMPLES_PER_CALL = 128; // set by Web Audio API
 
 const MIN_RMS = 0.01;
-const FRAME_SIZE = 2048;
-const HOP_SIZE = 1024;
-const BUFFER_SECONDS = 0.2; // length of buffer in seconds
-const FRAME_OVERLAP = 0.3; // percent of overlap between audio frames
+const FRAME_SIZE = 4096 * 2;
+const HOP_SIZE = FRAME_SIZE/2;
+const BUFFER_SECONDS = .5; // length of buffer in seconds
+const FRAME_OVERLAP = 0; // percent of overlap between audio frames
 
-
+// IDEA: what if we just had this class, and it could process different things depending on its message inputs
 
 class PitchWorkletProcessor extends AudioWorkletProcessor {
   constructor() {
@@ -32,9 +31,9 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     console.log('Backend - essentia:' + this.essentia.version + '- http://essentia.upf.edu');
 
     // TODO: make this a time value via the sampling rate
-    this._bufferSize = sampleRate * BUFFER_SECONDS;
+    this._bufferSize = Math.max(sampleRate * BUFFER_SECONDS, FRAME_SIZE);
     this._buffer = new Float32Buffer(this._bufferSize);
-    console.log(this._bufferSize + " Samples per buffer");
+    // console.log(this._bufferSize + " Samples per buffer");
 
     // controls how often the calculations are performed
     this._calcInterval = Math.floor(this._bufferSize * (1 - FRAME_OVERLAP) / SAMPLES_PER_CALL);
@@ -43,19 +42,26 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     // dsp settings
     this.minFreq = 40;
     this.maxFreq = 4000;
+
+    this.tuningFreq = 440;
   }
 
   //System-invoked process callback function.
   process(inputs, outputs, parameters) {
-
+    if (inputs.length == 0 || inputs[0][0] == null) {
+      console.log("no input - length", inputs.length);
+      return true;
+    }
+    
     // <inputs> and <outputs> will have as many as were specified in the options passed to the AudioWorkletNode constructor, each subsequently spanning potentially multiple channels
-    let audioInput = inputs[0];
+    let audioInput = inputs[0][0];
 
-    this._buffer.append(audioInput[0]);
+    this._buffer.append(audioInput);
 
     if (this.isCalculationCall() && !this._buffer.allZero()) {
-      let pitch = this.getFundFreq();
-      this.port.postMessage(pitch);
+      // let pitch = this.getFundFreq();
+      
+      this.port.postMessage(this.getChord());
     }
 
     this._calcCounter++;
@@ -70,18 +76,49 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     return this._calcCounter > 0 && isCalcStep;
   }
 
-  getFundFreq() {
+  getChord() {
     let inputSignal = this.essentia.arrayToVector(this._buffer.data);
-    if (inputSignal.size() !== this._bufferSize) {
-      console.log(inputSignal);
-      console.log("vector len: " + inputSignal.length);
-      console.log("buffer data len: " + this._buffer.data.length);
+    const inputRMS = this.essentia.RMS(inputSignal).rms;
+    console.log("RMS: ", inputRMS);
+
+    if (inputSignal.size() !== this._bufferSize || inputRMS < MIN_RMS) {
+      console.log("rms too low");
       return NaN;
     }
 
-    if(this.essentia.RMS(inputSignal) < MIN_RMS) {
+    // https://essentia.upf.edu/reference/std_TonalExtractor.html
+    let toneInfo = this.essentia.TonalExtractor(inputSignal, FRAME_SIZE, HOP_SIZE,440);
+
+    for(let feature in toneInfo) {
+      if(toneInfo[feature].size) {
+        
+        toneInfo[feature] = this.essentia.vectorToArray(toneInfo[feature]);
+        if(toneInfo[feature][0].size)
+        {
+          for(let i in toneInfo[feature]) {
+            toneInfo[feature][i] = this.essentia.vectorToArray(toneInfo[feature][i]);
+          }
+        }
+        // console.log("converted: " + feature);
+      }
+    }
+    return toneInfo;
+
+    // https://mtg.github.io/essentia.js/docs/api/Essentia.html#TonalExtractor
+    // https://github.com/MTG/essentia.js/blob/master/examples/demos/hpcp-chroma-rt/index.html
+    
+    // this.essentia(HPCP)
+    // https://mtg.github.io/essentia.js/docs/api/Essentia.html#HPCP
+    // https://mtg.github.io/essentia.js/docs/api/Essentia.html#ChordsDetection
+    
+  }
+
+  getFundFreq() {
+    let inputSignal = this.essentia.arrayToVector(this._buffer.data);
+    if (inputSignal.size() !== this._bufferSize || this.essentia.RMS(inputSignal) < MIN_RMS) {
       return NaN;
     }
+    
 
     // Get the predominant frequency. All the magic numbers are the default params    
     const algoOutput = this.essentia.PitchMelodia(
@@ -91,7 +128,7 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
       27.5625, 55, sampleRate, 100                    //  pitchContinuity, referenceFrequency, sampleRate, timeContinuity
     );
 
-    const pitchFrames = essentia.vectorToArray(algoOutput.pitch);
+    const pitchFrames = this.essentia.vectorToArray(algoOutput.pitch);
     // const confidenceFrames = essentia.vectorToArray(algoOutput.pitchConfidence);
     
     // average frame-wise pitches in pitch before writing to SAB
@@ -99,8 +136,6 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
     // const numFrames = pitchFrames.length;
     const meanPitch = pitchFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
     // const meanConfidence = confidenceFrames.reduce((acc, val) => acc + val, 0) / numVoicedFrames;
-
-    // console.log("pitch: " + meanPitch + " Hz, with conf: " + meanConfidence);
 
     return meanPitch;
   }
