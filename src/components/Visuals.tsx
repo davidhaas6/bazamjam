@@ -7,32 +7,57 @@ import { AudioManagerContext } from "../routes/App";
 
 
 interface VisualsProps {
-
+  isHidden?: boolean;
 }
 
 // https://medium.com/@pdx.lucasm/canvas-with-react-js-32e133c05258
 const Visuals: FunctionComponent<VisualsProps> = (props: VisualsProps) => {
   const audioManager = useContext(AudioManagerContext);
+  const { isHidden = false } = props;
 
   const draw = (ctx: CanvasRenderingContext2D, props?: DrawProps) => {
     if (props?.getData == null) return;
-    const data = props.getData();
+    const data = props.getData().reverse();
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
 
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    ctx.fillStyle = '#000000';
+    const sample_scale = height / 2 + 50;
+    const waveWidth = width - 8;
+
+    const sampleWidthPx = waveWidth / data.length;
+
+    ctx.clearRect(0, 0, width, height);
+
+    ctx.fillStyle = 'black';
+    ctx.lineWidth = 1;
+
+    ctx.shadowOffsetX = 8;
+    ctx.shadowOffsetY = 16;
+    ctx.shadowBlur = 1;
+    ctx.shadowColor = '#00000022';
+
+    const getSampleY = (sample: number) => sample * sample_scale + height / 2;
+
     ctx.beginPath();
-    ctx.arc(50, 100, 20 * Math.sin(data[0] * 100) ** 2, 0, 2 * Math.PI);
-    // ctx.
-    ctx.fill();
+    for (let i = 0; i < data.length - 1; i++) {
+      const next_x = (i + 1) * sampleWidthPx;
+      const next_y = getSampleY(data[i + 1]);
+
+      // ctx.moveTo(i * sampleWidthPx, getSampleY(data[i]));
+      ctx.lineTo(next_x, next_y);
+    }
+    ctx.stroke();
 
   };
 
   let canvasRef = useCanvas(draw, { getData: () => audioManager.getTimeData() });
 
+  const cssStyle = "waveform" + (isHidden ? " hidden" : "");
   return (
-    <div>
-      <canvas ref={canvasRef} />
-    </div>
+    <>
+
+      <canvas ref={canvasRef} className={cssStyle}/>
+    </>
   );
 }
 

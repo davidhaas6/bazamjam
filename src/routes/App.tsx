@@ -37,7 +37,7 @@ const App: FunctionComponent<IAppProps> = (_: IAppProps) => {
             </div>
 
             <div className="layout-section display-box">
-              <Visuals />
+              <Visuals isHidden={curPanel !== "dashboard"}  />
             </div>
 
             <ButtonPanel curPanel={curPanel} setPanel={(newPanel) => setCurPanel(newPanel)} />

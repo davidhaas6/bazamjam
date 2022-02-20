@@ -52,13 +52,12 @@ const ButtonPanel: FunctionComponent<ButtonPanelProps> = (props: ButtonPanelProp
       />
 
 
-
       {/* widget button */}
       <ControlButton
         notPressedChild={icons.widgets}
         pressedChild={icons.close}
         onPress={() => { props.setPanel("widgets") }}
-        onRelease={() => { props.setPanel("dashboard") }}
+        onRelease={() => { if (props.curPanel === "widgets") props.setPanel("dashboard") }}
         releaseCondition={props.curPanel !== "widgets"}
       />
 
@@ -67,7 +66,7 @@ const ButtonPanel: FunctionComponent<ButtonPanelProps> = (props: ButtonPanelProp
         notPressedChild={icons.settings}
         pressedChild={icons.close}
         onPress={() => { props.setPanel("settings") }}
-        onRelease={() => { props.setPanel("dashboard") }}
+        onRelease={() => { if (props.curPanel === "settings") props.setPanel("dashboard") }}
         releaseCondition={props.curPanel !== "settings"}
       />
 

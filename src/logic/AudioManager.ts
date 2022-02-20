@@ -36,7 +36,7 @@ class AudioManager {
 
   audioActive: boolean = false; // if we're actively processing audio
 
-  readonly FFT_SIZE = 8192; // num bins in fft -- real + image
+  readonly FFT_SIZE = 2* 8192; // num bins in fft -- real + image
   readonly SAMPLE_RATE = 44100;
   readonly BUFFER_SIZE = this.FFT_SIZE;
 

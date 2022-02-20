@@ -39,8 +39,20 @@ const ControlButton: FunctionComponent<ControlButtonProps> = (props: ControlButt
   useEffect(() => {
     if (props.releaseCondition) {
       setIsPressed(false);
+      console.log("release condition executred");
     }
   }, [props.releaseCondition]);
+
+  // execute press/release functions
+  useEffect(() => {
+    if (isPressed) {
+      props?.onPress?.();
+    } else {
+      props?.onRelease?.();
+      console.log("release called")
+    }
+    //console.log("effect called:",isPressed);
+  }, [isPressed] );
 
 
   // add css classes based on button state
@@ -48,23 +60,7 @@ const ControlButton: FunctionComponent<ControlButtonProps> = (props: ControlButt
   buttonClass += " " + (isPressed ? (props.pressedStyles ?? "cb-pressed") : "");
 
   return (
-    <button className={buttonClass} onClick={() => {
-      let isPressedNow = !isPressed;
-
-      // call user callbacks
-      if (isPressedNow) {
-        if (props.onPress) {
-          props.onPress();
-        }
-      } else {
-        if (props.onRelease) {
-          props.onRelease();
-        }
-      }
-
-      // update state
-      setIsPressed(() => isPressedNow)
-    }}>
+    <button className={buttonClass} onClick={() => {setIsPressed((press:boolean) => !press)}}>
       <span>
         {isPressed ? props.pressedChild : props.notPressedChild}
       </span>
