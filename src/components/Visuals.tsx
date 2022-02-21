@@ -1,5 +1,6 @@
 import { FunctionComponent, useContext } from "react";
 import { DrawProps, useCanvas } from "../logic/hooks";
+import { getRMS } from "../logic/util/Math";
 import { AudioManagerContext } from "../routes/App";
 
 
@@ -20,6 +21,7 @@ const Visuals: FunctionComponent<VisualsProps> = (props: VisualsProps) => {
     const data = props.getData().reverse();
     const width = ctx.canvas.width;
     const height = ctx.canvas.height;
+    const rms = getRMS(data);
 
     const sample_scale = height / 2 + 50;
     const waveWidth = width - 8;
@@ -29,12 +31,13 @@ const Visuals: FunctionComponent<VisualsProps> = (props: VisualsProps) => {
     ctx.clearRect(0, 0, width, height);
 
     ctx.fillStyle = 'black';
-    ctx.lineWidth = 1;
+    ctx.lineWidth = (rms > .01) ? 1 : 2;
+    console.log(ctx.lineWidth, rms);
 
-    ctx.shadowOffsetX = 8;
-    ctx.shadowOffsetY = 16;
+    ctx.shadowOffsetX = 4;
+    ctx.shadowOffsetY = 12;
     ctx.shadowBlur = 1;
-    ctx.shadowColor = '#00000022';
+    ctx.shadowColor = (rms > .01) ? '#00000022' : "#00000000";
 
     const getSampleY = (sample: number) => sample * sample_scale + height / 2;
 

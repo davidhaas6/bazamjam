@@ -82,10 +82,8 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
         setDashState(DashState.INACTIVE);
       }
       break;
-    case DashState.ACTIVE:
-      
+    case DashState.ACTIVE:   
         content = <TonalDisplay data={features} />;
-      
 
       if (!audioActive) {
         setDashState(DashState.INACTIVE);
