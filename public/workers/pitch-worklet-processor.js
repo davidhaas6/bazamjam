@@ -25,6 +25,16 @@ const FRAME_OVERLAP = 0; // percent of overlap between audio frames
 // IDEA: what if we just had this class, and it could process different things depending on its message inputs
 
 class PitchWorkletProcessor extends AudioWorkletProcessor {
+  static get parameterDescriptors () {
+    return [{
+      name: 'algorithm',
+      defaultValue: 1,
+      minValue: 0,
+      maxValue: 1,
+      automationRate: 'a-rate'
+    }]
+  }
+
   constructor() {
     super();
     this.essentia = essentia;
@@ -47,6 +57,10 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
   }
 
   //System-invoked process callback function.
+  // https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor/process
+  // inputs - inputs[n][m][i] will access n-th input, m-th channel of that input, and i-th sample of that channel.
+  // outputs - An array of outputs that is similar to the inputs parameter in structure
+  // parameters - An object containing string keys and Float32Array values. 
   process(inputs, outputs, parameters) {
     if (inputs.length == 0 || inputs[0][0] == null) {
       console.log("no input - length", inputs.length);
@@ -143,6 +157,8 @@ class PitchWorkletProcessor extends AudioWorkletProcessor {
   sendEmpty() {
     this.port.postMessage("");
   }
+
+  
 }
 
 registerProcessor('pitch-processor', PitchWorkletProcessor); // must use the same name we gave our processor in `createEssentiaNode`

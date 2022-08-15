@@ -54,6 +54,19 @@ class AlgoWorkletProcessor extends AudioWorkletProcessor {
     this.maxFreq = 4000;
 
     this.tuningFreq = 440;
+    this.port.postMessage("hello");
+
+    this.port.onmessage = (e) => {
+      console.log("worker:",e.data);
+      var members = [];
+      for (var member in essentia){
+        members.push(essentia[member].toString())
+      }
+      console.log("worker:", {"arr": members});
+      console.log("worker:", essentia.algorithms);
+      // this.port.postMessage(this.tuningFreq);
+      // this.handleMessage(e.data);
+    }
   }
 
   //System-invoked process callback function.
@@ -71,7 +84,7 @@ class AlgoWorkletProcessor extends AudioWorkletProcessor {
     if (this.isCalculationCall() && !this._buffer.allZero()) {
       // let data = this.getFundFreq();
       let data = this.getAlgorithmData(this._algo);
-      console.log(data);
+      // console.log(data);
       this.port.postMessage(data);
     }
 
@@ -172,6 +185,12 @@ class AlgoWorkletProcessor extends AudioWorkletProcessor {
     this.port.postMessage("");
   }
 
+  handleMessage(key) {
+    if(key === "methods") {
+      var data = JSON.stringify(Object.getOwnPropertyDescriptors(this.essentia));
+      this.port.postMessage("hi")
+    }
+  }
 
 }
 

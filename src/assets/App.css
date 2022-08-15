@@ -52,9 +52,10 @@ html, body {
     background-color: var(--main-bg-color);
 
     height: 100vh;
+    width:100%;
     display: flex;
-    flex-flow: column;
-    align-items: center;
+    flex-flow: row;
+    align-items: flex-start;
     justify-content: center;
 }
 
@@ -82,6 +83,14 @@ html, body {
     align-items: center;
     justify-content: space-between;
 }
+
+
+.node-column {
+    border: 5px solid black;
+    width: 100%;
+    margin: 1px;
+}
+
 
 .layout-section {
     width: 100%;
@@ -336,6 +345,7 @@ html, body {
 
 .dash-header {
     /* padding: 12px; */
+    font-size: calc(42px + 1vmin);
 }
 
 .tuner {
@@ -352,17 +362,11 @@ html, body {
     color: var(--cb-top);
 }
 
-.tuner-header {
-    /* padding: 0px 0px 15px 0px; */
-    font-size: calc(42px + 1vmin);
-}
 
 .tuner-notes {
     font-size: 32px;
     padding: 20px;
 }
-
-.tuner-you {}
 
 .tuner-target {
     color: var(--light-accent);

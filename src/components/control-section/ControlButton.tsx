@@ -37,9 +37,8 @@ const ControlButton: FunctionComponent<ControlButtonProps> = (props: ControlButt
   }, [isPressed, snd_on, snd_off]);
 
   useEffect(() => {
-    if (props.releaseCondition) {
+    if (isPressed && props.releaseCondition) {
       setIsPressed(false);
-      console.log("release condition executred");
     }
   }, [props.releaseCondition]);
 
@@ -49,7 +48,6 @@ const ControlButton: FunctionComponent<ControlButtonProps> = (props: ControlButt
       props?.onPress?.();
     } else {
       props?.onRelease?.();
-      console.log("release called")
     }
     //console.log("effect called:",isPressed);
   }, [isPressed] );

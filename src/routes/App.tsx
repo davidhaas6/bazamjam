@@ -1,11 +1,7 @@
-import React, { FunctionComponent, useMemo, useState } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
 import 'react-bootstrap';
 import "../assets/App.css";
-import ButtonPanel from '../components/control-section/ButtonPanel';
 import Dashboard from '../components/Dashboard';
-import Settings from '../components/Settings';
-import Visuals from '../components/Visuals';
-import Widgets from '../components/Widgets';
 import AudioManager from '../logic/AudioManager';
 import PubSub from '../logic/PubSub';
 
@@ -20,28 +16,12 @@ const App: FunctionComponent<IAppProps> = (_: IAppProps) => {
   const pubSub = useMemo(() => new PubSub(), []);
   const audioManager = useMemo(() => new AudioManager(pubSub), [pubSub]);
 
-  const [curPanel, setCurPanel] = useState("dashboard");
-
-  console.log("panel: " + curPanel);
-
   return (
     <PubSubContext.Provider value={pubSub}>
       <AudioManagerContext.Provider value={audioManager}>
 
         <div className="App">
-          <div className="box-body">
-            <div className="layout-section info-box">
-              {curPanel === "widgets" ? <Widgets /> : null}
-              {curPanel === "settings" ? <Settings /> : null}
-              <Dashboard className={curPanel !== "dashboard" ? "hidden" : ""} /> {/* only hide the dashboard so it doesn't dismount */}
-            </div>
-
-            <div className="layout-section display-box">
-              <Visuals isHidden={curPanel !== "dashboard"}  />
-            </div>
-
-            <ButtonPanel curPanel={curPanel} setPanel={(newPanel) => setCurPanel(newPanel)} />
-          </div>
+          <Dashboard />
         </div>
 
       </AudioManagerContext.Provider>

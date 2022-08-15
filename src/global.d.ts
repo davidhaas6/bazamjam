@@ -1,5 +1,6 @@
-declare module 'essentia.js';
 
+
+import {Essentia} from "essentia_api"
 
 // https://github.com/Microsoft/TypeScript/issues/28308#issuecomment-650802278
 interface AudioWorkletProcessor {

@@ -10,11 +10,6 @@ interface INodes {
 // 
 type NodeKey = keyof INodes;
 
-// A string-indexed list of nodes. Essentially a dict
-interface INodeConnections {
-  [src: NodeKey]: NodeKey;
-}
-
 const emptyBuffer = new Float32Array(0);
 
 
@@ -40,7 +35,7 @@ class AudioManager {
   readonly SAMPLE_RATE = 44100;
   readonly BUFFER_SIZE = this.FFT_SIZE;
 
-  public get nodes() {
+  public get nodes(): INodes {
     return this._nodes;
   }
 
@@ -238,10 +233,12 @@ class AudioManager {
       node.port.onmessage = onMessage;
 
       this.addNode(node, name, { inputs: ["source"] });
+      return node;
     } catch (e) {
       // TODO: delete node connections for worker if it exists
       console.log("Error adding worklet node:" + e);
     }
+    return null;
   }
 
 }
