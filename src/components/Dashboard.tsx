@@ -5,11 +5,11 @@
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { TiMediaStopOutline, TiNotesOutline } from "react-icons/ti";
-import Essentia from "../essentia_api.d";
+import DirectedGraph, { GraphNode } from "../logic/network";
 import { WorkletCallback } from "../logic/util/Worklet";
 import { AudioManagerContext, PubSubContext } from "../routes/App";
 import ControlButton from "./control-section/ControlButton";
-import { ITonalData } from "./tuner/TonalDisplay";
+import FxNodeInput from "./FxNodeInput";
 
 
 // path relative to public directory
@@ -30,10 +30,6 @@ interface IDashboardProps {
   className?: string;
 }
 
-interface EssentiaMethod {
-  
-}
-
 
 const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) => {
   let pubSub = useContext(PubSubContext);
@@ -42,6 +38,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   const [audioActive, setAudioActive] = useState(false);
   const [hasData, setHasData] = useState(false);
   const [dashState, setDashState] = useState(DashState.INACTIVE)
+  const [dag, setDag] = useState(new DirectedGraph());
   // const [features, setFeatures] = useState<ITonalData>();
 
   useEffect(() => {
@@ -94,8 +91,6 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
 
   let columns: any[] = [];
   
-  const methods = Object.getOwnPropertyDescriptors(Essentia.prototype);
-
 
   return (
     <div className="App"><div className="node-column">
@@ -116,8 +111,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
     </div >
 
       <div className="node-column">
-        k
-        {columns}
+        <FxNodeInput addNode={(node: GraphNode) => dag.addNode(node)}/>
         {/* <li>{essentia}</li> */}
       </div >
       <div className="node-column">
