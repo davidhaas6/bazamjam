@@ -1,9 +1,8 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react";
-import DirectedGraph, { EssentiaFx, getFunction, GraphNode, isValidFunction } from "../logic/network";
+import { EssentiaFx, FunctionGraph, getFunction, GraphNode, isValidFunction } from "../logic/network";
 import FxField from "./FxField";
 
 interface FxNodeInputProps {
-  setGraph?: (g: DirectedGraph) => void;
   addFunction: (key: string) => void;
 }
 

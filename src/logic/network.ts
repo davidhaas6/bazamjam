@@ -70,58 +70,62 @@ interface GraphInterface {
 }
 
 export type GraphNode = Node<string> | ParamNode | FxNode;
-type OutputAdjMap = Map<GraphNode, Set<GraphNode>>;
+type OutputAdjMap<KeyType> = Map<KeyType, Set<KeyType>>;
 
-export default class DirectedGraph {
-  outputs: OutputAdjMap;
-  nodes: Map<string, GraphNode>;
+export default class DirectedGraph<K, V extends Node<K>> {
+  outputs: OutputAdjMap<K>;
+  nodes: Map<K, V>;
+
   constructor() {
-    this.outputs = new Map<GraphNode, Set<GraphNode>>();
-    this.nodes = new Map<string, GraphNode>();
+    this.outputs = new Map<K, Set<K>>();
+    this.nodes = new Map<K, V>();
   }
 
-  addNode(node: GraphNode, outputs?: Set<GraphNode> | GraphNode[]) {
-    this.nodes.set(node.key, node);
+  addNode(node: V, outputs?: Set<V> | V[]) {
+    if (this.nodes.has(node.key)) {
+      this.nodes.set(node.key, node);
+      this.outputs.set(node.key, new Set());
+    }
 
     if (outputs != null) {
       if (outputs instanceof Array) outputs = new Set(outputs);
-      if (this.outputs.has(node)) {
-        outputs.forEach((outNode) => this.addNode(outNode)); // ensure outputs are tracked
-        this.outputs.set(node, this.mergeSets<GraphNode>(this.outputs.get(node)!, outputs))
-      } else {
-        console.log("adding new output node")
-        this.outputs.set(node, outputs)
+      this.addOutputs(node.key, outputs);
+      // if (this.outputs.has(node.key)) {
+      //   outputs.forEach((outNode) => this.nodes.set(outNode.key, outNode)); // ensure outputs are tracked
+      //   const keys = this.mergeSets<K>(this.outputs.get(node.key)!, this.getNodeArrKeys(outputs));
+      //   this.outputs.set(node.key, keys);
+      // } else {
+      //   console.log("adding outputs for new node");
+      //   this.outputs.set(node.key, this.getNodeArrKeys(outputs));
+      // }
+    }
+  }
+
+  addNodes(nodes: V[]) {
+    nodes.forEach((node) => this.addNode(node));
+  }
+
+
+  addOutputs(srcNode: K, outputs: Set<K> | Set<V>): boolean {
+    if (!this.nodes.has(srcNode)) return false;
+
+    // normalize outputs
+    if (outputs as Set<V>) {
+      const outputNodes = outputs as Set<V>;
+      outputNodes.forEach((outNode) => this.addNode(outNode))  // ensure output nodes are registered
+      outputs = this.getNodeArrKeys(outputNodes);
+    }
+    const outputKeys: Set<K> = outputs as Set<K>;
+
+
+    for (let newOutput of Array.from(outputKeys)) {
+      if (this.nodes.has(newOutput) && this.outputs.get(srcNode) != null) {  // Only connect to existing nodes
+        this.outputs.get(srcNode)!.add(newOutput);
       }
     }
-  }
 
-  addNodes(nodes: GraphNode[], outputs?: OutputAdjMap) {
-    nodes.forEach((node) => this.addNode(node, outputs != null ? outputs.get(node) : undefined));
-  }
-
-  connect(src: GraphNode | string, dst: GraphNode | string): boolean {
-    let srcNode: GraphNode;
-    let dstNode: GraphNode;
-
-    // get nodes from strings
-
-    if (src as string) {
-      if (!this.nodes.has(dst as string)) return false;
-      srcNode = this.nodes.get(src as string) as GraphNode;
-    } else {
-      srcNode = src as GraphNode;
-    }
-    if (dst as string) {
-      if (!this.nodes.has(dst as string)) return false;
-      dstNode = this.nodes.get(dst as string) as GraphNode;
-    } else {
-      dstNode = dst as GraphNode;
-    }
-
-    this.addNode(srcNode, [dstNode]);
     return true;
   }
-
 
 
   print() {
@@ -129,19 +133,29 @@ export default class DirectedGraph {
     console.log(this.nodes.keys())
     console.log("OUTPUTS");
     console.log(this.outputs)
-    // for (let srcNode of Array.from(this.outputs.keys())) {
-    //   let str = "";
-    //   this.outputs.get(srcNode)?.forEach((val) => str += val.key + ", ")
-    //   console.log("  ", srcNode.key, "-->", str)
-    // }
+    for (let srcNode of Array.from(this.outputs.keys())) {
+      let str = "";
+      this.outputs.get(srcNode)?.forEach((val) => str += val + ", ")
+      console.log("  ", srcNode, "-->", str)
+    }
   }
-
 
   private mergeSets<T>(set1: Set<T>, set2: Set<T>) {
     set1.forEach((val) => set2.add(val));
     return set2;
   }
+
+  private getNodeArrKeys(arr: Iterable<V>): Set<K> {
+    let keys = new Set<K>();
+    for (const node of Array.from(arr)) {
+      keys.add(node.key);
+    }
+    return keys;
+  }
 }
+
+export type FunctionGraph = DirectedGraph<string, GraphNode>
+
 
 /*
 ================
@@ -220,7 +234,7 @@ function createOutputNodes(fx: EssentiaFx): ParamNode[] {
   return nodes;
 }
 
-function _addFunction(graph: DirectedGraph, functions: EssentiaData, fxKey: keyof EssentiaData): DirectedGraph {
+function _addFunction(graph: FunctionGraph, functions: EssentiaData, fxKey: keyof EssentiaData): FunctionGraph {
   // convert the EssentiaFx into a connected set of arg nodes, a function node, and return value nodes
   const fx = functions[fxKey];
   let fxNode: FxNode = { data: fx, key: fx.name };
@@ -229,38 +243,34 @@ function _addFunction(graph: DirectedGraph, functions: EssentiaData, fxKey: keyo
 
   // connect then nodes
   // console.log(paramNodes, outNodes)
-  paramNodes.forEach((node) => graph.addNode(node, new Set([fxNode])));
-  graph.addNode(fxNode, new Set(outNodes));
+  paramNodes.forEach((node) => graph.addNode(node, [fxNode]));
+  graph.addNode(fxNode, outNodes);
   graph.addNodes(outNodes);
   return graph;
 }
 
 
+/*
+================
+===========
+   External Helpers 
+ ======================
+ ======================================
+*/
+
+
+
 const data: EssentiaData = json;
 
-export function addFunctionToGraph(graph: DirectedGraph, functionKey: string): DirectedGraph {
-  if(data[functionKey] == null) throw new Error("Function not found");
-  return  _addFunction(graph, data, functionKey);
+export function addFunctionToGraph(graph: FunctionGraph, functionKey: string): FunctionGraph {
+  if (data[functionKey] == null) throw new Error("Function not found");
+  return _addFunction(graph, data, functionKey);
 }
 
 export function isValidFunction(functionKey: string) {
-  return  data[functionKey] != null;
+  return data[functionKey] != null;
 }
 
-export function getFunction(functionKey:string) {
+export function getFunction(functionKey: string) {
   return data[functionKey];
 }
-/*
- Main
-*/
-
-// // if (data['BPF']['params'] != null) console.log(data['BPF']['params']['Name'])
-// const fx: EssentiaFx = data['BPF'];
-
-
-// // let g = addFunctionNodes(new DirectedGraph, data, 'getAudioBufferFromURL');
-// // let graph = addFunctionNodes(g, data, 'BFCC');
-// // graph.connect("getAudioBufferFromURL_AudioBuffer", 'BFCC_spectrum')
-// // graph.print()
-// console.log(data['BPF'])
-// // add

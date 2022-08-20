@@ -5,7 +5,7 @@
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { TiMediaStopOutline, TiNotesOutline } from "react-icons/ti";
-import DirectedGraph, { addFunctionToGraph, GraphNode } from "../logic/network";
+import DirectedGraph, { addFunctionToGraph, GraphNode, FunctionGraph } from "../logic/network";
 import { WorkletCallback } from "../logic/util/Worklet";
 import { AudioManagerContext, PubSubContext } from "../routes/App";
 import ControlButton from "./control-section/ControlButton";
@@ -38,7 +38,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   const [audioActive, setAudioActive] = useState(false);
   const [hasData, setHasData] = useState(false);
   const [dashState, setDashState] = useState(DashState.INACTIVE)
-  const [graph, setGraph] = useState(new DirectedGraph());
+  const [graph, setGraph] = useState(new DirectedGraph<string, GraphNode>());
   // const [features, setFeatures] = useState<ITonalData>();
 
   useEffect(() => {
@@ -74,13 +74,13 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
       - If you make Essentia from d.ts a class and make all the functions have empty bracketes, Object.getOwnPropertyNames will find them. But it doesn't give type info 
   */
 
-  useEffect(() => {
-    graph.print()
+  // useEffect(() => {
+  //   graph.print()
   
-    return () => {
+  //   return () => {
       
-    }
-  }, [graph])
+  //   }
+  // }, [graph])
   
 
 
