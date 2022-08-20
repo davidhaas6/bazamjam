@@ -5,11 +5,11 @@
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { TiMediaStopOutline, TiNotesOutline } from "react-icons/ti";
-import DirectedGraph, { addFunctionToGraph, GraphNode, FunctionGraph } from "../logic/network";
+import DirectedGraph, { addFunctionToGraph, GraphNode, FunctionGraph, getData } from "../logic/network";
 import { WorkletCallback } from "../logic/util/Worklet";
 import { AudioManagerContext, PubSubContext } from "../routes/App";
-import ControlButton from "./control-section/ControlButton";
-import FxNodeInput from "./FxNodeInput";
+import ControlButton from "./inputs/ControlButton";
+import FxNodeInput from "./inputs/FxNodeInput";
 
 
 // path relative to public directory
@@ -38,7 +38,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   const [audioActive, setAudioActive] = useState(false);
   const [hasData, setHasData] = useState(false);
   const [dashState, setDashState] = useState(DashState.INACTIVE)
-  const [graph, setGraph] = useState(new DirectedGraph<string, GraphNode>());
+  const [graph, setGraph] = useState(new FunctionGraph(getData()));
   // const [features, setFeatures] = useState<ITonalData>();
 
   useEffect(() => {
@@ -103,10 +103,9 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
       </div >
 
       <div className="node-column">
-        {/* addNode={(node: GraphNode) => graph.addNode(node)} */}
         <FxNodeInput addFunction={(fxKey) => {
-          addFunctionToGraph(graph, fxKey).print();
-          setGraph(() => addFunctionToGraph(graph, fxKey))
+          setGraph(() => graph.addFxToGraph(fxKey))
+          graph.addFxToGraph(fxKey).print()
         }} />
         {/* <li>{essentia}</li> */}
       </div >

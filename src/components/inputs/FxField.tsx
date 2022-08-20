@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import { EssentiaFx, normalizeJsonArr } from "../logic/network";
+import { EssentiaFx, normalizeJsonArr } from "../../logic/network";
 
 interface FxFieldProps {
   function: EssentiaFx;

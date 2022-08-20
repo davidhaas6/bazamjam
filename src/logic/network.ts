@@ -65,9 +65,6 @@ interface FxNode extends Node<string> {
   data: EssentiaFx
 }
 
-interface GraphInterface {
-  [index: string]: Node<string> | ParamNode | FxNode
-}
 
 export type GraphNode = Node<string> | ParamNode | FxNode;
 type OutputAdjMap<KeyType> = Map<KeyType, Set<KeyType>>;
@@ -90,19 +87,15 @@ export default class DirectedGraph<K, V extends Node<K>> {
     if (outputs != null) {
       if (outputs instanceof Array) outputs = new Set(outputs);
       this.addOutputs(node.key, outputs);
-      // if (this.outputs.has(node.key)) {
-      //   outputs.forEach((outNode) => this.nodes.set(outNode.key, outNode)); // ensure outputs are tracked
-      //   const keys = this.mergeSets<K>(this.outputs.get(node.key)!, this.getNodeArrKeys(outputs));
-      //   this.outputs.set(node.key, keys);
-      // } else {
-      //   console.log("adding outputs for new node");
-      //   this.outputs.set(node.key, this.getNodeArrKeys(outputs));
-      // }
     }
   }
 
   addNodes(nodes: V[]) {
     nodes.forEach((node) => this.addNode(node));
+  }
+
+  getNodeKeys(): K[] {
+    return Array.from(this.nodes.keys());
   }
 
 
@@ -154,8 +147,93 @@ export default class DirectedGraph<K, V extends Node<K>> {
   }
 }
 
-export type FunctionGraph = DirectedGraph<string, GraphNode>
+// export type FunctionGraph = DirectedGraph<string, GraphNode>
 
+
+export class FunctionGraph extends DirectedGraph<string, GraphNode> {
+  functions: EssentiaData;
+
+  constructor(functionMetadata: EssentiaData) {
+    super();
+    this.functions = functionMetadata;
+  }
+
+  public get functionKeys(): string[] {
+    return Object.keys(this.functions)
+  } 
+
+  addFxToGraph(fxKey: string) {
+    const fx = this.functions[fxKey];
+    let fxNode: FxNode = { data: fx, key: fx.name };
+    let paramNodes = fx.params != null ? createParameterNodes(fx) : [];
+    let outNodes = fx.returnData != null ? createOutputNodes(fx) : [];
+
+    paramNodes.forEach((node) => this.addNode(node, [fxNode]));
+    this.addNode(fxNode, outNodes);
+    this.addNodes(outNodes);
+    return this;
+  }
+
+  
+
+
+  private _createParameterNodes(fx: EssentiaFx): ParamNode[] {
+    if (fx.params == null) return [];
+
+    let nodes: ParamNode[] = [];
+    const params = fx.params as JsonParams;
+    const num_params = normalizeJsonArr(params.Name).length;
+
+    for (let i = 0; i < num_params; i++) {
+      let node: ParamNode = {
+        paramName: params.Name[i] as string,
+        paramType: params.Type[i] as string,
+        description: params.Description[i] as string,
+        funcName: fx.name,
+        key: fx.name + "_" + params.Name[i] as string,
+        isOutput: false,
+      }
+      if (params.Default != null) node.defaultVal = params.Default[i];
+      if (params.Attributes != null) node.attributes = params.Attributes[i] as string;
+      nodes.push(node)
+    }
+    return nodes;
+  }
+
+  private _createOutputNodes(fx: EssentiaFx): ParamNode[] {
+    if (fx.returnData == null) return [];
+
+    let nodes: ParamNode[] = [];
+    const ret = fx.returnData as Return;
+
+    if (ret.type === 'object' && ret.val as JsonArr) {
+      const values = ret.val as JsonArr;
+      // go thru each output in the vals dict
+      for (let name of Object.getOwnPropertyNames(values)) {
+        nodes.push({
+          funcName: fx.name,
+          paramName: name,
+          description: values[name],
+          key: fx.name + "_" + name,
+          isOutput: true,
+        });
+      }
+    }
+    else if (ret.val as string) {
+      nodes.push({
+        funcName: fx.name,
+        paramName: ret.type,
+        paramType: ret.type,
+        description: ret.val as string,
+        key: fx.name + "_" + ret.type,
+        isOutput: true,
+      })
+    }
+    return nodes;
+  }
+
+
+}
 
 /*
 ================
@@ -258,8 +336,6 @@ function _addFunction(graph: FunctionGraph, functions: EssentiaData, fxKey: keyo
  ======================================
 */
 
-
-
 const data: EssentiaData = json;
 
 export function addFunctionToGraph(graph: FunctionGraph, functionKey: string): FunctionGraph {
@@ -273,4 +349,12 @@ export function isValidFunction(functionKey: string) {
 
 export function getFunction(functionKey: string) {
   return data[functionKey];
+}
+
+export function getAvailableFunctions(): string[] {
+  return Object.keys(data);
+}
+
+export function getData(): EssentiaData {
+  return data;
 }

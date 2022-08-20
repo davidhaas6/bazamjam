@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react";
-import { EssentiaFx, FunctionGraph, getFunction, GraphNode, isValidFunction } from "../logic/network";
+import { EssentiaFx, FunctionGraph, getAvailableFunctions, getFunction, GraphNode, isValidFunction } from "../../logic/network";
 import FxField from "./FxField";
 
 interface FxNodeInputProps {
@@ -32,12 +32,17 @@ const FxNodeInput: FunctionComponent<FxNodeInputProps> = (props: FxNodeInputProp
 
 
   const showError = userInput.length > 0 && !isValidFunction(userInput);
+  const listOptions = getAvailableFunctions().map((fx) => <option value={fx} />)
 
   return (
     <div>
       <input ref={inputRef} type="text"
         onKeyPress={(e) => handleKeyPress(e.key)}
+        list="options"
       />
+      <datalist id="options">
+        {listOptions}
+    </datalist>
       {showError && <div>Invalid function: {userInput}</div>}
       {selectedFx != null &&
         <>
