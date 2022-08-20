@@ -1,4 +1,4 @@
-import * as json from "../assets/essentia.json";
+import json from "../assets/essentia.json";
 
 type ValueOf<T> = T[keyof T];
 
@@ -29,12 +29,12 @@ interface Return {
   "val": string | JsonArr
 }
 
-interface EssentiaFx {
+export interface EssentiaFx {
   name: string;
   header: string;
   desc: string;
   params: JsonParams | null;
-  return: Return | null;
+  returnData: Return | null;
 }
 
 interface EssentiaData {
@@ -89,6 +89,7 @@ export default class DirectedGraph {
         outputs.forEach((outNode) => this.addNode(outNode)); // ensure outputs are tracked
         this.outputs.set(node, this.mergeSets<GraphNode>(this.outputs.get(node)!, outputs))
       } else {
+        console.log("adding new output node")
         this.outputs.set(node, outputs)
       }
     }
@@ -127,11 +128,12 @@ export default class DirectedGraph {
     console.log("NODES");
     console.log(this.nodes.keys())
     console.log("OUTPUTS");
-    for (let srcNode of Array.from(this.outputs.keys())) {
-      let str = "";
-      this.outputs.get(srcNode)?.forEach((val) => str += val.key + ", ")
-      console.log("  ", srcNode.key, "-->", str)
-    }
+    console.log(this.outputs)
+    // for (let srcNode of Array.from(this.outputs.keys())) {
+    //   let str = "";
+    //   this.outputs.get(srcNode)?.forEach((val) => str += val.key + ", ")
+    //   console.log("  ", srcNode.key, "-->", str)
+    // }
   }
 
 
@@ -151,7 +153,7 @@ export default class DirectedGraph {
 
 
 
-function normalizeJsonArr(stringKeyedArr: JsonParamArray): ValueOf<JsonParamArray>[] {
+export function normalizeJsonArr(stringKeyedArr: JsonParamArray): ValueOf<JsonParamArray>[] {
   let arr = [];
   for (let i in stringKeyedArr) {
     arr.push(stringKeyedArr[i])
@@ -187,10 +189,10 @@ function createParameterNodes(fx: EssentiaFx): ParamNode[] {
 }
 
 function createOutputNodes(fx: EssentiaFx): ParamNode[] {
-  if (fx.return == null) return [];
+  if (fx.returnData == null) return [];
 
   let nodes: ParamNode[] = [];
-  const ret = fx.return as Return;
+  const ret = fx.returnData as Return;
 
   if (ret.type === 'object' && ret.val as JsonArr) {
     const values = ret.val as JsonArr;
@@ -223,7 +225,7 @@ function _addFunction(graph: DirectedGraph, functions: EssentiaData, fxKey: keyo
   const fx = functions[fxKey];
   let fxNode: FxNode = { data: fx, key: fx.name };
   let paramNodes = fx.params != null ? createParameterNodes(fx) : [];
-  let outNodes = fx.return != null ? createOutputNodes(fx) : [];
+  let outNodes = fx.returnData != null ? createOutputNodes(fx) : [];
 
   // connect then nodes
   // console.log(paramNodes, outNodes)
@@ -236,14 +238,17 @@ function _addFunction(graph: DirectedGraph, functions: EssentiaData, fxKey: keyo
 
 const data: EssentiaData = json;
 
-export function addFunction(graph: DirectedGraph, functionKey: string) {
-  if(data[functionKey] == null) return false;
-  _addFunction(graph, data, functionKey)
-  return true;
+export function addFunctionToGraph(graph: DirectedGraph, functionKey: string): DirectedGraph {
+  if(data[functionKey] == null) throw new Error("Function not found");
+  return  _addFunction(graph, data, functionKey);
 }
 
-export function isValidFunction(fxname: string) {
+export function isValidFunction(functionKey: string) {
+  return  data[functionKey] != null;
+}
 
+export function getFunction(functionKey:string) {
+  return data[functionKey];
 }
 /*
  Main

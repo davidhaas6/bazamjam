@@ -17,7 +17,7 @@
                 "1": "an instance of Web Audio API AudioContext"
             }
         },
-        "return": {
+        "returnData": {
             "type": "AudioBuffer",
             "val": "decoded audio buffer object"
         }
@@ -53,7 +53,7 @@
                 "2": "audio channel number"
             }
         },
-        "return": {
+        "returnData": {
             "type": "Float32Array",
             "val": "decode and returns the audio data as Float32 array for the given channel"
         }
@@ -73,7 +73,7 @@
                 "0": "AudioBuffer object decoded from an audio file."
             }
         },
-        "return": {
+        "returnData": {
             "type": "Float32Array",
             "val": "audio channel data. (downmixed to mono if its stereo signal)."
         }
@@ -83,21 +83,21 @@
         "header": "shutdown()",
         "desc": "Method to shutdown essentia algorithm instance after it's use",
         "params": null,
-        "return": null
+        "returnData": null
     },
     "reinstantiate": {
         "name": "reinstantiate",
         "header": "reinstantiate()",
         "desc": "Method for re-instantiating essentia algorithms instance after using the shutdown method",
         "params": null,
-        "return": null
+        "returnData": null
     },
     "\"delete\"": {
         "name": "\"delete\"",
         "header": "\"delete\"()",
         "desc": "Delete essentiajs class instance",
         "params": null,
-        "return": null
+        "returnData": null
     },
     "arrayToVector": {
         "name": "arrayToVector",
@@ -114,7 +114,7 @@
                 "0": "input JS typed array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "VectorFloat",
             "val": "returns vector float"
         }
@@ -134,7 +134,7 @@
                 "0": "input VectorFloat array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "Float32Array",
             "val": "returns converted JS typed array"
         }
@@ -170,7 +170,7 @@
                 "2": "size of overlapping frame"
             }
         },
-        "return": {
+        "returnData": {
             "type": "VectorVectorFloat",
             "val": "Returns a 2D vector float of sliced audio frames"
         }
@@ -193,7 +193,7 @@
                 "1": "the right channel of the stereo audio signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "audio": "the downmixed mono signal"
@@ -241,7 +241,7 @@
                 "4": "start momentary/short-term loudness estimation at time 0 (zero-centered loudness estimation windows) if true; otherwise start both windows at time 0 (time positions for momentary and short-term values will not be syncronized)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "momentaryLoudness": "momentary loudness (over 400ms) (LUFS)",
@@ -266,7 +266,7 @@
                 "0": "the array of pitch values [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "afterMaxToBeforeMaxEnergyRatio": "the ratio between the pitch energy after the pitch maximum to the pitch energy before the pitch maximum"
@@ -314,7 +314,7 @@
                 "4": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the filtered signal"
@@ -357,7 +357,7 @@
                 "3": "the type of sound to be added on the event"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the input signal mixed with bursts at onset locations"
@@ -400,7 +400,7 @@
                 "3": "type of normalization to compute: either 'standard' (default) or 'unbiased'"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "autoCorrelation": "the autocorrelation vector"
@@ -488,7 +488,7 @@
                 "12": "type of weighting function for determining triangle area"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energies in bark bands",
@@ -528,7 +528,7 @@
                 "2": "the y-coordinates of the points forming the break-point function"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "y": "the output coordinate (y-axis)"
@@ -572,7 +572,7 @@
                 "3": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the filtered signal"
@@ -615,7 +615,7 @@
                 "3": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the filtered signal"
@@ -653,7 +653,7 @@
                 "2": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energy of the bark bands"
@@ -691,7 +691,7 @@
                 "2": "the slowest tempo to detect [bpm]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "ticks": " the estimated tick locations [s]"
@@ -729,7 +729,7 @@
                 "2": "the slowest tempo to detect [bpm]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "ticks": " the estimated tick locations [s]",
@@ -768,7 +768,7 @@
                 "2": "number of beats for dynamic filtering"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "beatogram": "filtered matrix loudness"
@@ -821,7 +821,7 @@
                 "5": "the audio sampling rate [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "loudness": "the beat's energy in the whole spectrum",
@@ -860,7 +860,7 @@
                 "2": "the type of the binary operator to apply to the input arrays"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "array": "the array containing the result of binary operation"
@@ -898,7 +898,7 @@
                 "2": "the type of the binary operator to apply to the input arrays"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "array": "the array containing the result of binary operation"
@@ -920,7 +920,7 @@
                 "0": "the list of bpm intervals [s]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "firstPeakBPM": "value for the highest peak [bpm]",
@@ -969,7 +969,7 @@
                 "3": "minimum tempo deviation to look for"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "rubatoStart": "list of timestamps where the start of a rubato region was detected [s]",
@@ -1009,7 +1009,7 @@
                 "2": "the range of the input array, used for normalizing the results in the 'pdf' mode"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "centralMoments": "the central moments of the input array"
@@ -1042,7 +1042,7 @@
                 "1": "the range of the input array, used for normalizing the results"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "centroid": "the centroid of the array"
@@ -1070,7 +1070,7 @@
                 "2": "the scale of the whole song (major or minor)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "chordsHistogram": "the normalized histogram of chords",
@@ -1117,7 +1117,7 @@
                 "3": "the size of the window on which to estimate the chords [s]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "chords": "the resulting chords, from A to G",
@@ -1166,7 +1166,7 @@
                 "4": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "chords": "the resulting chords, from A to G",
@@ -1235,7 +1235,7 @@
                 "8": "whether to accumulate the input 'queryFeature' in the euclidean similarity matrix calculation on each compute() method call"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "csm": "2D binary cross-similarity matrix of the query and reference features"
@@ -1313,7 +1313,7 @@
                 "10": "a boolean value that enables zero-phase windowing. Input audio frames should be windowed with the same phase mode"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "chromagram": "the magnitude constant-Q chromagram"
@@ -1376,7 +1376,7 @@
                 "7": "threshold to skip silent frames"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "starts": "starting indexes of the clicks",
@@ -1415,7 +1415,7 @@
                 "2": "the minimum value below which the signal will be clipped"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the output signal with the added noise"
@@ -1463,7 +1463,7 @@
                 "4": "choose the type of distance. By default the algorithm outputs a asymmetric disctance which is obtained by normalising the maximum score in the alignment score matrix with length of reference song"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "scoreMatrix": "a 2D smith-waterman alignment score matrix from the input binary cross-similarity matrix",
@@ -1486,7 +1486,7 @@
                 "0": "the input array (cannot contain negative values, and must be non-empty)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "crest": "the crest of the input array"
@@ -1529,7 +1529,7 @@
                 "3": "the minimum lag to be computed between the two vectors"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "crossCorrelation": "the cross-correlation vector between the two input arrays (its size is equal to maxLag - minLag + 1)"
@@ -1582,7 +1582,7 @@
                 "5": "stride size to form a stack of frames (e.g., 'frameStackStride'=1 to use consecutive frames; 'frameStackStride'=2 for using every second frame)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "csm": "2D cross-similarity matrix of two input frame sequences (query vs reference)"
@@ -1640,7 +1640,7 @@
                 "6": "the y-coordinates to be interpolated (i.e. the known data)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "y": "the value of the spline at x",
@@ -1680,7 +1680,7 @@
                 "2": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the filtered signal, with the DC component removed"
@@ -1728,7 +1728,7 @@
                 "4": "the number of output coefficients"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "dct": "the discrete cosine transform of the input array"
@@ -1776,7 +1776,7 @@
                 "4": "multiplier to increment from min to max tau"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "danceability": "the danceability value. Normal values range from 0 to ~3. The higher, the more danceable.",
@@ -1810,7 +1810,7 @@
                 "1": "the range of the input array, used for normalizing the results"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "decrease": "the decrease of the input array"
@@ -1832,7 +1832,7 @@
                 "0": "the input signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the derivative of the input signal"
@@ -1854,7 +1854,7 @@
                 "0": "the envelope of the signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "derAvAfterMax": "the weighted average of the derivative after the maximum amplitude",
@@ -1923,7 +1923,7 @@
                 "8": "size of the window used to compute silent subframes"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "discontinuityLocations": "the index of the detected discontinuities (if any)",
@@ -1949,7 +1949,7 @@
                 "1": "the magnitudes of the spectral peaks (must be sorted by frequency"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "dissonance": "the dissonance of the audio signal (0 meaning completely consonant, and 1 meaning completely dissonant)"
@@ -1971,7 +1971,7 @@
                 "0": "the central moments of a distribution"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "spread": "the spread (variance) of the distribution",
@@ -2006,7 +2006,7 @@
                 "1": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "duration": "the duration of the signal [s]"
@@ -2044,7 +2044,7 @@
                 "2": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "dynamicComplexity": "the dynamic complexity coefficient",
@@ -2108,7 +2108,7 @@
                 "7": "filter width with respect to ERB"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energies/magnitudes of each band"
@@ -2146,7 +2146,7 @@
                 "2": "the ratio of the envelope maximum to be used as the threshold"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "effectiveDuration": "the effective duration of the signal [s]"
@@ -2168,7 +2168,7 @@
                 "0": "the input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "energy": "the energy of the input array"
@@ -2211,7 +2211,7 @@
                 "3": "the stop frequency to which to sum the energy [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "energyBand": "the energy in the frequency band"
@@ -2254,7 +2254,7 @@
                 "3": "the frequency up to which to sum the energy [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "energyBandRatio": "the energy ratio of the specified band over the total energy"
@@ -2276,7 +2276,7 @@
                 "0": "the input array (cannot contain negative values, and must be non-empty)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "entropy": "the entropy of the input array"
@@ -2324,7 +2324,7 @@
                 "4": "the audio sampling rate [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the resulting envelope of the signal"
@@ -2357,7 +2357,7 @@
                 "1": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the filtered signal"
@@ -2379,7 +2379,7 @@
                 "0": "the input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "flatness": "the flatness (ratio between the geometric and the arithmetic mean of the input array)"
@@ -2401,7 +2401,7 @@
                 "0": "the input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "flatnessDB": "the flatness dB"
@@ -2423,7 +2423,7 @@
                 "0": "the envelope of the signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "flatness": "the flatness coefficient"
@@ -2461,7 +2461,7 @@
                 "2": "the norm to use for difference computation"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "flux": "the spectral flux of the input spectrum"
@@ -2514,7 +2514,7 @@
                 "5": "frames smaller than this ratio will be discarded, those larger will be zero-padded to a full frame (i.e. a value of 0 will never discard frames and a value of 1 will only keep frames that are of length 'frameSize')"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frame": "the frame to write to"
@@ -2552,7 +2552,7 @@
                 "2": "the hop size with which the overlap-add function is computed"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the output audio samples"
@@ -2590,7 +2590,7 @@
                 "2": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energy in each band"
@@ -2668,7 +2668,7 @@
                 "10": "use magnitude or power spectrum"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energies in ERB bands",
@@ -2757,7 +2757,7 @@
                 "12": "silence threshold [dB]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "starts": "the start indexes of the detected gaps (if any) in seconds",
@@ -2780,7 +2780,7 @@
                 "0": "the input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "geometricMean": "the geometric mean of the input array"
@@ -2818,7 +2818,7 @@
                 "2": "the type of HFC coefficient to be computed"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "hfc": "the high-frequency coefficient"
@@ -2916,7 +2916,7 @@
                 "14": "the size, in semitones, of the window used for the weighting"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "hpcp": "the resulting harmonic pitch class profile"
@@ -2959,7 +2959,7 @@
                 "3": "percentage tolerance to consider two bpms are equal or equal to a harmonic"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "harmonicBpms": "a list of bpms which are harmonically related to the bpm parameter "
@@ -3007,7 +3007,7 @@
                 "4": "the allowed ratio deviation from ideal harmonics"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "harmonicFrequencies": "the frequencies of harmonic peaks [Hz]",
@@ -3046,7 +3046,7 @@
                 "2": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the filtered signal"
@@ -3079,7 +3079,7 @@
                 "1": "maximum number of HPCP peaks to consider when calculating outputs"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "equalTemperedDeviation": "measure of the deviation of HPCP local maxima with respect to equal-tempered bins",
@@ -3129,7 +3129,7 @@
                 "4": "the number of bins"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "histogram": "the values in the equally-spaced bins",
@@ -3233,7 +3233,7 @@
                 "15": "decimation factor used for the stochastic approximation"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frequencies": "the frequencies of the sinusoidal peaks [Hz]",
@@ -3339,7 +3339,7 @@
                 "15": "decimation factor used for the stochastic approximation"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frequencies": "the frequencies of the sinusoidal peaks [Hz]",
@@ -3390,7 +3390,7 @@
                 "4": "the number of output coefficients"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "idct": "the inverse cosine transform of the input array"
@@ -3428,7 +3428,7 @@
                 "2": "the list of coefficients of the numerator. Often referred to as the B coefficient vector."
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the filtered signal"
@@ -3453,7 +3453,7 @@
                 "1": "the magnitudes of the harmonic peaks (in frequency ascending order"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "inharmonicity": "the inharmonicity of the audio signal"
@@ -3475,7 +3475,7 @@
                 "0": "the input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "power": "the instant power of the input array"
@@ -3508,7 +3508,7 @@
                 "1": "the input audio sampling rate [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "intensity": "the intensity value"
@@ -3571,7 +3571,7 @@
                 "7": "consider only the 3 main triad chords of the key (T, D, SD) to build the polyphonic profiles"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "key": "the estimated key, from A to G",
@@ -3672,7 +3672,7 @@
                 "14": "the window type, which can be 'hamming', 'hann', 'triangular', 'square' or 'blackmanharrisXX'"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "key": "See Key algorithm documentation",
@@ -3717,7 +3717,7 @@
                 "3": "the type of LPC (regular or warped)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "lpc": "the LPC coefficients",
@@ -3766,7 +3766,7 @@
                 "4": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "larm": "the LARM loudness estimate [dB]"
@@ -3788,7 +3788,7 @@
                 "0": "the input signal (must be non-empty)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "leq": "the equivalent sound level estimate [dB]"
@@ -3826,7 +3826,7 @@
                 "2": "hop size to compute loudness"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "loudness": "the loudness values"
@@ -3869,7 +3869,7 @@
                 "3": "the percentage of the input signal envelope at which the ending point of the attack is considered"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "logAttackTime": "the log (base 10) of the attack time [log10(s)]",
@@ -3919,7 +3919,7 @@
                 "4": "the input sample rate"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "logFreqSpectrum": "log frequency spectrum frame",
@@ -3959,7 +3959,7 @@
                 "2": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "confidence": "confidence value for the BPM estimation"
@@ -3992,7 +3992,7 @@
                 "1": "confidence threshold below which bpm estimate will be considered unreliable"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bpm": "the estimated bpm (will be 0 if unsure)"
@@ -4014,7 +4014,7 @@
                 "0": "the input signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "loudness": "the loudness of the input signal"
@@ -4047,7 +4047,7 @@
                 "1": "the audio sampling rate of the input signal which is used to create the weight vector [Hz] (currently, this algorithm only works on signals with a sampling rate of 44100Hz)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "loudness": "the Vickers loudness [dB]"
@@ -4090,7 +4090,7 @@
                 "3": "the audio sampling rate"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "dissonance": "See Dissonance algorithm documentation",
@@ -4139,7 +4139,7 @@
                 "3": "the audio sampling rate"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "barkbands": "spectral energy at each bark band. See BarkBands alogithm",
@@ -4205,7 +4205,7 @@
                 "2": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the filtered signal"
@@ -4303,7 +4303,7 @@
                 "14": "type of weighting function for determining triangle area"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energies in mel bands",
@@ -4342,7 +4342,7 @@
                 "2": "the window size, has to be odd if the window is centered"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "filtered output"
@@ -4375,7 +4375,7 @@
                 "1": "the audio sampling rate [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "maxMagFreq": "the frequency with the largest magnitude [Hz]"
@@ -4397,7 +4397,7 @@
                 "0": "the envelope of the signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "maxToTotal": "the maximum amplitude position to total length ratio"
@@ -4419,7 +4419,7 @@
                 "0": "the input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "mean": "the mean of the input array"
@@ -4441,7 +4441,7 @@
                 "0": "the input array (must be non-empty)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "median": "the median of the input array"
@@ -4474,7 +4474,7 @@
                 "1": "scalar giving the size of the median filter window. Must be odd"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "filteredArray": "the median-filtered input array"
@@ -4552,7 +4552,7 @@
                 "10": "type of weighting function for determining triangle area"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energy in mel bands"
@@ -4574,7 +4574,7 @@
                 "0": "filtered matrix loudness"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "meter": "the time signature"
@@ -4607,7 +4607,7 @@
                 "1": "the type of the operation"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "real": "the minimum or maximum of the input array, according to the type parameter",
@@ -4630,7 +4630,7 @@
                 "0": "the envelope of the signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "minToTotal": "the minimum amplitude position to total length ratio"
@@ -4663,7 +4663,7 @@
                 "1": "the size of the window [audio samples]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the filtered signal"
@@ -4746,7 +4746,7 @@
                 "11": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "the estimated pitch values [Hz]"
@@ -4864,7 +4864,7 @@
                 "18": "time continuity cue (the maximum allowed gap duration for a pitch contour) [ms]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "the estimated pitch values [Hz]"
@@ -4897,7 +4897,7 @@
                 "1": "the number of inputs of type vector to multiplex"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "data": "the frame containing the input values and/or input frames"
@@ -4970,7 +4970,7 @@
                 "9": "toggle between NNLS approximate transcription and linear spectral mapping"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "tunedLogfreqSpectrum": "Log frequency spectrum after tuning",
@@ -5011,7 +5011,7 @@
                 "2": "power level of the noise generator [dB]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the output signal with the added noise"
@@ -5054,7 +5054,7 @@
                 "3": "factor to control the dynamic theshold"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "indexes": "indexes of the noisy samples"
@@ -5102,7 +5102,7 @@
                 "4": "the type of weighting to be used for the bands novelty"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "novelty": "the novelty curve as a single vector"
@@ -5155,7 +5155,7 @@
                 "5": "tolerance (in percentage) for considering bpms to be equal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bpms": "the bpm candidates sorted by magnitude",
@@ -5181,7 +5181,7 @@
                 "1": "the magnitudes of the harmonic peaks (at least two magnitudes in frequency ascending order)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "oddToEvenHarmonicEnergyRatio": "the ratio between the odd and even harmonic energies of the given harmonic peaks"
@@ -5224,7 +5224,7 @@
                 "3": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "onsetDetection": "the value of the detection function in the current frame"
@@ -5272,7 +5272,7 @@
                 "4": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "onsetDetections": "the frame-wise values of the detection function"
@@ -5294,7 +5294,7 @@
                 "0": "the input signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "onsets": "the positions of detected onsets [s]",
@@ -5338,7 +5338,7 @@
                 "3": "the hop size with which the overlap-add function is computed"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the output overlap-add audio signal frame"
@@ -5406,7 +5406,7 @@
                 "8": "peaks below this given threshold are not output"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "positions": "the positions of the peaks",
@@ -5470,7 +5470,7 @@
                 "7": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bpm": "the tempo estimation [bpm]"
@@ -5492,7 +5492,7 @@
                 "0": "the input signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "array": "the input signal with enhanced harmonics"
@@ -5517,7 +5517,7 @@
                 "1": "peak positions of BPM candidates"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "lag": "best tempo lag estimate"
@@ -5580,7 +5580,7 @@
                 "7": "tuning reference frequency [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "onset": "note onset times [s]",
@@ -5655,7 +5655,7 @@
                 "9": "time continuity cue (the maximum allowed gap duration for a pitch contour) [ms]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "contoursBins": "array of frame-wise vectors of cent bin values representing each contour",
@@ -5751,7 +5751,7 @@
                 "13": "allowed deviation below the average contour mean salience of all contours (fraction of the standard deviation)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "vector of estimated pitch values (i.e., melody) [Hz]",
@@ -5835,7 +5835,7 @@
                 "11": "the sampling rate of the audio signal (Hz)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "vector of estimated pitch values (i.e., melody) [Hz]",
@@ -5919,7 +5919,7 @@
                 "11": "the sampling rate of the audio signal (Hz)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "vector of estimated pitch values (i.e., melody) [Hz]"
@@ -5967,7 +5967,7 @@
                 "4": "treat negative pitch confidence values as positive (use with melodia guessUnvoiced=True)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitchFiltered": "vector of corrected pitch values [Hz]"
@@ -6085,7 +6085,7 @@
                 "18": "time continuity cue (the maximum allowed gap duration for a pitch contour) [ms]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "the estimated pitch values [Hz]",
@@ -6129,7 +6129,7 @@
                 "3": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitchSalience": "the pitch salience (normalized from 0 to 1)"
@@ -6192,7 +6192,7 @@
                 "7": "the reference frequency for Hertz to cent convertion [Hz], corresponding to the 0th cent bin"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "salienceFunction": "array of the quantized pitch salience values"
@@ -6240,7 +6240,7 @@
                 "4": "the reference frequency for Hertz to cent convertion [Hz], corresponding to the 0th cent bin"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "salienceBins": "the cent bins corresponding to salience function peaks",
@@ -6299,7 +6299,7 @@
                 "6": "tolerance for peak detection"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "detected pitch [Hz]",
@@ -6358,7 +6358,7 @@
                 "6": "tolerance for peak detection"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "detected pitch [Hz]",
@@ -6417,7 +6417,7 @@
                 "6": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "the output pitch estimations",
@@ -6466,7 +6466,7 @@
                 "4": "sampling rate of the input audio [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "the output pitch candidate frequencies in cents",
@@ -6521,7 +6521,7 @@
                 "5": "the yin trust parameter"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "pitch frequencies in Hz"
@@ -6554,7 +6554,7 @@
                 "1": "the power to which to elevate each element before taking the mean"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "powerMean": "the power mean of the input array"
@@ -6587,7 +6587,7 @@
                 "1": "the expected size of the input frame (this is purely optional and only targeted at optimizing the creation time of the FFT object)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "powerSpectrum": "power spectrum of the input signal"
@@ -6715,7 +6715,7 @@
                 "20": "allowed deviation below the average contour mean salience of all contours (fraction of the standard deviation)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "pitch": "the estimated pitch values [Hz]",
@@ -6738,7 +6738,7 @@
                 "0": "the input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "rms": "the root mean square of the input array"
@@ -6771,7 +6771,7 @@
                 "1": "the range of the input array, used for normalizing the results"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "rawMoments": "the (raw) moments of the input array"
@@ -6804,7 +6804,7 @@
                 "1": "the sampling rate of the input audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "replayGain": "the distance to the suitable average replay level (~-31dbB) defined by SMPTE [dB]"
@@ -6847,7 +6847,7 @@
                 "3": "the quality of the conversion, 0 for best quality"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the resampled signal"
@@ -6885,7 +6885,7 @@
                 "2": "the size of the output sequence. It needss to be even-sized."
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "output": "output resample array"
@@ -6907,7 +6907,7 @@
                 "0": "the audio input signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "beats_position": "See RhythmExtractor2013 algorithm documentation",
@@ -7006,7 +7006,7 @@
                 "12": "whether or not to use onsets as periodicity function"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bpm": "the tempo estimation [bpm]",
@@ -7052,7 +7052,7 @@
                 "3": "the slowest tempo to detect [bpm]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bpm": "the tempo estimation [bpm]",
@@ -7094,7 +7094,7 @@
                 "2": "the hop size to compute the rhythm transform"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "rhythm": "consecutive frames in the rhythm domain"
@@ -7132,7 +7132,7 @@
                 "2": "the sampling rate of the audio signal (used to normalize rollOff) [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "rollOff": "the roll-off frequency [Hz]"
@@ -7195,7 +7195,7 @@
                 "7": "flag to apply the -10 * log10(BW) broadband noise correction factor"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "instantSNR": "SNR value for the the current frame",
@@ -7255,7 +7255,7 @@
                 "6": "sample rate used for the analysis"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "starts": "starting times of the detected saturated regions [s]",
@@ -7299,7 +7299,7 @@
                 "3": "the maximum value above which to apply clipping"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the output audio signal"
@@ -7357,7 +7357,7 @@
                 "6": "the audio sampling rate [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frame": "the output audio frame"
@@ -7410,7 +7410,7 @@
                 "5": "the audio sampling rate [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "loudness": "the beat's energy across the whole spectrum",
@@ -7459,7 +7459,7 @@
                 "4": "the units of time of the start and end times"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frame": "the frames of the sliced input signal"
@@ -7492,7 +7492,7 @@
                 "1": "sampling rate of the input spectrum [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "centroid": "the spectral centroid of the signal"
@@ -7530,7 +7530,7 @@
                 "2": "the audio sampling rate [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "spectralComplexity": "the spectral complexity of the input spectrum"
@@ -7593,7 +7593,7 @@
                 "7": "the ratio of the bins to distribute equally"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "spectralContrast": "the spectral contrast coefficients",
@@ -7652,7 +7652,7 @@
                 "6": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frequencies": "the frequencies of the spectral peaks [Hz]",
@@ -7701,7 +7701,7 @@
                 "4": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "magnitudes": "the whitened spectral peaks' linear magnitudes"
@@ -7734,7 +7734,7 @@
                 "1": "the expected size of the input audio signal (this is an optional parameter to optimize memory allocation)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "spectrum": "magnitude spectrum of the input audio signal"
@@ -7807,7 +7807,7 @@
                 "9": "a boolean value that enables zero-phase windowing. Input audio frames should be windowed with the same phase mode"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "spectrumCQ": "the magnitude constant-Q spectrum"
@@ -7875,7 +7875,7 @@
                 "8": "use magnitude or power spectrum"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energy in each band",
@@ -7929,7 +7929,7 @@
                 "5": "the y-coordinates to be interpolated (i.e. the known data)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "y": "the value of the spline at x"
@@ -8012,7 +8012,7 @@
                 "11": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frequencies": "the frequencies of the sinusoidal peaks [Hz]",
@@ -8073,7 +8073,7 @@
                 "6": "the audio sampling rate [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frame": "the output audio frame of the Sinusoidal Plus Stochastic model",
@@ -8163,7 +8163,7 @@
                 "12": "decimation factor used for the stochastic approximation"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frequencies": "the frequencies of the sinusoidal peaks [Hz]",
@@ -8229,7 +8229,7 @@
                 "7": "decimation factor used for the stochastic approximation"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frame": "the output audio frame of the Sinusoidal Plus Stochastic model",
@@ -8289,7 +8289,7 @@
                 "6": "the threshold below which average energy is defined as silence [dB]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "startCut": "1 if there is a cut at the begining of the audio",
@@ -8323,7 +8323,7 @@
                 "1": "the threshold below which average energy is defined as silence [dB]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "startFrame": "number of the first non-silent frame",
@@ -8372,7 +8372,7 @@
                 "4": "decimation factor used for the stochastic approximation"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "stocenv": "the stochastic envelope"
@@ -8420,7 +8420,7 @@
                 "4": "decimation factor used for the stochastic approximation"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frame": "the output frame"
@@ -8453,7 +8453,7 @@
                 "1": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "strongDecay": "the strong decay"
@@ -8475,7 +8475,7 @@
                 "0": "the input spectrum (must be greater than one element and cannot contain negative values)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "strongPeak": "the Strong Peak ratio"
@@ -8533,7 +8533,7 @@
                 "6": "threshold for peak peaking with respect to the difference between novelty_signal and average_signal (for onsets in ambient noise)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "onsets": "the onsets times"
@@ -8571,7 +8571,7 @@
                 "2": "differentiation offset (compute the difference with the N-th previous frame)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "differences": "SuperFlux novelty curve"
@@ -8629,7 +8629,7 @@
                 "6": "threshold for peak peaking with respect to the difference between novelty_signal and average_signal (for onsets in ambient noise)"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "peaks": "detected peaks' instants [s]"
@@ -8651,7 +8651,7 @@
                 "0": "the envelope of the signal (its length must be greater than 1"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "TCToTotal": "the temporal centroid to total length ratio"
@@ -8689,7 +8689,7 @@
                 "2": "the frame rate in samples"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "scaledBands": "the output bands after scaling",
@@ -8753,7 +8753,7 @@
                 "7": "optional list of initial beat locations, to favor the detection of pre-determined tempo period and beats alignment [s]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "periods": "list of tempo estimates found for each input feature, in frames",
@@ -8802,7 +8802,7 @@
                 "4": "the sampling rate of the onset detection function [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "ticks": "the list of resulting ticks [s]"
@@ -8824,7 +8824,7 @@
                 "0": "the tick candidates estimated using different beat trackers (or features) [s]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "ticks": "the list of resulting ticks [s]",
@@ -8873,7 +8873,7 @@
                 "4": "sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "ticks": "the list of resulting ticks [s]",
@@ -8896,7 +8896,7 @@
                 "0": "the audio frame"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the log compressed mel bands"
@@ -8918,7 +8918,7 @@
                 "0": "the audio frame"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the log compressed mel bands"
@@ -8961,7 +8961,7 @@
                 "3": "the tuning frequency of the input signal"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "chords_changes_rate": "See ChordsDescriptors algorithm documentation",
@@ -9060,7 +9060,7 @@
                 "12": "the sampling rate of the audio signal [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "tonic": "the estimated tonic frequency [Hz]"
@@ -9123,7 +9123,7 @@
                 "7": "type of weighting function for determining triangle area"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energy in each band"
@@ -9196,7 +9196,7 @@
                 "9": "type of weighting function for determining triangle area"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "bands": "the energy in bark bands"
@@ -9244,7 +9244,7 @@
                 "4": "the start time of the slice you want to extract [s]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "signal": "the trimmed signal"
@@ -9269,7 +9269,7 @@
                 "1": "the magnitudes of the harmonic peaks ordered by frequency"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "tristimulus": "a three-element vector that measures the mixture of harmonics of the given spectrum"
@@ -9332,7 +9332,7 @@
                 "7": "algorithm version"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "peakLocations": "the peak locations in the ouput signal",
@@ -9371,7 +9371,7 @@
                 "2": "resolution in cents (logarithmic scale, 100 cents = 1 semitone) for tuning frequency determination"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "tuningFrequency": "the tuning frequency [Hz]",
@@ -9410,7 +9410,7 @@
                 "2": "the hopsize for computing tuning frequency"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "tuningFrequency": "the computed tuning frequency"
@@ -9453,7 +9453,7 @@
                 "3": "the type of the unary operator to apply to input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "array": "the input array transformed by unary operation"
@@ -9496,7 +9496,7 @@
                 "3": "the type of the unary operator to apply to input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "array": "the input array transformed by unary operation"
@@ -9518,7 +9518,7 @@
                 "0": "the input array"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "variance": "the variance of the input array"
@@ -9571,7 +9571,7 @@
                 "5": "sample rate of the input pitch contour"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "vibratoFrequency": "estimated vibrato frequency (or speed) [Hz]; zero if no vibrato was detected.",
@@ -9610,7 +9610,7 @@
                 "2": "the audio sampling rate [Hz]"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "warpedAutoCorrelation": "the warped auto-correlation vector"
@@ -9668,7 +9668,7 @@
                 "6": "the window type, which can be 'hamming', 'hann', 'triangular', 'square' or 'blackmanharrisXX'"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "psd": "Power Spectral Density [dB] or [dB/Hz]"
@@ -9721,7 +9721,7 @@
                 "5": "a boolean value that enables zero-phase windowing"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "frame": "the windowed audio frame"
@@ -9754,7 +9754,7 @@
                 "1": "the threshold which will be taken as the zero axis in both positive and negative sign"
             }
         },
-        "return": {
+        "returnData": {
             "type": "object",
             "val": {
                 "zeroCrossingRate": "the zero-crossing rate"

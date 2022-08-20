@@ -5,7 +5,7 @@
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { TiMediaStopOutline, TiNotesOutline } from "react-icons/ti";
-import DirectedGraph, { GraphNode } from "../logic/network";
+import DirectedGraph, { addFunctionToGraph, GraphNode } from "../logic/network";
 import { WorkletCallback } from "../logic/util/Worklet";
 import { AudioManagerContext, PubSubContext } from "../routes/App";
 import ControlButton from "./control-section/ControlButton";
@@ -38,7 +38,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   const [audioActive, setAudioActive] = useState(false);
   const [hasData, setHasData] = useState(false);
   const [dashState, setDashState] = useState(DashState.INACTIVE)
-  const [dag, setDag] = useState(new DirectedGraph());
+  const [graph, setGraph] = useState(new DirectedGraph());
   // const [features, setFeatures] = useState<ITonalData>();
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
 
       const onWorkletMsg: WorkletCallback = (e: MessageEvent) => {
         try {
-          if(e.data != null) console.log(e.data)
+          if (e.data != null) console.log(e.data)
           pubSub.publish('tuner-message', e);
           // setFeatures(() => e.data as ITonalData);
           setHasData(e.data != null);
@@ -68,50 +68,46 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
     }
   }, [isLoading, audioActive, audioManager, pubSub]);
 
-  switch (dashState) {
-    case DashState.INACTIVE:
-      if (audioActive) setDashState(DashState.LOADING);
-      break;
-    case DashState.LOADING:
-      if (hasData) setDashState(DashState.ACTIVE);
-      if (!audioActive) setDashState(DashState.INACTIVE);
-      break;
-    case DashState.ACTIVE:
-      if (!audioActive) setDashState(DashState.INACTIVE);
-      break;
-    case DashState.OTHER_ERR:
-    default:
-      break;
-  }
 
   /*
     Getting essentia properties
       - If you make Essentia from d.ts a class and make all the functions have empty bracketes, Object.getOwnPropertyNames will find them. But it doesn't give type info 
   */
 
-  let columns: any[] = [];
+  useEffect(() => {
+    graph.print()
+  
+    return () => {
+      
+    }
+  }, [graph])
   
 
+
   return (
-    <div className="App"><div className="node-column">
-      <ControlButton
-        onPress={() => audioManager.startRecording()}
-        onRelease={() => audioManager.stopRecording()}
-        pressedChild={<TiMediaStopOutline size={50} />}
-        notPressedChild={<TiNotesOutline size={50} />}
-        releaseCondition={!audioActive}
-      />
-      {audioActive &&
-        <Button onClick={() => {
-          const workletNode = audioManager.nodes[NODE_NAME] as AudioWorkletNode;
-          workletNode.port.postMessage("methods");
+    <div className="App">
+      <div className="node-column">
+        <ControlButton
+          onPress={() => audioManager.startRecording()}
+          onRelease={() => audioManager.stopRecording()}
+          pressedChild={<TiMediaStopOutline size={50} />}
+          notPressedChild={<TiNotesOutline size={50} />}
+          releaseCondition={!audioActive}
+        />
+        {audioActive &&
+          <Button onClick={() => {
+            const workletNode = audioManager.nodes[NODE_NAME] as AudioWorkletNode;
+            workletNode.port.postMessage("methods");
+          }} className="height: 100px" />
         }
-        
-        } className="height: 100px"/>}
-    </div >
+      </div >
 
       <div className="node-column">
-        <FxNodeInput addNode={(node: GraphNode) => dag.addNode(node)}/>
+        {/* addNode={(node: GraphNode) => graph.addNode(node)} */}
+        <FxNodeInput addFunction={(fxKey) => {
+          addFunctionToGraph(graph, fxKey).print();
+          setGraph(() => addFunctionToGraph(graph, fxKey))
+        }} />
         {/* <li>{essentia}</li> */}
       </div >
       <div className="node-column">
@@ -120,12 +116,7 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
       <div className="node-column">
         asdfdffff
       </div >
-      <div className="node-column">
-        asdfdffff
-      </div >
-      <div className="node-column">
-        asdfdffff
-      </div >
+
     </div >
   );
 }
