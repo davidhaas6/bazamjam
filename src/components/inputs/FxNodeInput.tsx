@@ -1,6 +1,7 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { EssentiaFx, FunctionGraph, getAvailableFunctions, getFunction, GraphNode, isValidFunction } from "../../logic/network";
 import FxField from "./FxField";
+import TextInput from "./TextInput";
 
 interface FxNodeInputProps {
   addFunction: (key: string) => void;
@@ -8,21 +9,12 @@ interface FxNodeInputProps {
 
 
 const FxNodeInput: FunctionComponent<FxNodeInputProps> = (props: FxNodeInputProps) => {
-  const [userInput, setUserInput] = useState("");
   const [selectedFx, setSelectedFx] = useState<EssentiaFx>();
-  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleKeyPress = (key: string) => {
-    console.log("key", key)
-    if (key === "Enter" && inputRef.current != null) {
-      const usrIn = inputRef.current.value;
-      setUserInput(usrIn);
-      inputRef.current.value = "";
-
-      if (isValidFunction(usrIn)) {
-        setSelectedFx(getFunction(usrIn))
-      }
-      else console.log("Invalid fx:", usrIn)
+  const handleEnter = (usrIn: string) => {
+    console.log("heyy", usrIn)
+    if (isValidFunction(usrIn)) {
+      setSelectedFx(() => getFunction(usrIn))
     }
   }
 
@@ -31,28 +23,26 @@ const FxNodeInput: FunctionComponent<FxNodeInputProps> = (props: FxNodeInputProp
   }, [selectedFx])
 
 
-  const showError = userInput.length > 0 && !isValidFunction(userInput);
-  const listOptions = getAvailableFunctions().map((fx) => <option value={fx} />)
+  const showErr = (str: string) => str.length != 0 && !isValidFunction(str);
+  const listOptions = getAvailableFunctions();
 
   return (
     <div>
-      <input ref={inputRef} type="text"
-        onKeyPress={(e) => handleKeyPress(e.key)}
-        list="options"
+      <TextInput
+        onEnter={(str) => handleEnter(str)}
+        options={listOptions}
+        showErr={showErr}
       />
-      <datalist id="options">
-        {listOptions}
-    </datalist>
-      {showError && <div>Invalid function: {userInput}</div>}
       {selectedFx != null &&
-        <>
+        <div className="fx-box">
           <FxField function={selectedFx} />
+          <br/>
           <button onClick={() => {
-            props.addFunction(userInput);
-            console.log("adding node for ", userInput)
+            props.addFunction(selectedFx.name);
+            console.log("adding node for ", selectedFx.name)
             // props.setGraph()
-          }} className="height: 100px"/>
-        </>
+          }}> Add to Graph </button>
+        </div>
       }
 
     </div>

@@ -6,7 +6,7 @@
 
 :root {
 
-    --main-bg-color: #fcf5d6;
+    --main-bg-color: whitesmoke;
     --primary-color: #A16B56;
     --primary-dark: #6f4a3b;
     --light-accent: #E0A370;
@@ -318,6 +318,37 @@ html, body {
     /* width:100px; */
 }
 
+/* ======= fx display =======
+*/
+
+.fx-box {
+    width: 500px;
+    min-height: 200px;
+    margin: 10px;
+    padding: 10px;
+
+    background-color: whitesmoke;
+    box-shadow: -3px 3px 3px rgb(154, 154, 154);
+    border: 2px solid black;
+}
+
+.fx-name {
+    font-weight: bold;
+    font-size: large;
+}
+
+.fx-desc {
+    font-size: medium;
+}
+
+.fx-header {
+    font-weight: lighter;
+    font-size: small;
+}
+
+.fx-params {
+    font-size: 23px;
+}
 
 /* ======= Dashboard Components =======
 
@@ -361,7 +392,6 @@ html, body {
     /* padding: 20px; */
     color: var(--cb-top);
 }
-
 
 .tuner-notes {
     font-size: 32px;

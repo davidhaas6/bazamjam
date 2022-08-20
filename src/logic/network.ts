@@ -73,13 +73,20 @@ export default class DirectedGraph<K, V extends Node<K>> {
   outputs: OutputAdjMap<K>;
   nodes: Map<K, V>;
 
-  constructor() {
-    this.outputs = new Map<K, Set<K>>();
-    this.nodes = new Map<K, V>();
+  constructor(g?: DirectedGraph<K,V>) {
+    if (g != null && g as DirectedGraph<K,V>) {
+      this.outputs = new Map(g.outputs.entries());
+      this.nodes = new Map(g.nodes.entries());
+    } else {
+    this.outputs = new Map();
+    this.nodes = new Map();
+    }
   }
 
+  
+
   addNode(node: V, outputs?: Set<V> | V[]) {
-    if (this.nodes.has(node.key)) {
+    if (!this.nodes.has(node.key)) {
       this.nodes.set(node.key, node);
       this.outputs.set(node.key, new Set());
     }
@@ -138,7 +145,7 @@ export default class DirectedGraph<K, V extends Node<K>> {
     return set2;
   }
 
-  private getNodeArrKeys(arr: Iterable<V>): Set<K> {
+  getNodeArrKeys(arr: Iterable<V>): Set<K> {
     let keys = new Set<K>();
     for (const node of Array.from(arr)) {
       keys.add(node.key);
@@ -147,23 +154,42 @@ export default class DirectedGraph<K, V extends Node<K>> {
   }
 }
 
-// export type FunctionGraph = DirectedGraph<string, GraphNode>
-
-
 export class FunctionGraph extends DirectedGraph<string, GraphNode> {
-  functions: EssentiaData;
+  functionRepo: EssentiaData;
 
-  constructor(functionMetadata: EssentiaData) {
-    super();
-    this.functions = functionMetadata;
+  constructor(functionMetadata: EssentiaData, fg?: FunctionGraph) {
+    super(fg);
+    this.functionRepo = fg?.functionRepo ?? functionMetadata;
   }
 
   public get functionKeys(): string[] {
-    return Object.keys(this.functions)
-  } 
+    return Object.keys(this.functionRepo)
+  }
+
+  public get outputNodes(): ParamNode[] {
+    let outNodes: ParamNode[] = [];
+    for (const node of Array.from(this.nodes.values())) {
+      if ((node as ParamNode)?.isOutput) {
+        outNodes.push(node as ParamNode);
+      }
+    }
+    return outNodes;
+  }
+
+  public get inputNodes(): ParamNode[] {
+    let inNodes: ParamNode[] = [];
+    for (const node of Array.from(this.nodes.values())) {
+      if (node as ParamNode) {
+        if ((node as ParamNode)!.isOutput === false) {
+          inNodes.push(node as ParamNode);
+        }
+      }
+    }
+    return inNodes;
+  }
 
   addFxToGraph(fxKey: string) {
-    const fx = this.functions[fxKey];
+    const fx = this.functionRepo[fxKey];
     let fxNode: FxNode = { data: fx, key: fx.name };
     let paramNodes = fx.params != null ? createParameterNodes(fx) : [];
     let outNodes = fx.returnData != null ? createOutputNodes(fx) : [];
@@ -171,10 +197,8 @@ export class FunctionGraph extends DirectedGraph<string, GraphNode> {
     paramNodes.forEach((node) => this.addNode(node, [fxNode]));
     this.addNode(fxNode, outNodes);
     this.addNodes(outNodes);
-    return this;
+    return new FunctionGraph(this.functionRepo, this);
   }
-
-  
 
 
   private _createParameterNodes(fx: EssentiaFx): ParamNode[] {

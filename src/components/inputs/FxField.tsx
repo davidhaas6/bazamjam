@@ -7,10 +7,11 @@ interface FxFieldProps {
 
 const FxField: FunctionComponent<FxFieldProps> = (props: FxFieldProps) => {
   const { name, header, desc, params: rawParams, returnData } = props.function;
-  const params = rawParams?.Name != null ? normalizeJsonArr(rawParams!.Name): null ; 
+  const params = rawParams?.Name != null ? normalizeJsonArr(rawParams!.Name) : null;
   return (
     <div>
-      {name}
+
+      <div className="fx-name">{name}</div>
       <br />
       {desc}
       <br /><br />

@@ -10,6 +10,7 @@ import { WorkletCallback } from "../logic/util/Worklet";
 import { AudioManagerContext, PubSubContext } from "../routes/App";
 import ControlButton from "./inputs/ControlButton";
 import FxNodeInput from "./inputs/FxNodeInput";
+import TextInput from "./inputs/TextInput";
 
 
 // path relative to public directory
@@ -39,6 +40,8 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
   const [hasData, setHasData] = useState(false);
   const [dashState, setDashState] = useState(DashState.INACTIVE)
   const [graph, setGraph] = useState(new FunctionGraph(getData()));
+  const [connSrc, setConnSrc] = useState("");
+  const [connDst, setConnDst] = useState("");
   // const [features, setFeatures] = useState<ITonalData>();
 
   useEffect(() => {
@@ -67,22 +70,10 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
       audioManager.addWorklet(NODE_NAME, WORKLET_PATH, onWorkletMsg);
     }
   }, [isLoading, audioActive, audioManager, pubSub]);
-
-
-  /*
-    Getting essentia properties
-      - If you make Essentia from d.ts a class and make all the functions have empty bracketes, Object.getOwnPropertyNames will find them. But it doesn't give type info 
-  */
-
-  // useEffect(() => {
-  //   graph.print()
-  
-  //   return () => {
-      
-  //   }
-  // }, [graph])
   
 
+  const srcKeys = Array.from(graph.getNodeArrKeys(graph.outputNodes));
+  const dstKeys = Array.from(graph.getNodeArrKeys(graph.inputNodes));
 
   return (
     <div className="App">
@@ -110,7 +101,8 @@ const Dashboard: FunctionComponent<IDashboardProps> = (props: IDashboardProps) =
         {/* <li>{essentia}</li> */}
       </div >
       <div className="node-column">
-        asdfdffff
+        <li>src: <TextInput onEnter={(str) => setConnSrc(str)} options={srcKeys} uuid={"y"}/></li>
+        <li> dst: <TextInput onEnter={(str) => setConnDst(str)} options={dstKeys} uuid="yd" /></li>
       </div >
       <div className="node-column">
         asdfdffff
